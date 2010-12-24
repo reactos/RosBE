@@ -11,11 +11,6 @@ $host.ui.RawUI.WindowTitle = "ReactOS Build Environment $_ROSBE_VERSION"
 
 # Set defaults to work with and override them if edited by the options utility.
 
-# For NT4 compatibility
-if ($ENV:APPDATA.Length -lt 1) {
-    $ENV:APPDATA = $ENV:USERPROFILE
-}
-
 # Web Downloader in a function.
 
 function global:Get-WebFile {

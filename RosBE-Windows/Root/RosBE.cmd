@@ -17,9 +17,6 @@ if %_ROSBE_DEBUG% == 1 (
 
 title ReactOS Build Environment %_ROSBE_VERSION%
 
-:: For NT4 compatibility
-if not defined APPDATA set APPDATA=%USERPROFILE%
-
 :: Set defaults to work with and override them if edited by
 :: the options utility.
 if "%1" == "" (
