@@ -24,7 +24,6 @@ if exist .\config.rbuild (
         echo *** aborting build. Please check for changes and       ***
         echo *** update your config.rbuild.                         ***
         echo.
-        goto :EOC
     )
 )
 

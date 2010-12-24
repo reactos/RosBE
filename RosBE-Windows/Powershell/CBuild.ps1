@@ -19,6 +19,9 @@ $TIMERAW = get-date -f t
 $DATENAME = get-date -f dMMyyyy
 $TIMENAME = get-date -f Hms
 
+# Setting for MinGW Compiler in CMake
+$ENV:BUILD_ENVIRONMENT = "MINGW"
+
 # Check whether we were called as "makex" or "make"
 if ("$($args[0])" -eq "multi") {
     $args.setvalue($null, 0)
@@ -38,11 +41,15 @@ if ($_ROSBE_SHOWTIME -eq 1) {
     $sw.Start()
 }
 
-if (!(Test-Path "build")) {
-        New-Item -path "build" -type directory
+if (!(Test-Path "host-tools")) {
+        New-Item -path "host-tools" -type directory
     }
 
-cd build
+cd host-tools
+
+# Variable with the Host Tools Path
+$ENV:REACTOS_BUILD_TOOLS_DIR = "$pwd"
+
 &{IEX "&'cmake.exe' -G 'MinGW Makefiles' ..\"}
 
 if ($_ROSBE_WRITELOG -eq 1) {
@@ -54,12 +61,12 @@ if ($_ROSBE_WRITELOG -eq 1) {
 cd..
 ""
 
-if (!(Test-Path "build-ros")) {
-        New-Item -path "build-ros" -type directory
+if (!(Test-Path "reactos")) {
+        New-Item -path "reactos" -type directory
     }
 
-cd build-ros
-&{IEX "&'cmake.exe' -G 'MinGW Makefiles' '-DCMAKE_TOOLCHAIN_FILE=toolchain-mingw32.cmake' ..\"}
+cd reactos
+&{IEX "&'cmake.exe' -G 'MinGW Makefiles' '-DCMAKE_TOOLCHAIN_FILE=toolchain-mingw32.cmake' ..\ '-DREACTOS_BUILD_TOOLS_DIR:DIR="$ENV:REACTOS_BUILD_TOOLS_DIR'"}
 
 if ($_ROSBE_WRITELOG -eq 1) {
     &{IEX "&'mingw32-make.exe' -j $MAKE_JOBS $($args)"} $($args) 2>&1 | tee-object $file2

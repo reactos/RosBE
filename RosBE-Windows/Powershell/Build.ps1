@@ -15,7 +15,6 @@ if (Test-Path ".\config.rbuild") {
         "*** aborting build. Please check for changes and       ***"
         "*** update your config.rbuild.                         ***"
         ""
-        exit
     }
 }
 

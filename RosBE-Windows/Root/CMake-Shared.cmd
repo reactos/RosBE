@@ -18,6 +18,9 @@ if %_ROSBE_WRITELOG% == 1 (
     )
 )
 
+:: Setting for MinGW Compiler in CMake
+set BUILD_ENVIRONMENT=MINGW
+
 :: Get the current date and time for use in in our build log's file name.
 call "%_ROSBE_BASEDIR%\TimeDate.cmd"
 
@@ -30,10 +33,14 @@ if %_ROSBE_SHOWTIME% == 1 (
     set BUILDTIME_COMMAND=
 )
 
-if not exist "build\." (
-    mkdir "build" 1> NUL 2> NUL
+if not exist "host-tools\." (
+    mkdir "host-tools" 1> NUL 2> NUL
 )
-cd build
+cd host-tools
+
+:: Variable with the Host Tools Path
+set REACTOS_BUILD_TOOLS_DIR=%CD%
+
 cmake.exe -G "MinGW Makefiles" ..\
 if %_ROSBE_WRITELOG% == 1 (
     %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %* 2>&1 | tee.exe "%_ROSBE_LOGDIR%\BuildToolLog-%ROS_ARCH%-%datename%-%timename%.txt"
@@ -43,11 +50,11 @@ if %_ROSBE_WRITELOG% == 1 (
 cd..
 echo.
 
-if not exist "build-ros\." (
-    mkdir "build-ros" 1> NUL 2> NUL
+if not exist "reactos\." (
+    mkdir "reactos" 1> NUL 2> NUL
 )
-cd build-ros
-cmake.exe -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-mingw32.cmake ..\
+cd reactos
+cmake.exe -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-mingw32.cmake ..\ -DREACTOS_BUILD_TOOLS_DIR:DIR="%REACTOS_BUILD_TOOLS_DIR%
 if %_ROSBE_WRITELOG% == 1 (
     %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %* 2>&1 | tee.exe "%_ROSBE_LOGDIR%\BuildROSLog-%ROS_ARCH%-%datename%-%timename%.txt"
 ) else (
