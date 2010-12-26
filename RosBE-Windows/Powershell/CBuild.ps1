@@ -66,7 +66,7 @@ if (!(Test-Path "reactos")) {
     }
 
 cd reactos
-&{IEX "&'cmake.exe' -G 'MinGW Makefiles' '-DCMAKE_TOOLCHAIN_FILE=toolchain-mingw32.cmake' ..\ '-DREACTOS_BUILD_TOOLS_DIR:DIR="$ENV:REACTOS_BUILD_TOOLS_DIR'"}
+&{IEX "&'cmake.exe' -G 'MinGW Makefiles' '-DCMAKE_TOOLCHAIN_FILE=toolchain-mingw32.cmake' ..\ '-DREACTOS_BUILD_TOOLS_DIR:DIR="$ENV:REACTOS_BUILD_TOOLS_DIR"'"}
 
 if ($_ROSBE_WRITELOG -eq 1) {
     &{IEX "&'mingw32-make.exe' -j $MAKE_JOBS $($args)"} $($args) 2>&1 | tee-object $file2
