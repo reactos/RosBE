@@ -52,10 +52,15 @@ goto :EOF
 :BIN
 
 :: Check if the user set any custom filenames or pathes, otherwise locally set the appropriate variables.
-if "%ROS_AUTOMAKE%"     == "" (set ROS_AUTOMAKE=makefile-%ROS_ARCH%.auto)
-if "%ROS_INTERMEDIATE%" == "" (set ROS_INTERMEDIATE=obj-%ROS_ARCH%)
-if "%ROS_OUTPUT%"       == "" (set ROS_OUTPUT=output-%ROS_ARCH%)
-if "%ROS_CDOUTPUT%"     == "" (set ROS_CDOUTPUT=reactos)
+if not exist "CMakeLists.txt" (
+    if "%ROS_AUTOMAKE%"     == "" (set ROS_AUTOMAKE=makefile-%ROS_ARCH%.auto)
+    if "%ROS_INTERMEDIATE%" == "" (set ROS_INTERMEDIATE=obj-%ROS_ARCH%)
+    if "%ROS_OUTPUT%"       == "" (set ROS_OUTPUT=output-%ROS_ARCH%)
+    if "%ROS_CDOUTPUT%"     == "" (set ROS_CDOUTPUT=reactos)
+) else (
+    set ROS_INTERMEDIATE=host-tools
+    set ROS_OUTPUT=reactos
+)
 
 :: Do some basic sanity checks to verify that we are working in a ReactOS source tree.
 :: Consider that we also want to clean half-complete builds, so don't depend on too many existing files.
@@ -63,10 +68,12 @@ if "%ROS_CDOUTPUT%"     == "" (set ROS_CDOUTPUT=reactos)
 if exist "%ROS_INTERMEDIATE%" (
     echo Cleaning ReactOS %ROS_ARCH% source directory...
     
-    del "%ROS_AUTOMAKE%" 1>NUL 2>NUL
+    if not exist "CMakeLists.txt" (
+        del "%ROS_AUTOMAKE%" 1>NUL 2>NUL
+        rd /s /q "%ROS_CDOUTPUT%" 1>NUL 2>NUL
+    )
     rd /s /q "%ROS_INTERMEDIATE%" 1>NUL 2>NUL
     rd /s /q "%ROS_OUTPUT%" 1>NUL 2>NUL
-    rd /s /q "%ROS_CDOUTPUT%" 1>NUL 2>NUL
     
     echo Done cleaning ReactOS %ROS_ARCH% source directory.
 ) else (

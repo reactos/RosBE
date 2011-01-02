@@ -37,10 +37,6 @@ if ("$args" -eq "") {
     "    clean [OPTIONS]      - Fully clean the ReactOS source directory and/or the"
     "                           RosBE build logs."
 
-    if (Test-Path "$_ROSBE_BASEDIR\Config.ps1") {
-        "    config [OPTIONS]     - Configures the way, ReactOS will be built."
-    }
-
     "    help [COMMAND]       - Display the available commands or give help on a"
     "                           specific command."
 
@@ -167,17 +163,6 @@ if ("$args" -eq "") {
     "    logs - Removes all build logs in the RosBE-Logs directory."
     "    All other commands will be parsed as ""make ""module""_clean"" and cleans the"
     "    specific module."
-} elseif ("$args" -eq "config") {
-    if (Test-Path "$_ROSBE_BASEDIR\Config.ps1") {
-        " Usage: config [OPTIONS]"
-        " Creates a configuration file, which tells RosBE how to build the tree."
-        ""
-        "    delete - Deletes the created configuration file and so sets back to the"
-        "             default settings."
-        "    rbuild - Switches to RBuild Flag setting mode."
-        "    update - Deletes the old created configuration file and updates it with a"
-        "             new, default one."
-    }
 } elseif ("$args" -eq "help") {
     " Usage: help [COMMAND]"
     " Shows help for the specified command or lists all available commands."

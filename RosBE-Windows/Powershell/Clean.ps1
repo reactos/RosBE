@@ -24,34 +24,34 @@ function rembin {
 
     # Check if the user set any custom filenames or pathes, otherwise locally set the appropriate variables.
 
-    if ("$ENV:ROS_AUTOMAKE" -eq "") {
-        $ROS_AUTOMAKE = "makefile-$ENV:ROS_ARCH.auto"
+    if (!(Test-Path "CMakeLists.txt")) {
+        if ("$ENV:ROS_AUTOMAKE" -eq "") {
+            $ENV:ROS_AUTOMAKE = "makefile-$ENV:ROS_ARCH.auto"
+        }
+        if ("$ENV:ROS_INTERMEDIATE" -eq "") {
+            $ENV:ROS_INTERMEDIATE = "obj-$ENV:ROS_ARCH"
+        }
+        if ("$ENV:ROS_OUTPUT" -eq "") {
+            $ENV:ROS_OUTPUT = "output-$ENV:ROS_ARCH"
+        }
+        if ("$ENV:ROS_CDOUTPUT" -eq "") {
+            $ENV:ROS_CDOUTPUT = "reactos"
+        }
     } else {
-        $ROS_AUTOMAKE = $ENV:ROS_AUTOMAKE
+        $ENV:ROS_INTERMEDIATE = "host-tools"
+        $ENV:ROS_OUTPUT = "reactos"
     }
-    if ("$ENV:ROS_INTERMEDIATE" -eq "") {
-        $ROS_INTERMEDIATE = "obj-$ENV:ROS_ARCH"
-    } else {
-        $ROS_INTERMEDIATE = $ENV:ROS_INTERMEDIATE
-    }
-    if ("$ENV:ROS_OUTPUT" -eq "") {
-        $ROS_OUTPUT = "output-$ENV:ROS_ARCH"
-    } else {
-        $ROS_OUTPUT = $ENV:ROS_OUTPUT
-    }
-    if ("$ENV:ROS_CDOUTPUT" -eq "") {
-        $ROS_CDOUTPUT = "reactos"
-    } else {
-        $ROS_CDOUTPUT = $ENV:ROS_CDOUTPUT
-    }
+        
 
-    if (Test-Path "$ROS_INTERMEDIATE\.") {
+    if (Test-Path "$ENV:ROS_INTERMEDIATE\.") {
         "Cleaning ReactOS $ENV:ROS_ARCH source directory..."
 
-            $null = (Remove-Item "$ROS_AUTOMAKE" -force)
-            $null = (Remove-Item "$ROS_INTERMEDIATE" -recurse -force)
-            $null = (Remove-Item "$ROS_OUTPUT" -recurse -force)
-            $null = (Remove-Item "$ROS_CDOUTPUT" -recurse -force)
+        if (!(Test-Path "CMakeLists.txt")) {
+            $null = (Remove-Item "$ENV:ROS_AUTOMAKE" -force)
+            $null = (Remove-Item "$ENV:ROS_CDOUTPUT" -recurse -force)
+        }
+        $null = (Remove-Item "$ENV:ROS_INTERMEDIATE" -recurse -force)
+        $null = (Remove-Item "$ENV:ROS_OUTPUT" -recurse -force)
 
         "Done cleaning ReactOS $ENV:ROS_ARCH source directory."
     } else {

@@ -45,10 +45,6 @@ if "%1" == "" (
     echo    clean [OPTIONS]      - Fully clean the ReactOS source directory and/or the
     echo                           RosBE build logs.
 
-    if exist "%_ROSBE_BASEDIR%\Config.cmd" (
-        echo    config [OPTIONS]     - Configures the way, ReactOS will be built.
-    )
-
     echo    help [COMMAND]       - Display the available commands or give help on a
     echo                           specific command.
 
@@ -174,17 +170,6 @@ if "%1" == "" (
     echo    logs - Removes all build logs in the RosBE-Logs directory.
     echo    All other commands will be parsed as "make module_clean" and cleans the
     echo    specific module.
-) else if /i "%1" == "config" (
-    if exist "%_ROSBE_BASEDIR%\Config.cmd" (
-        echo Usage: config [OPTIONS]
-        echo Creates a configuration file, which tells RosBE how to build the tree.
-        echo.
-        echo    delete - Deletes the created configuration file and so sets back to default
-        echo             settings.
-        echo    rbuild - Switches to RBuild Flag setting mode.
-        echo    update - Deletes the old created configuration file and updates it with a
-        echo             new, default one.
-    )
 ) else if /i "%1" == "help" (
     echo Usage: help [COMMAND]
     echo Shows help for the specified command or lists all available commands.
