@@ -122,10 +122,6 @@ function LoadAliases {
 
     set-alias CLEAN "$_ROSBE_BASEDIR\Clean.ps1" -scope Global
 
-    if (Test-Path "$_ROSBE_BASEDIR\Config.ps1") {
-        set-alias CONFIG "$_ROSBE_BASEDIR\Config.ps1" -scope Global
-    }
-
     set-alias HELP "$_ROSBE_BASEDIR\Help.ps1" -scope Global
     function global:MAKE {
         if (Test-Path ".\CMakeLists.txt") {
