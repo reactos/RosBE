@@ -3,13 +3,21 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/CMake-Shared.cmd
 :: PURPOSE:     Perform the CMake build of ReactOS - Shared commands.
-:: COPYRIGHT:   Copyright 2010 Daniel Reimer <reimer.daniel@freenet.de>
+:: COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
 ::
 
 @echo off
 if not defined _ROSBE_DEBUG set _ROSBE_DEBUG=0
 if %_ROSBE_DEBUG% == 1 (
     @echo on
+)
+
+echo %PATH% | find "cmake" /I 1> NUL 2> NUL
+if errorlevel 1 (
+    echo CMake not found. Build cant be continued, until a CMake version of 2.6 or newer
+    echo is properly installed on this system. The newest Version can be found here:
+    echo http://www.cmake.org/cmake/resources/software.html
+    goto :EOC
 )
 
 if %_ROSBE_WRITELOG% == 1 (

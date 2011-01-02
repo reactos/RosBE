@@ -3,7 +3,7 @@
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 # FILE:        Root/version.ps1
 # PURPOSE:     Display the current version of GCC, NASM, ld and make.
-# COPYRIGHT:   Copyright 2010 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
 (get-WmiObject Win32_OperatingSystem).caption
@@ -30,3 +30,9 @@ if (Test-Path "$_ROSBE_HOST_MINGWPATH\bin\nasm.exe") {
 $fver = (& flex '--version') -replace ".*version ((\d|\.)+).*",'$1'
 "flex $fver"
 & mingw32-make.exe -v | & find "GNU Make"
+$null = "$ENV:PATH" | select-string -pattern "cmake"
+if ($LASTEXITCODE -ne 0) {
+    "WARNING: CMake not found!"
+} else {
+    cmake.exe --version
+}

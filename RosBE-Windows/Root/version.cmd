@@ -3,7 +3,7 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/version.cmd
 :: PURPOSE:     Display the current version of GCC, NASM, ld and make.
-:: COPYRIGHT:   Copyright 2010 Daniel Reimer <reimer.daniel@freenet.de>
+:: COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
 ::                             Colin Finck <colin@reactos.org>
 ::
 
@@ -33,3 +33,9 @@ if exist "%_ROSBE_HOST_MINGWPATH%\bin\nasm.exe" (
 bison --version | find "GNU Bison"
 flex --version
 mingw32-make.exe -v | find "GNU Make"
+echo %PATH% | find "cmake" /I 1> NUL 2> NUL
+if errorlevel 1 (
+    echo WARNING: CMake not found!
+) else (
+    cmake.exe --version
+)

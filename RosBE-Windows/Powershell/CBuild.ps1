@@ -3,8 +3,16 @@
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 # FILE:        Root/CBuild.ps1
 # PURPOSE:     Perform the CMake build of ReactOS.
-# COPYRIGHT:   Copyright 2010 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
 #
+
+$null = "$ENV:PATH" | select-string -pattern "cmake"
+if ($LASTEXITCODE -ne 0) {
+    "CMake not found. Build cant be continued, until a CMake version of 2.6 or newer"
+    "is properly installed on this system. The newest Version can be found here:"
+    "http://www.cmake.org/cmake/resources/software.html"
+    exit
+}
 
 if ($_ROSBE_WRITELOG -eq 1) {
     if (!(Test-Path "$_ROSBE_LOGDIR")) {

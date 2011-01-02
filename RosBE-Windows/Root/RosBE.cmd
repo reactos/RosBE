@@ -3,8 +3,8 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/RosBE.cmd
 :: PURPOSE:     This script provides/sets up various build environments for
-::              ReactOS. Currently it provides a GCC 4.4.3 build environment.
-:: COPYRIGHT:   Copyright 2010 Daniel Reimer <reimer.daniel@freenet.de>
+::              ReactOS. Currently it provides a GCC 4.5.2 build environment.
+:: COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
 ::                             Peter Ward <dralnix@gmail.com>
 ::                             Colin Finck <colin@reactos.org>
 ::
