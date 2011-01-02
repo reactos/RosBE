@@ -6,13 +6,21 @@
 # COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
+$LASTEXITCODE = 0
+
 $null = "$ENV:PATH" | select-string -pattern "cmake"
 if ($LASTEXITCODE -ne 0) {
     "CMake not found. Build cant be continued, until a CMake version of 2.6 or newer"
     "is properly installed on this system. The newest Version can be found here:"
     "http://www.cmake.org/cmake/resources/software.html"
+    "ADD IT TO SYSTEM PATH!"
     exit
 }
+
+# Get the current date and time for use in in our build log's file name.
+$TIMERAW = get-date -f t
+$DATENAME = get-date -f dMMyyyy
+$TIMENAME = get-date -f Hms
 
 if ($_ROSBE_WRITELOG -eq 1) {
     if (!(Test-Path "$_ROSBE_LOGDIR")) {
@@ -21,11 +29,6 @@ if ($_ROSBE_WRITELOG -eq 1) {
     $file1 = "..\$_ROSBE_LOGDIR\BuildToolLog-$ENV:ROS_ARCH-$DATENAME-$TIMENAME.txt"
     $file2 = "..\$_ROSBE_LOGDIR\BuildROSLog-$ENV:ROS_ARCH-$DATENAME-$TIMENAME.txt"
 }
-
-# Get the current date and time for use in in our build log's file name.
-$TIMERAW = get-date -f t
-$DATENAME = get-date -f dMMyyyy
-$TIMENAME = get-date -f Hms
 
 # Setting for MinGW Compiler in CMake
 $ENV:BUILD_ENVIRONMENT = "MINGW"

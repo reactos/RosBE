@@ -1,18 +1,31 @@
-*** Aug XXth, 2010 - RosBE 1.6 Released
+*** Jan XXth, 2011 - RosBE 1.6 Released
 
 - Updated Binutils to 2.20.51-20100801 (snapshot) (Daniel Reimer)
-- Updated GCC to 4.5.1 (Daniel Reimer)
+- Updated GCC to 4.5.2 (Daniel Reimer)
   * gmp 5.0.1
   * mpfr 3.0.0
   * mpc 0.8.2
-  * MinGW-w64 Runtime 20100730
+  * MinGW-w64 Runtime 20101002
 - Updated NASM to 2.08.02 (Daniel Reimer)
 - Updated YASM to 1.0.1 (Daniel Reimer)
 - Updated SVN to 1.6.12 (Daniel Reimer)
 - Bug 5426 resolved (Adam Kachwalla)
 - Cleanup the options tool (Christoph von Wittich)
-- Add Support for the cmake bringup branch. Just install cmake and type make inside the branch (Daniel Reimer)
-- Renamed make back to mingw32-make to make cmake happy (Daniel Reimer)
+- Add Support for the cmake bringup branch. Just install cmake and type make/makex inside the branch (Daniel Reimer)
+- Renamed make.exe back to mingw32-make.exe to make cmake happy (Daniel Reimer)
+- Add a way to modify the ccache dir by setting the _ROSBE_CCACHE_DIR Variable accordingly. (Daniel Reimer)
+- Fix ccache build by setting a higher cache size and make it User customizeable with the _ROSBE_CACHESIZE Variable representing the allowed GB. (Daniel Reimer)
+- Make the config.rbuild too old error non fatal. Now it continues to build, but I still don't recommend it. (Daniel Reimer)
+- Remove the old config command for rbuild. (Daniel Reimer)
+- Modify clean command to be cmake compatible. (Daniel Reimer)
+- Add cmake to the Version show up. (Daniel Reimer)
+- Make cmake build failsafe if no cmake 2.6+ is properly installed. It shows a Information what to do now. (Daniel Reimer)
+- Make RosBE silent by changing the variable _ROSBE_NOSOUND to 1. (Daniel Reimer)
+- Make the log dir not dependent of the main tree. Use the current dir instead.
+  This makes is possible to have different logs of different branches separate in their own folder.
+
+P.S. Win2000 Support is no more.
+
 
 *** May 19th, 2010 - RosBE 1.5.1.1 Released
 

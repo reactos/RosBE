@@ -17,6 +17,7 @@ if errorlevel 1 (
     echo CMake not found. Build cant be continued, until a CMake version of 2.6 or newer
     echo is properly installed on this system. The newest Version can be found here:
     echo http://www.cmake.org/cmake/resources/software.html
+    echo ADD IT TO SYSTEM PATH!
     goto :EOC
 )
 
