@@ -51,7 +51,7 @@ set REACTOS_BUILD_TOOLS_DIR=%CD%
 
 cmake.exe -G "MinGW Makefiles" -DARCH=%ROS_ARCH% ..\
 if %_ROSBE_WRITELOG% == 1 (
-    %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %* 2>&1 | tee.exe "%_ROSBE_LOGDIR%\BuildToolLog-%ROS_ARCH%-%datename%-%timename%.txt"
+    %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %* 2>&1 | tee.exe "..\%_ROSBE_LOGDIR%\BuildToolLog-%ROS_ARCH%-%datename%-%timename%.txt"
 ) else (
     %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %*
 )
@@ -64,7 +64,7 @@ if not exist "reactos\." (
 cd reactos
 cmake.exe -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-mingw32.cmake -DARCH=%ROS_ARCH% -DREACTOS_BUILD_TOOLS_DIR:DIR="%REACTOS_BUILD_TOOLS_DIR%" ..\
 if %_ROSBE_WRITELOG% == 1 (
-    %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %* 2>&1 | tee.exe "%_ROSBE_LOGDIR%\BuildROSLog-%ROS_ARCH%-%datename%-%timename%.txt"
+    %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %* 2>&1 | tee.exe "..\%_ROSBE_LOGDIR%\BuildROSLog-%ROS_ARCH%-%datename%-%timename%.txt"
 ) else (
     %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %*
 )
