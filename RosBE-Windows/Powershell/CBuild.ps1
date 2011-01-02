@@ -92,14 +92,15 @@ if ($_ROSBE_SHOWTIME -eq 1) {
 # Highlight the fact that building has ended.
 FlashWindow (ps -id $pid).MainWIndowHandle $true
 
-$sound = new-Object System.Media.SoundPlayer;
+if ($_ROSBE_NOSOUND -ne 1) {
+    $sound = new-Object System.Media.SoundPlayer;
 
-if ($LASTEXITCODE -ne 0) {
-    $sound.SoundLocation="$_ROSBE_BASEDIR\samples\error.wav";
-} else {
-    $sound.SoundLocation="$_ROSBE_BASEDIR\samples\notification.wav";
+    if ($LASTEXITCODE -ne 0) {
+        $sound.SoundLocation="$_ROSBE_BASEDIR\samples\error.wav";
+    } else {
+        $sound.SoundLocation="$_ROSBE_BASEDIR\samples\notification.wav";
+    }
+    $sound.Play();
 }
-
-$sound.Play();
 
 $host.ui.RawUI.WindowTitle = "ReactOS Build Environment $_ROSBE_VERSION"

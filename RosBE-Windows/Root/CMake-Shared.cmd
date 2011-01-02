@@ -73,10 +73,12 @@ cd..
 :EOC
 :: Highlight the fact that building has ended.
 
-if !errorlevel! GEQ 1 (
-    playwav.exe error.wav
-) else (
-    playwav.exe notification.wav
+if not %_ROSBE_NOSOUND% == 1 (
+    if !errorlevel! GEQ 1 (
+        playwav.exe error.wav
+    ) else (
+        playwav.exe notification.wav
+    )
 )
 
 flash.exe

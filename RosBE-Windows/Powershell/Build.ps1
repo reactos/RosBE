@@ -3,7 +3,7 @@
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 # FILE:        Root/Build.ps1
 # PURPOSE:     Perform the build of ReactOS.
-# COPYRIGHT:   Copyright 2010 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
 # Check if config.template.rbuild is newer than config.rbuild, if it is then
@@ -75,14 +75,15 @@ if ($_ROSBE_SHOWTIME -eq 1) {
 # Highlight the fact that building has ended.
 FlashWindow (ps -id $pid).MainWIndowHandle $true
 
-$sound = new-Object System.Media.SoundPlayer;
+if ($_ROSBE_NOSOUND -ne 1) {
+    $sound = new-Object System.Media.SoundPlayer;
 
-if ($LASTEXITCODE -ne 0) {
-    $sound.SoundLocation="$_ROSBE_BASEDIR\samples\error.wav";
-} else {
-    $sound.SoundLocation="$_ROSBE_BASEDIR\samples\notification.wav";
+    if ($LASTEXITCODE -ne 0) {
+        $sound.SoundLocation="$_ROSBE_BASEDIR\samples\error.wav";
+    } else {
+        $sound.SoundLocation="$_ROSBE_BASEDIR\samples\notification.wav";
+    }
+    $sound.Play();
 }
-
-$sound.Play();
 
 $host.ui.RawUI.WindowTitle = "ReactOS Build Environment $_ROSBE_VERSION"

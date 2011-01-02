@@ -3,7 +3,7 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/Build-Shared.cmd
 :: PURPOSE:     Perform the build of ReactOS - Shared commands.
-:: COPYRIGHT:   Copyright 2010 Daniel Reimer <reimer.daniel@freenet.de>
+:: COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
 ::                             Colin Finck <colin@reactos.org>
 ::                             Peter Ward <dralnix@gmail.com>
 ::
@@ -67,10 +67,12 @@ if %_ROSBE_WRITELOG% == 1 (
 :EOC
 :: Highlight the fact that building has ended.
 
-if !errorlevel! GEQ 1 (
-    playwav.exe error.wav
-) else (
-    playwav.exe notification.wav
+if not %_ROSBE_NOSOUND% == 1 (
+    if !errorlevel! GEQ 1 (
+        playwav.exe error.wav
+    ) else (
+        playwav.exe notification.wav
+    )
 )
 
 flash.exe
