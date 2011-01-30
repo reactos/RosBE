@@ -42,22 +42,21 @@ if %_ROSBE_SHOWTIME% == 1 (
     set BUILDTIME_COMMAND=
 )
 
+:: Variable with the Host Tools Path
+set REACTOS_BUILD_TOOLS_DIR=%CD%\host-tools
+
 if not exist "host-tools\." (
     mkdir "host-tools" 1> NUL 2> NUL
+    cd host-tools
+    cmake.exe -G "MinGW Makefiles" -DARCH=%ROS_ARCH% ..\
+    if %_ROSBE_WRITELOG% == 1 (
+        %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %* 2>&1 | tee.exe "..\%_ROSBE_LOGDIR%\BuildToolLog-%ROS_ARCH%-%datename%-%timename%.txt"
+    ) else (
+        %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %*
+    )
+    cd..
+    echo.
 )
-cd host-tools
-
-:: Variable with the Host Tools Path
-set REACTOS_BUILD_TOOLS_DIR=%CD%
-
-cmake.exe -G "MinGW Makefiles" -DARCH=%ROS_ARCH% ..\
-if %_ROSBE_WRITELOG% == 1 (
-    %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %* 2>&1 | tee.exe "..\%_ROSBE_LOGDIR%\BuildToolLog-%ROS_ARCH%-%datename%-%timename%.txt"
-) else (
-    %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %*
-)
-cd..
-echo.
 
 if not exist "reactos\." (
     mkdir "reactos" 1> NUL 2> NUL

@@ -52,29 +52,25 @@ if ($_ROSBE_SHOWTIME -eq 1) {
     $sw.Start()
 }
 
-if (!(Test-Path "host-tools")) {
-        New-Item -path "host-tools" -type directory
-    }
-
-cd host-tools
-
 # Variable with the Host Tools Path
-$REACTOS_BUILD_TOOLS_DIR = "$pwd"
+$REACTOS_BUILD_TOOLS_DIR = "$pwd\host-tools"
 
-&{IEX "&'cmake.exe' -G 'MinGW Makefiles' '-DARCH=$ENV:ROS_ARCH' ..\"}
-
-if ($_ROSBE_WRITELOG -eq 1) {
-    &{IEX "&'mingw32-make.exe' -j $MAKE_JOBS $($args)"} $($args) 2>&1 | tee-object $file1
-} else {
-    &{IEX "&'mingw32-make.exe' -j $MAKE_JOBS $($args)"} $($args)
+if (!(Test-Path "host-tools")) {
+    New-Item -path "host-tools" -type directory
+    cd host-tools
+    &{IEX "&'cmake.exe' -G 'MinGW Makefiles' '-DARCH=$ENV:ROS_ARCH' ..\"}
+    if ($_ROSBE_WRITELOG -eq 1) {
+        &{IEX "&'mingw32-make.exe' -j $MAKE_JOBS $($args)"} $($args) 2>&1 | tee-object $file1
+    } else {
+        &{IEX "&'mingw32-make.exe' -j $MAKE_JOBS $($args)"} $($args)
+    }
+    cd..
+    ""
 }
 
-cd..
-""
-
 if (!(Test-Path "reactos")) {
-        New-Item -path "reactos" -type directory
-    }
+    New-Item -path "reactos" -type directory
+}
 
 cd reactos
 &{IEX "&'cmake.exe' -G 'MinGW Makefiles' '-DCMAKE_TOOLCHAIN_FILE=toolchain-mingw32.cmake' '-DARCH=$ENV:ROS_ARCH' '-DREACTOS_BUILD_TOOLS_DIR:DIR=""$REACTOS_BUILD_TOOLS_DIR""' ..\"}
