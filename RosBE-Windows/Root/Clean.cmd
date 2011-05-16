@@ -58,8 +58,7 @@ if not exist "CMakeLists.txt" (
     if "%ROS_OUTPUT%"       == "" (set ROS_OUTPUT=output-%ROS_ARCH%)
     if "%ROS_CDOUTPUT%"     == "" (set ROS_CDOUTPUT=reactos)
 ) else (
-    set ROS_INTERMEDIATE=host-tools
-    set ROS_OUTPUT=reactos
+    set ROS_OUTPUT=output-%BUILD_ENVIRONMENT%-%ROS_ARCH%
 )
 
 :: Do some basic sanity checks to verify that we are working in a ReactOS source tree.
@@ -71,8 +70,8 @@ if exist "%ROS_INTERMEDIATE%" (
     if not exist "CMakeLists.txt" (
         del "%ROS_AUTOMAKE%" 1>NUL 2>NUL
         rd /s /q "%ROS_CDOUTPUT%" 1>NUL 2>NUL
+        rd /s /q "%ROS_INTERMEDIATE%" 1>NUL 2>NUL
     )
-    rd /s /q "%ROS_INTERMEDIATE%" 1>NUL 2>NUL
     rd /s /q "%ROS_OUTPUT%" 1>NUL 2>NUL
     
     echo Done cleaning ReactOS %ROS_ARCH% source directory.

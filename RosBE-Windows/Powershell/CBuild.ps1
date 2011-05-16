@@ -17,6 +17,24 @@ if ($LASTEXITCODE -ne 0) {
     exit
 }
 
+# Setting for MinGW Compiler in CMake
+$REACTOS_SOURCE_DIR = $PWD
+$REACTOS_OUTPUT_PATH = "output-$ENV:BUILD_ENVIRONMENT-$ENV:ROS_ARCH"
+
+if (!(Test-Path "$REACTOS_OUTPUT_PATH")) {
+    New-Item -path "$REACTOS_OUTPUT_PATH" -type directory
+}
+
+set-location $REACTOS_OUTPUT_PATH
+
+if (!(Test-Path "host-tools")) {
+    New-Item -path "host-tools" -type directory
+}
+
+if (!(Test-Path "reactos")) {
+    New-Item -path "reactos" -type directory
+}
+
 # Get the current date and time for use in in our build log's file name.
 $TIMERAW = get-date -f t
 $DATENAME = get-date -f dMMyyyy
@@ -29,9 +47,6 @@ if ($_ROSBE_WRITELOG -eq 1) {
     $file1 = "..\$_ROSBE_LOGDIR\BuildToolLog-$ENV:ROS_ARCH-$DATENAME-$TIMENAME.txt"
     $file2 = "..\$_ROSBE_LOGDIR\BuildROSLog-$ENV:ROS_ARCH-$DATENAME-$TIMENAME.txt"
 }
-
-# Setting for MinGW Compiler in CMake
-$ENV:BUILD_ENVIRONMENT = "MINGW"
 
 # Check whether we were called as "makex" or "make"
 if ("$($args[0])" -eq "multi") {
@@ -52,28 +67,29 @@ if ($_ROSBE_SHOWTIME -eq 1) {
     $sw.Start()
 }
 
-# Variable with the Host Tools Path
-$REACTOS_BUILD_TOOLS_DIR = "$pwd\host-tools"
-
-if (!(Test-Path "host-tools")) {
-    New-Item -path "host-tools" -type directory
-    cd host-tools
-    &{IEX "&'cmake.exe' -G 'MinGW Makefiles' '-DARCH=$ENV:ROS_ARCH' ..\"}
-    if ($_ROSBE_WRITELOG -eq 1) {
-        &{IEX "&'mingw32-make.exe' -j $MAKE_JOBS $($args)"} $($args) 2>&1 | tee-object $file1
-    } else {
-        &{IEX "&'mingw32-make.exe' -j $MAKE_JOBS $($args)"} $($args)
-    }
-    cd..
-    ""
+set-location host-tools
+if (Test-Path "CMakeCache.txt") {
+    $null = remove-item -path "CMakeCache.txt" -force
 }
 
-if (!(Test-Path "reactos")) {
-    New-Item -path "reactos" -type directory
+$REACTOS_BUILD_TOOLS_DIR = $PWD
+
+&{IEX "&'cmake.exe' -G 'MinGW Makefiles' '-DARCH=$ENV:ROS_ARCH' '$REACTOS_SOURCE_DIR'"}
+if ($_ROSBE_WRITELOG -eq 1) {
+    &{IEX "&'mingw32-make.exe' -j $MAKE_JOBS"} 2>&1 | tee-object $file1
+} else {
+    &{IEX "&'mingw32-make.exe' -j $MAKE_JOBS"}
 }
 
-cd reactos
-&{IEX "&'cmake.exe' -G 'MinGW Makefiles' '-DCMAKE_TOOLCHAIN_FILE=toolchain-mingw32.cmake' '-DARCH=$ENV:ROS_ARCH' '-DREACTOS_BUILD_TOOLS_DIR:DIR=""$REACTOS_BUILD_TOOLS_DIR""' ..\"}
+cd..
+""
+
+set-location reactos
+if (Test-Path "CMakeCache.txt") {
+    $null = remove-item -path "CMakeCache.txt" -force
+}
+
+&{IEX "&'cmake.exe' -G 'MinGW Makefiles' '-DCMAKE_TOOLCHAIN_FILE=toolchain-mingw32.cmake' '-DARCH=$ENV:ROS_ARCH' '-DREACTOS_BUILD_TOOLS_DIR:DIR=""$REACTOS_BUILD_TOOLS_DIR""' '$REACTOS_SOURCE_DIR'"}
 
 if ($_ROSBE_WRITELOG -eq 1) {
     &{IEX "&'mingw32-make.exe' -j $MAKE_JOBS $($args)"} $($args) 2>&1 | tee-object $file2
@@ -81,6 +97,7 @@ if ($_ROSBE_WRITELOG -eq 1) {
     &{IEX "&'mingw32-make.exe' -j $MAKE_JOBS $($args)"} $($args)
 }
 
+cd..
 cd..
 
 if ($_ROSBE_SHOWTIME -eq 1) {

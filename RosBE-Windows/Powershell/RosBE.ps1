@@ -45,6 +45,7 @@ if ("$ENV:ROS_ARCH" -eq "amd64") {
 (Get-Host).UI.RawUI.BackgroundColor = 0x0
 clear-host
 
+$global:BUILD_ENVIRONMENT = "MinGW"
 $global:0 = $myInvocation.MyCommand.Definition
 $global:_ROSBE_BASEDIR = [System.IO.Path]::GetDirectoryName($0)
 $global:_ROSBE_PREFIX = $null

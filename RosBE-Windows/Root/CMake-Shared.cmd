@@ -27,8 +27,20 @@ if %_ROSBE_WRITELOG% == 1 (
     )
 )
 
-:: Setting for MinGW Compiler in CMake
-set BUILD_ENVIRONMENT=MINGW
+set REACTOS_SOURCE_DIR=%CD%
+set REACTOS_OUTPUT_PATH=output-%BUILD_ENVIRONMENT%-%ROS_ARCH%
+
+if not exist %REACTOS_OUTPUT_PATH% (
+    mkdir %REACTOS_OUTPUT_PATH%
+)
+cd %REACTOS_OUTPUT_PATH%
+
+if not exist host-tools (
+    mkdir host-tools
+)
+if not exist reactos (
+    mkdir reactos
+)
 
 :: Get the current date and time for use in in our build log's file name.
 call "%_ROSBE_BASEDIR%\TimeDate.cmd"
@@ -42,32 +54,33 @@ if %_ROSBE_SHOWTIME% == 1 (
     set BUILDTIME_COMMAND=
 )
 
-:: Variable with the Host Tools Path
-set REACTOS_BUILD_TOOLS_DIR=%CD%\host-tools
-
-if not exist "host-tools\." (
-    mkdir "host-tools" 1> NUL 2> NUL
-    cd host-tools
-    cmake.exe -G "MinGW Makefiles" -DARCH=%ROS_ARCH% ..\
-    if %_ROSBE_WRITELOG% == 1 (
-        %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %* 2>&1 | tee.exe "..\%_ROSBE_LOGDIR%\BuildToolLog-%ROS_ARCH%-%datename%-%timename%.txt"
-    ) else (
-        %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %*
-    )
-    cd..
-    echo.
+cd host-tools
+if EXIST CMakeCache.txt (
+    del CMakeCache.txt /q
+)
+set REACTOS_BUILD_TOOLS_DIR=%CD%
+cmake -G "MinGW Makefiles" -DARCH=%ROS_ARCH% %REACTOS_SOURCE_DIR%
+if %_ROSBE_WRITELOG% == 1 (
+    %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% 2>&1 | tee.exe "..\%_ROSBE_LOGDIR%\BuildToolLog-%ROS_ARCH%-%datename%-%timename%.txt"
+) else (
+    %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS%
 )
 
-if not exist "reactos\." (
-    mkdir "reactos" 1> NUL 2> NUL
-)
+cd..
+echo.
+
 cd reactos
-cmake.exe -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-mingw32.cmake -DARCH=%ROS_ARCH% -DREACTOS_BUILD_TOOLS_DIR:DIR="%REACTOS_BUILD_TOOLS_DIR%" ..\
+if EXIST CMakeCache.txt (
+    del CMakeCache.txt /q
+)
+cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-mingw32.cmake -DARCH=%ROS_ARCH% -DREACTOS_BUILD_TOOLS_DIR:DIR="%REACTOS_BUILD_TOOLS_DIR%" %REACTOS_SOURCE_DIR%
 if %_ROSBE_WRITELOG% == 1 (
     %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %* 2>&1 | tee.exe "..\%_ROSBE_LOGDIR%\BuildROSLog-%ROS_ARCH%-%datename%-%timename%.txt"
 ) else (
     %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %*
 )
+
+cd..
 cd..
 
 :EOC

@@ -25,6 +25,7 @@ if "%1" == "" (
     set ROS_ARCH=%1
 )
 
+set BUILD_ENVIRONMENT=MinGW
 set _ROSBE_BASEDIR=%~dp0
 set _ROSBE_BASEDIR=%_ROSBE_BASEDIR:~0,-1%
 set _ROSBE_VERSION=1.6
