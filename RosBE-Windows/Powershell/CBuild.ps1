@@ -44,8 +44,8 @@ if ($_ROSBE_WRITELOG -eq 1) {
     if (!(Test-Path "$_ROSBE_LOGDIR")) {
         New-Item -path "$_ROSBE_LOGDIR" -type directory
     }
-    $file1 = "..\$_ROSBE_LOGDIR\BuildToolLog-$ENV:ROS_ARCH-$DATENAME-$TIMENAME.txt"
-    $file2 = "..\$_ROSBE_LOGDIR\BuildROSLog-$ENV:ROS_ARCH-$DATENAME-$TIMENAME.txt"
+    $file1 = "..\..\$_ROSBE_LOGDIR\BuildToolLog-$ENV:ROS_ARCH-$DATENAME-$TIMENAME.txt"
+    $file2 = "..\..\$_ROSBE_LOGDIR\BuildROSLog-$ENV:ROS_ARCH-$DATENAME-$TIMENAME.txt"
 }
 
 # Check whether we were called as "makex" or "make"
