@@ -38,7 +38,7 @@ function rembin {
             $ENV:ROS_CDOUTPUT = "reactos"
         }
     } else {
-        $ENV:ROS_OUTPUT = "output-$BUILD_ENVIRONMENT-$ROS_ARCH"
+        $ENV:ROS_INTERMEDIATE = "output-$BUILD_ENVIRONMENT-$ROS_ARCH"
     }
         
 
@@ -48,9 +48,9 @@ function rembin {
         if (!(Test-Path "CMakeLists.txt")) {
             $null = (Remove-Item "$ENV:ROS_AUTOMAKE" -force)
             $null = (Remove-Item "$ENV:ROS_CDOUTPUT" -recurse -force)
-            $null = (Remove-Item "$ENV:ROS_INTERMEDIATE" -recurse -force)
+            $null = (Remove-Item "$ENV:ROS_OUTPUT" -recurse -force)
         }
-        $null = (Remove-Item "$ENV:ROS_OUTPUT" -recurse -force)
+        $null = (Remove-Item "$ENV:ROS_INTERMEDIATE" -recurse -force)
 
         "Done cleaning ReactOS $ENV:ROS_ARCH source directory."
     } else {
