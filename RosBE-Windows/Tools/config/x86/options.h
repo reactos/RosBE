@@ -15,9 +15,9 @@
 #include <wchar.h>
 #include "resources.h"
 
-#define MINGWVERSION64 L"\\amd64"
-#define MINGWVERSIONARM L"\\arm"
-#define MINGWVERSION L"\\i386"
+#define MINGWVERSION64 L"\\amd64_be"
+#define MINGWVERSIONARM L"\\arm_be"
+#define MINGWVERSION L"\\i386_be"
 
 typedef struct _SETTINGS
 {
