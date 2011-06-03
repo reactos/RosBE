@@ -35,7 +35,9 @@ flex --version
 mingw32-make.exe -v | find "GNU Make"
 echo %PATH% | find "cmake" /I 1> NUL 2> NUL
 if errorlevel 1 (
-    echo WARNING: CMake not found!
+    echo.
+    echo WARNING: CMake not found! You have to load and install it from http://www.cmake.org/
+    echo ------------------------------------------------------------------------------------
 ) else (
     cmake.exe --version
 )

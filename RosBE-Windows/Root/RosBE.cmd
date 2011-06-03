@@ -40,6 +40,10 @@ set _ROSBE_HOST_MINGWPATH=%_ROSBE_BASEDIR%\i386_be
 set _ROSBE_TARGET_MINGWPATH=%_ROSBE_BASEDIR%\%ROS_ARCH%_be
 set _BUILDBOT_SVNSKIPMAINTRUNK=0
 
+if not defined _ROSBE_CMAKEPATH (
+    for /f "usebackq" %%i in (`type "%_ROSBE_BASEDIR%\cmakepath.cfg"`) do set _ROSBE_CMAKEPATH=%%i
+)
+
 set _ROSBE_ORIGINALPATH=%_ROSBE_BASEDIR%;%_ROSBE_BASEDIR%\Tools;%_ROSBE_BASEDIR%\samples;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%_ROSBE_CMAKEPATH%\bin
 
 :: Fix Bison package path (just in case RosBE is installed in a path which contains spaces)

@@ -32,7 +32,9 @@ $fver = (& flex '--version') -replace ".*version ((\d|\.)+).*",'$1'
 & mingw32-make.exe -v | & find "GNU Make"
 $null = "$ENV:PATH" | select-string -pattern "cmake"
 if ($LASTEXITCODE -ne 0) {
-    "WARNING: CMake not found!"
+    ""
+    "WARNING: CMake not found! You have to load and install it from http://www.cmake.org/"
+    "------------------------------------------------------------------------------------"
 } else {
     cmake.exe --version
 }
