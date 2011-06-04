@@ -33,11 +33,4 @@ if exist "%_ROSBE_HOST_MINGWPATH%\bin\nasm.exe" (
 bison --version | find "GNU Bison"
 flex --version
 mingw32-make.exe -v | find "GNU Make"
-echo %PATH% | find "cmake" /I 1> NUL 2> NUL
-if errorlevel 1 (
-    echo.
-    echo WARNING: CMake not found! You have to load and install it from http://www.cmake.org/
-    echo ------------------------------------------------------------------------------------
-) else (
-    cmake.exe --version
-)
+cmake.exe --version
