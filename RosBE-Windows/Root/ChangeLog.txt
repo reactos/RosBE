@@ -1,14 +1,17 @@
-*** Jan XXth, 2011 - RosBE 2.0 Released
+*** Jul XXth, 2011 - RosBE 2.0 Released
 
-- Updated Binutils to 2.20.51-20100801 (snapshot) (Daniel Reimer)
-- Updated GCC to 4.5.2 (Daniel Reimer)
-  * gmp 5.0.1
-  * mpfr 3.0.0
-  * mpc 0.8.2
-  * MinGW-w64 Runtime 20101002
-- Updated NASM to 2.08.02 (Daniel Reimer)
-- Updated YASM to 1.0.1 (Daniel Reimer)
-- Updated SVN to 1.6.12 (Daniel Reimer)
+- Updated Binutils to 2.21.51-20110605 (snapshot) (Daniel Reimer)
+- Updated GCC to 4.6.0 (Daniel Reimer)
+  * gmp 5.0.2
+  * mpfr 3.0.1
+  * mpc 0.9
+  * MinGW-w64 Runtime 20110523
+- Updated NASM to 2.09.06 (Daniel Reimer)
+- Updated pexports 0.44.1 (Daniel Reimer)
+- Updated make 3.8.2 (Amine Khaldi)
+- Updated 7-zip 9.2.0 (Daniel Reimer)
+- Updated YASM to 1.1.0 (Daniel Reimer)
+- Updated SVN to 1.6.16 (Daniel Reimer)
 - Bug 5426 resolved (Adam Kachwalla)
 - Cleanup the options tool (Christoph von Wittich)
 - Add Support for the cmake bringup branch. Just install cmake and type make/makex inside the branch (Daniel Reimer)
@@ -23,6 +26,8 @@
 - Make RosBE silent by changing the variable _ROSBE_NOSOUND to 1. (Daniel Reimer)
 - Make the log dir not dependent of the main tree. Use the current dir instead.
   This makes is possible to have different logs of different branches separate in their own folder.
+- Generate a own path variable again to bypass many problems with different apps in the path var (Daniel Reimer)
+- New nice MSI Installer (Thx for the work goes to zguo aka z98 aka zwabbit)
 
 P.S. Win2000 Support is no more.
 
