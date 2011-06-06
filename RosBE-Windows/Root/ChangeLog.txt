@@ -1,4 +1,4 @@
-*** Jan XXth, 2011 - RosBE 1.6 Released
+*** Jan XXth, 2011 - RosBE 2.0 Released
 
 - Updated Binutils to 2.20.51-20100801 (snapshot) (Daniel Reimer)
 - Updated GCC to 4.5.2 (Daniel Reimer)

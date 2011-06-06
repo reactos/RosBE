@@ -3,7 +3,7 @@
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 # FILE:        Root/RosBE.ps1
 # PURPOSE:     This script provides/sets up various build environments for
-#              ReactOS. Currently it provides a GCC 4.5.2 build environment.
+#              ReactOS. Currently it provides a GCC 4.6.0 build environment.
 # COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
@@ -49,7 +49,7 @@ $global:BUILD_ENVIRONMENT = "MinGW"
 $global:0 = $myInvocation.MyCommand.Definition
 $global:_ROSBE_BASEDIR = [System.IO.Path]::GetDirectoryName($0)
 $global:_ROSBE_PREFIX = $null
-$global:_ROSBE_VERSION = "1.6"
+$global:_ROSBE_VERSION = "2.0"
 $global:_ROSBE_ROSSOURCEDIR = "$pwd"
 $global:_ROSBE_SHOWTIME = 1
 $global:_ROSBE_WRITELOG = 1
