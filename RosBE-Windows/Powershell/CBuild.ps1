@@ -89,7 +89,7 @@ if (Test-Path "CMakeCache.txt") {
     $null = remove-item -path "CMakeCache.txt" -force
 }
 
-&{IEX "&'cmake.exe' -G 'MinGW Makefiles' '-DCMAKE_TOOLCHAIN_FILE=toolchain-mingw32.cmake' '-DARCH=$ENV:ROS_ARCH' '-DREACTOS_BUILD_TOOLS_DIR:DIR=""$REACTOS_BUILD_TOOLS_DIR""' '$REACTOS_SOURCE_DIR'"}
+&{IEX "&'cmake.exe' -G 'MinGW Makefiles' '-DCMAKE_TOOLCHAIN_FILE=toolchain-gcc.cmake' '-DARCH=$ENV:ROS_ARCH' '-DREACTOS_BUILD_TOOLS_DIR:DIR=""$REACTOS_BUILD_TOOLS_DIR""' '$REACTOS_SOURCE_DIR'"}
 
 if ($_ROSBE_WRITELOG -eq 1) {
     &{IEX "&'mingw32-make.exe' -j $MAKE_JOBS $($args)"} $($args) 2>&1 | tee-object $file2
