@@ -5,7 +5,7 @@ TARGET := options.exe
 all: $(TARGET)
 
 CC=gcc
-CFLAGS := -DWIN32 -DUNICODE -O2 -std=c99 -D_WIN32_IE=0x0400 -D_WIN32_WINNT=0x0500
+CFLAGS := -DWIN32 -DUNICODE -O2 -std=c99 -D_WIN32_IE=0x0500 -D_WIN32_WINNT=0x0500
 LFLAGS := -mwindows -s
 LIBS := -lshell32
 
