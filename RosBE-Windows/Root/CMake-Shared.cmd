@@ -73,7 +73,7 @@ cd reactos
 if EXIST CMakeCache.txt (
     del CMakeCache.txt /q
 )
-cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-gcc.cmake -DARCH=%ROS_ARCH% -DREACTOS_BUILD_TOOLS_DIR:DIR="%REACTOS_BUILD_TOOLS_DIR%" %REACTOS_SOURCE_DIR%
+cmake -G "MinGW Makefiles" -DENABLE_CCACHE=%_ROSBE_USECCACHE% -DPCH=%_ROSBE_CMAKEPCH% -DCMAKE_TOOLCHAIN_FILE=toolchain-gcc.cmake -DARCH=%ROS_ARCH% -DREACTOS_BUILD_TOOLS_DIR:DIR="%REACTOS_BUILD_TOOLS_DIR%" %REACTOS_SOURCE_DIR%
 if %_ROSBE_WRITELOG% == 1 (
     %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %* 2>&1 | tee.exe "..\..\%_ROSBE_LOGDIR%\BuildROSLog-%ROS_ARCH%-%datename%-%timename%.txt"
 ) else (
