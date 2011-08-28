@@ -63,6 +63,10 @@ $global:_ROSBE_HOST_MINGWPATH = "$_ROSBE_BASEDIR\i386_be"
 $global:_ROSBE_TARGET_MINGWPATH = "$_ROSBE_BASEDIR\$ENV:ROS_ARCH_be"
 $global:_BUILDBOT_SVNSKIPMAINTRUNK = "0"
 
+if ("$_ROSBE_USECCACHE" -eq "1") {
+    $ENV:CCACHE_SLOPPINESS = "time_macros"
+}
+
 $global:_ROSBE_ORIGINALPATH = "$_ROSBE_BASEDIR;$_ROSBE_BASEDIR\Tools;$ENV:SystemRoot\system32;$ENV:SystemRoot;$ENV:SystemRoot\System32\Wbem;$ENV:SYSTEMROOT\System32\WindowsPowerShell\v1.0;$_ROSBE_BASEDIR\Tools\cmake\bin"
 
 # Fix Bison package path (just in case RosBE is installed in a path which contains spaces)
