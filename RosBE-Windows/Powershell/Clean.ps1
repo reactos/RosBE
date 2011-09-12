@@ -38,9 +38,8 @@ function rembin {
             $ENV:ROS_CDOUTPUT = "reactos"
         }
     } else {
-        $ENV:ROS_INTERMEDIATE = "output-$BUILD_ENVIRONMENT-$ROS_ARCH"
+        $ENV:ROS_INTERMEDIATE = "."
     }
-        
 
     if (Test-Path "$ENV:ROS_INTERMEDIATE\.") {
         "Cleaning ReactOS $ENV:ROS_ARCH source directory..."
@@ -49,8 +48,11 @@ function rembin {
             $null = (Remove-Item "$ENV:ROS_AUTOMAKE" -force)
             $null = (Remove-Item "$ENV:ROS_CDOUTPUT" -recurse -force)
             $null = (Remove-Item "$ENV:ROS_OUTPUT" -recurse -force)
+            $null = (Remove-Item "$ENV:ROS_INTERMEDIATE" -recurse -force)
+        } else {
+            $null = (Remove-Item "$ENV:ROS_CMAKE_HOST" -recurse -force)
+            $null = (Remove-Item "$ENV:ROS_CMAKE_BUILD" -recurse -force)
         }
-        $null = (Remove-Item "$ENV:ROS_INTERMEDIATE" -recurse -force)
 
         "Done cleaning ReactOS $ENV:ROS_ARCH source directory."
     } else {
@@ -58,10 +60,17 @@ function rembin {
     }
 }
 
+function remhost {
+    $null = (Remove-Item "$ENV:ROS_CMAKE_HOST" -recurse -force)
+}
+
 function end {
     $host.ui.RawUI.WindowTitle = "ReactOS Build Environment $_ROSBE_VERSION"
     exit
 }
+
+$ENV:ROS_CMAKE_HOST = "output-$BUILD_ENVIRONMENT-$ENV:ROS_ARCH\host-tools"
+$ENV:ROS_CMAKE_BUILD = "output-$BUILD_ENVIRONMENT-$ENV:ROS_ARCH\reactos"
 
 if ("$args" -eq "") {
     rembin
@@ -72,6 +81,9 @@ elseif ("$args" -eq "logs") {
 elseif ("$args" -eq "all") {
     rembin
     remlog
+}
+elseif ("$args" -eq "host-tools") {
+    remhost
 }
 elseif ("$args" -ne "") {
     $argindex = 0

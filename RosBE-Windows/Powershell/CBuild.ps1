@@ -19,7 +19,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # Setting for MinGW Compiler in CMake
 $REACTOS_SOURCE_DIR = $PWD
-$REACTOS_OUTPUT_PATH = "output-$BUILD_ENVIRONMENT-$ENV:ROS_ARCH"
+$REACTOS_OUTPUT_PATH = "output-$BUILD_ENVIRONMENT-$ENV:ROS_ARCH$_ROSBE_CMAKE_DIFF_"
 
 if (!(Test-Path "$REACTOS_OUTPUT_PATH")) {
     New-Item -path "$REACTOS_OUTPUT_PATH" -type directory

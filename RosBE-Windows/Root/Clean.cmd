@@ -17,6 +17,9 @@ if %_ROSBE_DEBUG% == 1 (
 setlocal enabledelayedexpansion
 title Cleaning...
 
+set ROS_CMAKE_HOST=output-%BUILD_ENVIRONMENT%-%ROS_ARCH%\host-tools
+set ROS_CMAKE_BUILD=output-%BUILD_ENVIRONMENT%-%ROS_ARCH%\reactos
+
 if "%1" == "" (
     call :BIN
 ) else if /i "%1" == "logs" (
@@ -24,6 +27,8 @@ if "%1" == "" (
 ) else if /i "%1" == "all" (
     call :BIN
     call :LOG
+) else if /i "%1" == "host-tools" (
+    call :HOST
 ) else (
     call :MODULE %*
 )
@@ -50,7 +55,6 @@ goto :EOF
 
 :: Check if we have any binaries to clean, if so, clean them.
 :BIN
-
 :: Check if the user set any custom filenames or pathes, otherwise locally set the appropriate variables.
 if not exist "CMakeLists.txt" (
     if "%ROS_AUTOMAKE%"     == "" (set ROS_AUTOMAKE=makefile-%ROS_ARCH%.auto)
@@ -58,7 +62,7 @@ if not exist "CMakeLists.txt" (
     if "%ROS_OUTPUT%"       == "" (set ROS_OUTPUT=output-%ROS_ARCH%)
     if "%ROS_CDOUTPUT%"     == "" (set ROS_CDOUTPUT=reactos)
 ) else (
-    set ROS_INTERMEDIATE=output-%BUILD_ENVIRONMENT%-%ROS_ARCH%
+    set ROS_INTERMEDIATE=.
 )
 
 :: Do some basic sanity checks to verify that we are working in a ReactOS source tree.
@@ -71,13 +75,20 @@ if exist "%ROS_INTERMEDIATE%" (
         del "%ROS_AUTOMAKE%" 1>NUL 2>NUL
         rd /s /q "%ROS_CDOUTPUT%" 1>NUL 2>NUL
         rd /s /q "%ROS_OUTPUT%" 1>NUL 2>NUL
+        rd /s /q "%ROS_INTERMEDIATE%" 1>NUL 2>NUL
+    ) else (
+        rd /s /q "%ROS_CMAKE_HOST%" 1>NUL 2>NUL
+        rd /s /q "%ROS_CMAKE_BUILD%" 1>NUL 2>NUL
     )
-    rd /s /q "%ROS_INTERMEDIATE%" 1>NUL 2>NUL
     
     echo Done cleaning ReactOS %ROS_ARCH% source directory.
 ) else (
     echo ERROR: This directory contains no %ROS_ARCH% compiler output to clean.
 )
+goto :EOF
+
+:HOST
+rd /s /q "%ROS_CMAKE_HOST%" 1>NUL 2>NUL
 goto :EOF
 
 :EOC

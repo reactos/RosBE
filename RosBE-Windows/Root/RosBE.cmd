@@ -25,6 +25,10 @@ if "%1" == "" (
     set ROS_ARCH=%1
 )
 
+if defined _ROSBE_CMAKE_DIFF (
+    set _ROSBE_CMAKE_DIFF_=_%_ROSBE_CMAKE_DIFF%
+)
+
 set BUILD_ENVIRONMENT=MinGW
 set _ROSBE_BASEDIR=%~dp0
 set _ROSBE_BASEDIR=%_ROSBE_BASEDIR:~0,-1%
