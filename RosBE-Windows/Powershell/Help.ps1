@@ -159,8 +159,9 @@ if ("$args" -eq "") {
     " Usage: clean [logs]"
     " Fully clean the ReactOS source directory."
     ""
-    "    all  - Removes build logs and compiler output in the RosBE-Logs directory."
-    "    logs - Removes all build logs in the RosBE-Logs directory."
+    "    all        - Removes build logs and compiler output in the RosBE-Logs directory."
+    "    logs       - Removes all build logs in the RosBE-Logs directory."
+    "    host-tools - Removes just the cmake host tools."
     "    All other commands will be parsed as ""make ""module""_clean"" and cleans the"
     "    specific module."
 } elseif ("$args" -eq "help") {

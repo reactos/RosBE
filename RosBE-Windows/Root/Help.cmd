@@ -166,8 +166,9 @@ if "%1" == "" (
     echo Usage: clean [logs]
     echo Fully clean the ReactOS source directory.
     echo.
-    echo    all  - Removes build logs and compiler output in the RosBE-Logs directory.
-    echo    logs - Removes all build logs in the RosBE-Logs directory.
+    echo    all        - Removes build logs and compiler output in the RosBE-Logs directory.
+    echo    logs       - Removes all build logs in the RosBE-Logs directory.
+    echo    host-tools - Removes just the cmake host tools.
     echo    All other commands will be parsed as "make module_clean" and cleans the
     echo    specific module.
 ) else if /i "%1" == "help" (
