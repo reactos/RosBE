@@ -1,0 +1,618 @@
+diff -Naur make-3.82-orig/ChangeLog make-3.82/ChangeLog
+--- make-3.82-orig/ChangeLog	2011-07-18 13:42:28.256928000 -0400
++++ make-3.82/ChangeLog	2011-07-18 13:42:43.615001000 -0400
+@@ -1,3 +1,31 @@
++2010-10-28  Troy Runkel  <Troy.Runkel@mathworks.com>
++
++	* config.h.W32: Enable job server support for Windows.
++	* main.c [WINDOWS32]: Include sub_proc.h
++	(main): Create a named semaphore to implement the job server.
++	(clean_jobserver): Free the job server semaphore when make is finished.
++	* job.c [WINDOWS32]: Define WAIT_NOHANG
++	(reap_children): Support non-blocking wait for child processes.
++	(free_child): Release job server semaphore when child process finished.
++	(job_noop): Don't define function on Windows.
++	(set_child_handler_action_flags): Don't define function on Windows.
++	(new_job): Wait for job server semaphore or child process termination.
++	(exec_command): Pass new parameters to process_wait_for_any.
++	* w32/include/sub_proc.h [WINDOWS32]: New and updated EXTERN_DECL entries.
++	* w32/subproc/sub_proc.c [WINDOWS32]: Added job server implementation variables.
++	(open_jobserver_semaphore): Open existing job server semaphore by name.
++	(create_jobserver_semaphore): Create new job server named semaphore.
++	(free_jobserver_semaphore): Close existing job server semaphore.
++	(acquire_jobserver_semaphore): Decrement job server semaphore count.
++	(release_jobserver_semaphore): Increment job server semaphore count.
++	(has_jobserver_semaphore): Returns whether job server semaphore exists.
++	(get_jobserver_semaphore_name): Returns name of job server semaphore.
++	(wait_for_semaphore_or_child_process): Wait for either the job server
++	semaphore to become signalled or a child process to terminate.
++	(process_wait_for_any_private): Added support for non-blocking wait for child.
++	(process_wait_for_any): Added support for non-blocking wait for child.
++	(process_file_io): Pass new parameters to process_wait_for_any_private.
++
+ 2010-07-28  Paul Smith  <psmith@gnu.org>
+ 
+ 	Version 3.82 released.
+diff -Naur make-3.82-orig/config.h.W32 make-3.82/config.h.W32
+--- make-3.82-orig/config.h.W32	2011-07-18 13:42:28.262934000 -0400
++++ make-3.82/config.h.W32	2011-07-18 14:00:33.848608000 -0400
+@@ -332,7 +332,7 @@
+ #define MAKE_HOST "Windows32"
+ 
+ /* Define this to enable job server support in GNU make. */
+-/* #undef MAKE_JOBSERVER */
++#define MAKE_JOBSERVER 1
+ 
+ /* Define to 1 if your `struct nlist' has an `n_un' member. Obsolete, depend
+    on `HAVE_STRUCT_NLIST_N_UN_N_NAME */
+diff -Naur make-3.82-orig/job.c make-3.82/job.c
+--- make-3.82-orig/job.c	2011-07-18 13:42:28.545806000 -0400
++++ make-3.82/job.c	2011-07-18 13:42:44.357002000 -0400
+@@ -108,6 +108,7 @@
+ # include "sub_proc.h"
+ # include "w32err.h"
+ # include "pathstuff.h"
++# define WAIT_NOHANG 1
+ #endif /* WINDOWS32 */
+ 
+ #ifdef __EMX__
+@@ -509,9 +510,10 @@
+ {
+ #ifndef WINDOWS32
+   WAIT_T status;
++#endif
++
+   /* Initially, assume we have some.  */
+   int reap_more = 1;
+-#endif
+ 
+ #ifdef WAIT_NOHANG
+ # define REAP_MORE reap_more
+@@ -680,6 +682,7 @@
+             HANDLE hPID;
+             int werr;
+             HANDLE hcTID, hcPID;
++            DWORD dwWaitStatus = 0;
+             exit_code = 0;
+             exit_sig = 0;
+             coredump = 0;
+@@ -703,7 +706,7 @@
+               }
+ 
+             /* wait for anything to finish */
+-            hPID = process_wait_for_any();
++            hPID = process_wait_for_any(block, &dwWaitStatus);
+             if (hPID)
+               {
+ 
+@@ -725,6 +728,18 @@
+ 
+                 coredump = 0;
+               }
++            else if (dwWaitStatus == WAIT_FAILED)
++              {
++                /* The WaitForMultipleObjects() failed miserably.  Punt.  */
++                pfatal_with_name ("WaitForMultipleObjects");
++              }
++            else if (dwWaitStatus == WAIT_TIMEOUT)
++              {
++                /* No child processes are finished.  Give up waiting. */
++                reap_more = 0;
++                break;
++              }
++
+             pid = (pid_t) hPID;
+           }
+ #endif /* WINDOWS32 */
+@@ -908,6 +923,19 @@
+   /* If we're using the jobserver and this child is not the only outstanding
+      job, put a token back into the pipe for it.  */
+ 
++#ifdef WINDOWS32
++  if (has_jobserver_semaphore() && jobserver_tokens > 1)
++    {
++      if (! release_jobserver_semaphore())
++        {
++          DWORD err = GetLastError();
++          fatal (NILF,_("release jobserver semaphore: (Error %d: %s)"),
++                 err, map_windows32_error_to_string(err));
++        }
++
++      DB (DB_JOBS, (_("Released token for child %p (%s).\n"), child, child->file->name));
++    }
++#else
+   if (job_fds[1] >= 0 && jobserver_tokens > 1)
+     {
+       char token = '+';
+@@ -922,6 +950,7 @@
+       DB (DB_JOBS, (_("Released token for child %p (%s).\n"),
+                     child, child->file->name));
+     }
++#endif
+ 
+   --jobserver_tokens;
+ 
+@@ -973,7 +1002,7 @@
+ }
+ #endif
+ 
+-#ifdef MAKE_JOBSERVER
++#if defined(MAKE_JOBSERVER) && !defined(WINDOWS32)
+ RETSIGTYPE
+ job_noop (int sig UNUSED)
+ {
+@@ -1706,7 +1735,11 @@
+      just once).  Also more thought needs to go into the entire algorithm;
+      this is where the old parallel job code waits, so...  */
+ 
++#ifdef WINDOWS32
++  else if (has_jobserver_semaphore())
++#else
+   else if (job_fds[0] >= 0)
++#endif
+     while (1)
+       {
+         char token;
+@@ -1720,6 +1753,7 @@
+         if (!jobserver_tokens)
+           break;
+ 
++#ifndef WINDOWS32
+         /* Read a token.  As long as there's no token available we'll block.
+            We enable interruptible system calls before the read(2) so that if
+            we get a SIGCHLD while we're waiting, we'll return with EINTR and
+@@ -1748,7 +1782,7 @@
+             DB (DB_JOBS, ("Duplicate the job FD\n"));
+             job_rfd = dup (job_fds[0]);
+           }
+-
++#endif
+         /* Reap anything that's currently waiting.  */
+         reap_children (0, 0);
+ 
+@@ -1766,12 +1800,24 @@
+         if (!children)
+           fatal (NILF, "INTERNAL: no children as we go to sleep on read\n");
+ 
++#ifdef WINDOWS32
++        /* On Windows we simply wait for the jobserver semaphore to become
++         * signalled or one of our child processes to terminate.
++         */
++        got_token = wait_for_semaphore_or_child_process();
++        if (got_token < 0)
++          {
++            DWORD err = GetLastError();
++            fatal (NILF,_("semaphore or child process wait: (Error %d: %s)"),
++                   err, map_windows32_error_to_string(err));
++          }
++#else
+         /* Set interruptible system calls, and read() for a job token.  */
+ 	set_child_handler_action_flags (1, waiting_jobs != NULL);
+ 	got_token = read (job_rfd, &token, 1);
+ 	saved_errno = errno;
+ 	set_child_handler_action_flags (0, waiting_jobs != NULL);
+-
++#endif
+         /* If we got one, we're done here.  */
+ 	if (got_token == 1)
+           {
+@@ -1780,6 +1826,7 @@
+             break;
+           }
+ 
++#ifndef WINDOWS32
+         /* If the error _wasn't_ expected (EINTR or EBADF), punt.  Otherwise,
+            go back and reap_children(), and try again.  */
+ 	errno = saved_errno;
+@@ -1787,6 +1834,7 @@
+           pfatal_with_name (_("read jobs pipe"));
+         if (errno == EBADF)
+           DB (DB_JOBS, ("Read returned EBADF.\n"));
++#endif
+       }
+ #endif
+ 
+@@ -2100,7 +2148,7 @@
+     }
+ 
+   /* wait and reap last child */
+-  hWaitPID = process_wait_for_any();
++  hWaitPID = process_wait_for_any(1, 0);
+   while (hWaitPID)
+     {
+       /* was an error found on this process? */
+diff -Naur make-3.82-orig/main.c make-3.82/main.c
+--- make-3.82-orig/main.c	2011-07-18 13:42:28.557810000 -0400
++++ make-3.82/main.c	2011-07-18 13:42:44.377995000 -0400
+@@ -35,6 +35,7 @@
+ #include <windows.h>
+ #include <io.h>
+ #include "pathstuff.h"
++#include "sub_proc.h"
+ #endif
+ #ifdef __EMX__
+ # include <sys/types.h>
+@@ -1722,13 +1723,23 @@
+ 
+       cp = jobserver_fds->list[0];
+ 
++#ifdef WINDOWS32
++      if (! open_jobserver_semaphore(cp))
++        {
++          DWORD err = GetLastError();
++          fatal (NILF,_("internal error: unable to open jobserver semaphore `%s': (Error %d: %s)"), 
++                 cp, err, map_windows32_error_to_string(err));
++        }
++
++      DB (DB_JOBS, (_("Jobserver client (semaphore %s)\n"), cp));
++#else
+       if (sscanf (cp, "%d,%d", &job_fds[0], &job_fds[1]) != 2)
+         fatal (NILF,
+                _("internal error: invalid --jobserver-fds string `%s'"), cp);
+ 
+       DB (DB_JOBS,
+           (_("Jobserver client (fds %d,%d)\n"), job_fds[0], job_fds[1]));
+-
++#endif
+       /* The combination of a pipe + !job_slots means we're using the
+          jobserver.  If !job_slots and we don't have a pipe, we can start
+          infinite jobs.  If we see both a pipe and job_slots >0 that means the
+@@ -1739,6 +1750,7 @@
+         error (NILF,
+                _("warning: -jN forced in submake: disabling jobserver mode."));
+ 
++#ifndef WINDOWS32
+       /* Create a duplicate pipe, that will be closed in the SIGCHLD
+          handler.  If this fails with EBADF, the parent has closed the pipe
+          on us because it didn't think we were a submake.  If so, print a
+@@ -1753,11 +1765,15 @@
+                  _("warning: jobserver unavailable: using -j1.  Add `+' to parent make rule."));
+           job_slots = 1;
+         }
+-
++#endif
+       if (job_slots > 0)
+         {
++#ifdef WINDOWS32
++          free_jobserver_semaphore();
++#else
+           close (job_fds[0]);
+           close (job_fds[1]);
++#endif
+           job_fds[0] = job_fds[1] = -1;
+           free (jobserver_fds->list);
+           free (jobserver_fds);
+@@ -1773,8 +1789,27 @@
+       char *cp;
+       char c = '+';
+ 
++#ifdef WINDOWS32
++      /* sub_proc.c cannot wait for more than MAXIMUM_WAIT_OBJECTS objects
++       * and one of them is the job-server semaphore object.  Limit the 
++       * number of available job slots to (MAXIMUM_WAIT_OBJECTS - 1). */
++
++      if (job_slots >= MAXIMUM_WAIT_OBJECTS)
++        {
++          job_slots = MAXIMUM_WAIT_OBJECTS - 1;
++          DB (DB_JOBS, (_("Jobserver slots limited to %d\n"), job_slots));
++        }
++
++      if (! create_jobserver_semaphore(job_slots - 1))
++        {
++          DWORD err = GetLastError();
++          fatal (NILF,_("creating jobserver semaphore: (Error %d: %s)"),
++                 err, map_windows32_error_to_string(err));
++        }
++#else
+       if (pipe (job_fds) < 0 || (job_rfd = dup (job_fds[0])) < 0)
+ 	pfatal_with_name (_("creating jobs pipe"));
++#endif
+ 
+       /* Every make assumes that it always has one job it can run.  For the
+          submakes it's the token they were given by their parent.  For the
+@@ -1783,6 +1818,10 @@
+ 
+       master_job_slots = job_slots;
+ 
++#ifdef WINDOWS32
++      /* We're using the jobserver so set job_slots to 0. */
++      job_slots = 0;
++#else
+       while (--job_slots)
+         {
+           int r;
+@@ -1791,11 +1830,17 @@
+           if (r != 1)
+             pfatal_with_name (_("init jobserver pipe"));
+         }
++#endif
+ 
+       /* Fill in the jobserver_fds struct for our children.  */
+ 
++#ifdef WINDOWS32
++      cp = xmalloc (MAX_PATH + 1);
++      strcpy(cp, get_jobserver_semaphore_name());
++#else
+       cp = xmalloc ((sizeof ("1024")*2)+1);
+       sprintf (cp, "%d,%d", job_fds[0], job_fds[1]);
++#endif
+ 
+       jobserver_fds = (struct stringlist *)
+                         xmalloc (sizeof (struct stringlist));
+@@ -3106,7 +3151,11 @@
+      have written all our tokens so do that now.  If tokens are left
+      after any other error code, that's bad.  */
+ 
++#ifdef WINDOWS32
++  if (has_jobserver_semaphore() && jobserver_tokens)
++#else
+   if (job_fds[0] != -1 && jobserver_tokens)
++#endif
+     {
+       if (status != 2)
+         error (NILF,
+@@ -3115,11 +3164,16 @@
+       else
+         while (jobserver_tokens--)
+           {
++#ifdef WINDOWS32
++            if (! release_jobserver_semaphore())
++              perror_with_name ("release_jobserver_semaphore", "");
++#else
+             int r;
+ 
+             EINTRLOOP (r, write (job_fds[1], &token, 1));
+             if (r != 1)
+               perror_with_name ("write", "");
++#endif
+           }
+     }
+ 
+@@ -3131,19 +3185,26 @@
+       /* We didn't write one for ourself, so start at 1.  */
+       unsigned int tcnt = 1;
+ 
++#ifdef WINDOWS32
++      while (acquire_jobserver_semaphore())
++          ++tcnt;
++#else
+       /* Close the write side, so the read() won't hang.  */
+       close (job_fds[1]);
+ 
+       while (read (job_fds[0], &token, 1) == 1)
+         ++tcnt;
+-
++#endif
+       if (tcnt != master_job_slots)
+         error (NILF,
+                "INTERNAL: Exiting with %u jobserver tokens available; should be %u!",
+                tcnt, master_job_slots);
+ 
++#ifdef WINDOWS32
++      free_jobserver_semaphore();
++#else
+       close (job_fds[0]);
+-
++#endif
+       /* Clean out jobserver_fds so we don't pass this information to any
+          sub-makes.  Also reset job_slots since it will be put on the command
+          line, not in MAKEFLAGS.  */
+diff -Naur make-3.82-orig/w32/include/sub_proc.h make-3.82/w32/include/sub_proc.h
+--- make-3.82-orig/w32/include/sub_proc.h	2011-07-18 13:42:28.454893000 -0400
++++ make-3.82/w32/include/sub_proc.h	2011-07-18 13:42:46.006751000 -0400
+@@ -40,7 +40,7 @@
+ 	int stdin_data_len));
+ EXTERN_DECL(long process_file_io, (HANDLE proc));
+ EXTERN_DECL(void process_cleanup, (HANDLE proc));
+-EXTERN_DECL(HANDLE process_wait_for_any, (VOID_DECL));
++EXTERN_DECL(HANDLE process_wait_for_any, (int block, DWORD* pdwWaitStatus));
+ EXTERN_DECL(void process_register, (HANDLE proc));
+ EXTERN_DECL(HANDLE process_easy, (char** argv, char** env));
+ EXTERN_DECL(BOOL process_kill, (HANDLE proc, int signal));
+@@ -57,4 +57,14 @@
+ EXTERN_DECL(int process_errcnt, (HANDLE proc));
+ EXTERN_DECL(void process_pipes, (HANDLE proc, int pipes[3]));
+ 
++/* jobserver routines */
++EXTERN_DECL(int open_jobserver_semaphore, (char* name));
++EXTERN_DECL(int create_jobserver_semaphore, (int tokens));
++EXTERN_DECL(void free_jobserver_semaphore, (VOID_DECL));
++EXTERN_DECL(int acquire_jobserver_semaphore, (VOID_DECL));
++EXTERN_DECL(int release_jobserver_semaphore, (VOID_DECL));
++EXTERN_DECL(int has_jobserver_semaphore, (VOID_DECL));
++EXTERN_DECL(char* get_jobserver_semaphore_name, (VOID_DECL));
++EXTERN_DECL(int wait_for_semaphore_or_child_process, (VOID_DECL));
++
+ #endif
+diff -Naur make-3.82-orig/w32/subproc/sub_proc.c make-3.82/w32/subproc/sub_proc.c
+--- make-3.82-orig/w32/subproc/sub_proc.c	2011-07-18 13:42:28.498849000 -0400
++++ make-3.82/w32/subproc/sub_proc.c	2011-07-18 13:42:46.045751000 -0400
+@@ -58,6 +58,126 @@
+ static int proc_index = 0;
+ static int fake_exits_pending = 0;
+ 
++/* Windows jobserver implementation variables */
++static char jobserver_semaphore_name[MAX_PATH + 1];
++static HANDLE jobserver_semaphore = NULL;
++
++/* Open existing jobserver semaphore */
++int open_jobserver_semaphore(char* name)
++{
++    jobserver_semaphore = OpenSemaphore(
++        SEMAPHORE_ALL_ACCESS,	// Semaphore access setting
++        FALSE,			// Child processes DON'T inherit
++        name);			// Semaphore name
++
++    if (jobserver_semaphore == NULL)
++        return 0;
++
++    return 1;        
++}
++
++/* Create new jobserver semaphore */
++int create_jobserver_semaphore(int tokens)
++{
++    sprintf(jobserver_semaphore_name, "gmake_semaphore_%d", _getpid());
++
++    jobserver_semaphore = CreateSemaphore(
++        NULL, 				// Use default security descriptor
++        tokens,				// Initial count
++        tokens, 			// Maximum count
++        jobserver_semaphore_name);	// Semaphore name
++
++    if (jobserver_semaphore == NULL)
++        return 0;
++
++    return 1;        
++}
++
++/* Close jobserver semaphore */
++void free_jobserver_semaphore()
++{
++    if (jobserver_semaphore != NULL)
++    {
++        CloseHandle(jobserver_semaphore);
++        jobserver_semaphore = NULL;
++    }
++}
++
++/* Decrement semaphore count */
++int acquire_jobserver_semaphore()
++{
++    DWORD dwEvent = WaitForSingleObject(
++        jobserver_semaphore,	// Handle to semaphore
++        0);			// DON'T wait on semaphore
++
++    return (dwEvent == WAIT_OBJECT_0);
++}
++
++/* Increment semaphore count */
++int release_jobserver_semaphore()
++{
++    BOOL bResult = ReleaseSemaphore( 
++        jobserver_semaphore,  	// handle to semaphore
++        1,            		// increase count by one
++        NULL);        		// not interested in previous count
++
++    return (bResult);
++}
++
++int has_jobserver_semaphore()
++{
++    return (jobserver_semaphore != NULL);
++}
++
++char* get_jobserver_semaphore_name()
++{
++    return (jobserver_semaphore_name);
++}
++
++/* Wait for either the jobserver semaphore to become signalled or one of our
++ * child processes to terminate.
++ */
++int wait_for_semaphore_or_child_process()
++{
++    HANDLE handles[MAXIMUM_WAIT_OBJECTS];
++    DWORD dwHandleCount = 1;
++    DWORD dwEvent;
++    int i;
++
++    /* Add jobserver semaphore to first slot. */
++    handles[0] = jobserver_semaphore;
++
++    /* Build array of handles to wait for */
++    for (i = 0; i < proc_index; i++) 
++    {
++        /* Don't wait on child processes that have already finished */
++        if (fake_exits_pending && proc_array[i]->exit_code)
++            continue;
++
++        handles[dwHandleCount++] = (HANDLE) proc_array[i]->pid;
++    }
++
++    dwEvent = WaitForMultipleObjects( 
++        dwHandleCount,	// number of objects in array
++        handles,	// array of objects
++        FALSE,		// wait for any object
++        INFINITE);	// wait until object is signalled
++
++    switch(dwEvent)
++    {
++      case WAIT_FAILED:
++        return -1;
++
++      case WAIT_OBJECT_0:
++        /* Indicate that the semaphore was signalled */
++        return 1;
++
++      default:
++        /* Assume that one or more of the child processes terminated. */
++        return 0;
++    }
++}
++
+ /*
+  * When a process has been waited for, adjust the wait state
+  * array so that we don't wait for it again
+@@ -87,7 +207,7 @@
+  * Waits for any of the registered child processes to finish.
+  */
+ static sub_process *
+-process_wait_for_any_private(void)
++process_wait_for_any_private(int block, DWORD* pdwWaitStatus)
+ {
+ 	HANDLE handles[MAXIMUM_WAIT_OBJECTS];
+ 	DWORD retval, which;
+@@ -106,7 +226,7 @@
+ 
+ 	/* wait for someone to exit */
+ 	if (!fake_exits_pending) {
+-		retval = WaitForMultipleObjects(proc_index, handles, FALSE, INFINITE);
++		retval = WaitForMultipleObjects(proc_index, handles, FALSE, (block ? INFINITE : 0));
+ 		which = retval - WAIT_OBJECT_0;
+ 	} else {
+ 		fake_exits_pending--;
+@@ -114,13 +234,19 @@
+ 		which = i;
+ 	}
+ 
++        /* If the pointer is not NULL, set the wait status result variable. */
++        if (pdwWaitStatus)
++            *pdwWaitStatus = retval;
++
+ 	/* return pointer to process */
+-	if (retval != WAIT_FAILED) {
++        if ((retval == WAIT_TIMEOUT) || (retval == WAIT_FAILED)) {
++		return NULL;
++        }
++	else {
+ 		sub_process* pproc = proc_array[which];
+ 		process_adjust_wait_state(pproc);
+ 		return pproc;
+-	} else
+-		return NULL;
++	} 
+ }
+ 
+ /*
+@@ -179,9 +305,9 @@
+  */
+ 
+ HANDLE
+-process_wait_for_any(void)
++process_wait_for_any(int block, DWORD* pdwWaitStatus)
+ {
+-	sub_process* pproc = process_wait_for_any_private();
++	sub_process* pproc = process_wait_for_any_private(block, pdwWaitStatus);
+ 
+ 	if (!pproc)
+ 		return NULL;
+@@ -865,7 +991,7 @@
+         DWORD ierr;
+ 
+ 	if (proc == NULL)
+-		pproc = process_wait_for_any_private();
++		pproc = process_wait_for_any_private(1, 0);
+ 	else
+ 		pproc = (sub_process *)proc;
+ 
