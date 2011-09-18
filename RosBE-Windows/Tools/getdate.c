@@ -3,7 +3,7 @@
  * LICENSE:     GNU General Public License v2. (see LICENSE.txt)
  * FILE:        Tools/getdate.c
  * PURPOSE:     Returns System Date
- * COPYRIGHT:   Copyright 2007 Peter Ward <dralnix@gmail.com>
+ * COPYRIGHT:   Copyright 2008 Peter Ward <dralnix@gmail.com>
  *
  */
 

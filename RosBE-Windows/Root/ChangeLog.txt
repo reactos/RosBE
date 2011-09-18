@@ -1,17 +1,13 @@
-*** Jul XXth, 2011 - RosBE 2.0 Released
+*** Sep XXth, 2011 - RosBE 2.0 Released
 
-- Updated Binutils to 2.21.51-20110605 (snapshot) (Daniel Reimer)
-- Updated GCC to 4.6.0 (Daniel Reimer)
+- Updated parts of GCC
   * gmp 5.0.2
   * mpfr 3.0.1
-  * mpc 0.9
-  * MinGW-w64 Runtime 20110523
-- Updated NASM to 2.09.06 (Daniel Reimer)
 - Updated pexports 0.44.1 (Daniel Reimer)
 - Updated make 3.8.2 (Amine Khaldi)
+- Updated gdb 7.3-2 (Daniel Reimer)
 - Updated 7-zip 9.2.0 (Daniel Reimer)
-- Updated YASM to 1.1.0 (Daniel Reimer)
-- Updated SVN to 1.6.16 (Daniel Reimer)
+- Updated SVN to 1.6.17 (Daniel Reimer)
 - Bug 5426 resolved (Adam Kachwalla)
 - Cleanup the options tool (Christoph von Wittich)
 - Add Support for the cmake bringup branch. Just install cmake and type make/makex inside the branch (Daniel Reimer)
@@ -28,6 +24,15 @@
   This makes is possible to have different logs of different branches separate in their own folder.
 - Generate a own path variable again to bypass many problems with different apps in the path var (Daniel Reimer)
 - New nice MSI Installer (Thx for the work goes to zguo aka z98 aka zwabbit)
+- Add CCACHE_SLOPPINESS=time_macros if CCACHE is set active. (Amine Khaldi)
+- Add the parameter "clean host-tools" to just clean cmake host-tools folder. (Daniel Reimer)
+- Add the ENVVar _ROSBE_CMAKE_DIFF representing the Difference in name to be generated between more than one build folder if needed. (Daniel Reimer)
+Follow Colin's idea for a better RosBE folder structure and rename the Tools Folder to bin. (Colin Finck)
+- Remove nasm/yasm and getincludes and any trace of it. (Daniel Reimer)
+- Modified and updated build script for rosbe 2.0 (Colin Finck)
+- Provide patched cmake and make sources to better suit out needs. (Colin Finck)
+  - Commit a patch by Troy Runkel to fix the implementation of the jobserver under Windows builds of GNU Make.
+  - Commit the patch containing Jérôme Gardou's CMake improvements.
 
 P.S. Win2000 Support is no more.
 

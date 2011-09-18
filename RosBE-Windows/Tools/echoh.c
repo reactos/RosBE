@@ -3,7 +3,7 @@
  * LICENSE:     GNU General Public License v2. (see LICENSE.txt)
  * FILE:        Tools/echoh.c
  * PURPOSE:     Converts a value to hex and displays it
- * COPYRIGHT:   Copyright 2007 Christoph von Wittich <Christoph_vW@reactos.org>
+ * COPYRIGHT:   Copyright 2008 Christoph von Wittich <Christoph_vW@reactos.org>
  *
  */
 
