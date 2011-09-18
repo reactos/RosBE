@@ -10,7 +10,9 @@
 
 # GCC
 [regex]$GCCVer = "4.[0-9].[0-9]"
-$_ROSBE_GCC_TARGET_VERSION = $GCCVer.matches($ENV:ROSBE_TARGET_CXXFLAGS)[0].value
+$targetgcc = "$_ROSBE_PREFIX" + "gcc.exe"
+$gccversion = &{IEX "&'$_ROSBE_TARGET_MINGWPATH\bin\$targetgcc' -v 2>&1"}
+$_ROSBE_GCC_TARGET_VERSION = $GCCVer.matches($gccversion)[0].value
 "gcc version - $_ROSBE_GCC_TARGET_VERSION"
 "gcc target - $ENV:ROS_ARCH"
 
