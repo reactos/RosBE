@@ -12,15 +12,6 @@ if %_ROSBE_DEBUG% == 1 (
     @echo on
 )
 
-echo %PATH% | find "cmake" /I 1> NUL 2> NUL
-if errorlevel 1 (
-    echo CMake not found. Build cant be continued, until a CMake version of 2.6 or newer
-    echo is properly installed on this system. The newest Version can be found here:
-    echo http://www.cmake.org/cmake/resources/software.html
-    echo ADD IT TO SYSTEM PATH!
-    goto :EOC
-)
-
 if %_ROSBE_WRITELOG% == 1 (
     if not exist "%_ROSBE_LOGDIR%\." (
         mkdir "%_ROSBE_LOGDIR%" 1> NUL 2> NUL

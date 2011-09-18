@@ -8,15 +8,6 @@
 
 $LASTEXITCODE = 0
 
-$null = "$ENV:PATH" | select-string -pattern "cmake"
-if ($LASTEXITCODE -ne 0) {
-    "CMake not found. Build cant be continued, until a CMake version of 2.6 or newer"
-    "is properly installed on this system. The newest Version can be found here:"
-    "http://www.cmake.org/cmake/resources/software.html"
-    "ADD IT TO SYSTEM PATH!"
-    exit
-}
-
 # Setting for MinGW Compiler in CMake
 $REACTOS_SOURCE_DIR = $PWD
 $REACTOS_OUTPUT_PATH = "output-$BUILD_ENVIRONMENT-$ENV:ROS_ARCH$_ROSBE_CMAKE_DIFF_"
