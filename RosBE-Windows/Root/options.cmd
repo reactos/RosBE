@@ -23,7 +23,7 @@ if not "%ROS_ARCH%" == "i386" (
 )
 
 :: Run options.exe
-if exist "%_ROSBE_BASEDIR%\Tools\options.exe" (
+if exist "%_ROSBE_BASEDIR%\bin\options.exe" (
     pushd "%_ROSBE_BASEDIR%"
     call options.exe %param%
     popd

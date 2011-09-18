@@ -18,7 +18,7 @@ if ("$ENV:ROS_ARCH" -ne "i386") {
 
 # Run options.exe
 
-if (Test-Path "$_ROSBE_BASEDIR\Tools\options.exe") {
+if (Test-Path "$_ROSBE_BASEDIR\bin\options.exe") {
     Push-Location "$_ROSBE_BASEDIR"
     &options.exe $param | out-null
     Pop-Location

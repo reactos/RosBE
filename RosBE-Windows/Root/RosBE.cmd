@@ -49,14 +49,14 @@ if "_ROSBE_USECCACHE" == "1" (
     set CCACHE_SLOPPINESS=time_macros
 )
 
-set _ROSBE_ORIGINALPATH=%_ROSBE_BASEDIR%;%_ROSBE_BASEDIR%\Tools;%_ROSBE_BASEDIR%\samples;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%_ROSBE_BASEDIR%\Tools\cmake\bin
+set _ROSBE_ORIGINALPATH=%_ROSBE_BASEDIR%;%_ROSBE_BASEDIR%\bin;%_ROSBE_BASEDIR%\samples;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%_ROSBE_BASEDIR%\bin\cmake\bin
 
 :: Fix Bison package path (just in case RosBE is installed in a path which contains spaces)
 set BISON_PKGDATADIR=%~ds0%~sp0%i386\share\bison
 
 :: Get the number of CPUs in the system so we know how many jobs to execute.
 :: To modify the number used, see the cpucount usage for getting to know about the possible options
-for /f "usebackq" %%i in (`"%_ROSBE_BASEDIR%\Tools\cpucount.exe" -x1`) do set _ROSBE_MAKEX_JOBS=%%i
+for /f "usebackq" %%i in (`"%_ROSBE_BASEDIR%\bin\cpucount.exe" -x1`) do set _ROSBE_MAKEX_JOBS=%%i
 
 if "%_ROSBE_CCACHE_DIR%" == "" (
     set CCACHE_DIR=%APPDATA%\RosBE\.ccache
@@ -96,7 +96,7 @@ if not exist "%APPDATA%\RosBE\." (
 )
 
 call "%_ROSBE_BASEDIR%\rosbe-gcc-env.cmd"
-doskey update="%_ROSBE_BASEDIR%\Tools\elevate.exe" "%_ROSBE_BASEDIR%\update.cmd" $*
+doskey update="%_ROSBE_BASEDIR%\bin\elevate.exe" "%_ROSBE_BASEDIR%\update.cmd" $*
 
 cls
 echo *******************************************************************************
