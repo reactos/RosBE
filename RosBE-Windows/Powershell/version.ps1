@@ -18,13 +18,6 @@ $_ROSBE_GCC_TARGET_VERSION = $GCCVer.matches($ENV:ROSBE_TARGET_CXXFLAGS)[0].valu
 $run = "$_ROSBE_TARGET_MINGWPATH\bin\$_ROSBE_PREFIX" + "ld"
 & "$run" -v
 
-# NASM or YASM
-if (Test-Path "$_ROSBE_HOST_MINGWPATH\bin\nasm.exe") {
-    & nasm -v
-} else {
-    & yasm --version | select-string "yasm 0"
-}
-
 # Bison, Flex and Make
 & bison '--version' | select-string "GNU Bison"
 $fver = (& flex '--version') -replace ".*version ((\d|\.)+).*",'$1'

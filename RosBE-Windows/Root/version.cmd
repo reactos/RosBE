@@ -22,13 +22,6 @@ echo gcc target^: %ROS_ARCH%
 :: LD
 "%_ROSBE_TARGET_MINGWPATH%\bin\%_ROSBE_PREFIX%ld" -v
 
-:: NASM or YASM
-if exist "%_ROSBE_HOST_MINGWPATH%\bin\nasm.exe" (
-    nasm -v
-) else (
-    yasm --version | find "yasm 0"
-)
-
 :: Bison, Flex and Make
 bison --version | find "GNU Bison"
 flex --version

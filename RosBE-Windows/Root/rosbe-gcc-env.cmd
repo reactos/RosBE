@@ -30,8 +30,3 @@ if "%ROS_PREFIX%" == "" (
 )
 
 set PATH=%_ROSBE_HOST_MINGWPATH%\bin;%_ROSBE_TARGET_MINGWPATH%\bin;%_ROSBE_ORIGINALPATH%
-
-for /f "usebackq tokens=*" %%i in (`"cpp -x c -v <NUL 2>&1 | getincludes"`) do set ROSBE_HOST_CFLAGS=%%i
-for /f "usebackq tokens=*" %%i in (`"cpp -x c++ -v <NUL 2>&1 | getincludes"`) do set ROSBE_HOST_CXXFLAGS=%%i
-for /f "usebackq tokens=*" %%i in (`"%_ROSBE_PREFIX%cpp -x c -v <NUL 2>&1 | getincludes"`) do set ROSBE_TARGET_CFLAGS=%%i
-for /f "usebackq tokens=*" %%i in (`"%_ROSBE_PREFIX%cpp -x c++ -v <NUL 2>&1 | getincludes"`) do set ROSBE_TARGET_CXXFLAGS=%%i

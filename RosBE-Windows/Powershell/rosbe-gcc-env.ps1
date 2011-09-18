@@ -22,13 +22,3 @@ if ("$ENV:ROS_PREFIX") {
 }
  
 $ENV:PATH = "$_ROSBE_HOST_MINGWPATH\bin;$_ROSBE_TARGET_MINGWPATH\bin;$_ROSBE_ORIGINALPATH"
-
-[string]$_ROSBE_HOST_CFLAGS = "" | cpp.exe -x c -v 2>&1
-[string]$_ROSBE_HOST_CXXFLAGS = "" | cpp.exe -x c++ -v 2>&1
-$TARGETGCC = "$_ROSBE_PREFIX" + "cpp.exe"
-[string]$_ROSBE_TARGET_CFLAGS = "" | &$TARGETGCC -x c -v 2>&1
-[string]$_ROSBE_TARGET_CXXFLAGS = "" | &$TARGETGCC -x c++ -v 2>&1
-$ENV:ROSBE_HOST_CFLAGS = $_ROSBE_HOST_CFLAGS | getincludes
-$ENV:ROSBE_HOST_CXXFLAGS = $_ROSBE_HOST_CXXFLAGS | getincludes
-$ENV:ROSBE_TARGET_CFLAGS = $_ROSBE_TARGET_CFLAGS | getincludes
-$ENV:ROSBE_TARGET_CXXFLAGS = $_ROSBE_TARGET_CXXFLAGS | getincludes
