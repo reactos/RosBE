@@ -6,18 +6,6 @@
 # COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
-# Check if config.template.rbuild is newer than config.rbuild, if it is then
-# abort the build and inform the user.
-if (Test-Path ".\config.rbuild") {
-    if ((gi .\config.template.rbuild).LastWriteTime -gt (gi .\config.rbuild).LastWriteTime) {
-        ""
-        "*** config.template.rbuild is newer than config.rbuild ***"
-        "*** aborting build. Please check for changes and       ***"
-        "*** update your config.rbuild.                         ***"
-        ""
-    }
-}
-
 if ($_ROSBE_USECCACHE -eq 1) {
     if ("$_ROSBE_CACHESIZE" -ne "") {
     $_ROSBE_CACHESIZEG = "$_ROSBE_CACHESIZE" + "G"

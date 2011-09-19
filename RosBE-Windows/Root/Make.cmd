@@ -20,9 +20,5 @@ setlocal enabledelayedexpansion
 set MAKE_JOBS=1
 set TITLE_COMMAND=make %*
 
-if exist "CMakeLists.txt" (
-    call "%_ROSBE_BASEDIR%\CMake-Shared.cmd" %*
-) else (
-    call "%_ROSBE_BASEDIR%\Build-Shared.cmd" %*
-)
+call "%_ROSBE_BASEDIR%\Build-Shared.cmd" %*
 endlocal

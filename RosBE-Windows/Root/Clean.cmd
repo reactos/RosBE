@@ -55,32 +55,13 @@ goto :EOF
 
 :: Check if we have any binaries to clean, if so, clean them.
 :BIN
-:: Check if the user set any custom filenames or pathes, otherwise locally set the appropriate variables.
-if not exist "CMakeLists.txt" (
-    if "%ROS_AUTOMAKE%"     == "" (set ROS_AUTOMAKE=makefile-%ROS_ARCH%.auto)
-    if "%ROS_INTERMEDIATE%" == "" (set ROS_INTERMEDIATE=obj-%ROS_ARCH%)
-    if "%ROS_OUTPUT%"       == "" (set ROS_OUTPUT=output-%ROS_ARCH%)
-    if "%ROS_CDOUTPUT%"     == "" (set ROS_CDOUTPUT=reactos)
-) else (
-    set ROS_INTERMEDIATE=.
-)
-
 :: Do some basic sanity checks to verify that we are working in a ReactOS source tree.
 :: Consider that we also want to clean half-complete builds, so don't depend on too many existing files.
 
-if exist "%ROS_INTERMEDIATE%" (
+if exist "CMakeLists.txt" (
     echo Cleaning ReactOS %ROS_ARCH% source directory...
-    
-    if not exist "CMakeLists.txt" (
-        del "%ROS_AUTOMAKE%" 1>NUL 2>NUL
-        rd /s /q "%ROS_CDOUTPUT%" 1>NUL 2>NUL
-        rd /s /q "%ROS_OUTPUT%" 1>NUL 2>NUL
-        rd /s /q "%ROS_INTERMEDIATE%" 1>NUL 2>NUL
-    ) else (
-        rd /s /q "%ROS_CMAKE_HOST%" 1>NUL 2>NUL
-        rd /s /q "%ROS_CMAKE_BUILD%" 1>NUL 2>NUL
-    )
-    
+    rd /s /q "%ROS_CMAKE_HOST%" 1>NUL 2>NUL
+    rd /s /q "%ROS_CMAKE_BUILD%" 1>NUL 2>NUL
     echo Done cleaning ReactOS %ROS_ARCH% source directory.
 ) else (
     echo ERROR: This directory contains no %ROS_ARCH% compiler output to clean.

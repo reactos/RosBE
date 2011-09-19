@@ -14,19 +14,6 @@ if %_ROSBE_DEBUG% == 1 (
     @echo on
 )
 
-:: Check if config.template.rbuild is newer than config.rbuild, if it is then
-:: abort the build and inform the user.
-if exist .\config.rbuild (
-    chknewer.exe config.template.rbuild config.rbuild
-    if !errorlevel! == 1 (
-        echo.
-        echo *** config.template.rbuild is newer than config.rbuild ***
-        echo *** aborting build. Please check for changes and       ***
-        echo *** update your config.rbuild.                         ***
-        echo.
-    )
-)
-
 if "%_ROSBE_USECCACHE%" == "1" (
     if not "%_ROSBE_CACHESIZE%" == "" (
         ccache -M %_ROSBE_CACHESIZE%G

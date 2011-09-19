@@ -22,38 +22,10 @@ function remlog {
 function rembin {
     # Check if we have any binaries to clean, if so, clean them.
 
-    # Check if the user set any custom filenames or pathes, otherwise locally set the appropriate variables.
-
-    if (!(Test-Path "CMakeLists.txt")) {
-        if ("$ENV:ROS_AUTOMAKE" -eq "") {
-            $ENV:ROS_AUTOMAKE = "makefile-$ENV:ROS_ARCH.auto"
-        }
-        if ("$ENV:ROS_INTERMEDIATE" -eq "") {
-            $ENV:ROS_INTERMEDIATE = "obj-$ENV:ROS_ARCH"
-        }
-        if ("$ENV:ROS_OUTPUT" -eq "") {
-            $ENV:ROS_OUTPUT = "output-$ENV:ROS_ARCH"
-        }
-        if ("$ENV:ROS_CDOUTPUT" -eq "") {
-            $ENV:ROS_CDOUTPUT = "reactos"
-        }
-    } else {
-        $ENV:ROS_INTERMEDIATE = "."
-    }
-
-    if (Test-Path "$ENV:ROS_INTERMEDIATE\.") {
+    if (Test-Path "CMakeLists.txt") {
         "Cleaning ReactOS $ENV:ROS_ARCH source directory..."
-
-        if (!(Test-Path "CMakeLists.txt")) {
-            $null = (Remove-Item "$ENV:ROS_AUTOMAKE" -force)
-            $null = (Remove-Item "$ENV:ROS_CDOUTPUT" -recurse -force)
-            $null = (Remove-Item "$ENV:ROS_OUTPUT" -recurse -force)
-            $null = (Remove-Item "$ENV:ROS_INTERMEDIATE" -recurse -force)
-        } else {
-            $null = (Remove-Item "$ENV:ROS_CMAKE_HOST" -recurse -force)
-            $null = (Remove-Item "$ENV:ROS_CMAKE_BUILD" -recurse -force)
-        }
-
+        $null = (Remove-Item "$ENV:ROS_CMAKE_HOST" -recurse -force)
+        $null = (Remove-Item "$ENV:ROS_CMAKE_BUILD" -recurse -force)
         "Done cleaning ReactOS $ENV:ROS_ARCH source directory."
     } else {
         throw {"ERROR: This directory contains no $ENV:ROS_ARCH compiler output to clean."}
