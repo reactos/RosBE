@@ -58,7 +58,6 @@ $global:_ROSBE_ROSSOURCEDIR = "$pwd"
 $global:_ROSBE_SHOWTIME = 1
 $global:_ROSBE_WRITELOG = 1
 $global:_ROSBE_USECCACHE = 0
-$global:_ROSBE_CMAKEPCH = 0
 $global:_ROSBE_SHOWVERSION = 0
 $global:_ROSBE_NOSOUND = 0
 $global:_ROSBE_NOSYSPATH = 1

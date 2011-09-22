@@ -17,8 +17,6 @@ if %_ROSBE_DEBUG% == 1 (
 if "%_ROSBE_USECCACHE%" == "1" (
     if not "%_ROSBE_CACHESIZE%" == "" (
         ccache -M %_ROSBE_CACHESIZE%G
-    ) else (
-        ccache -M 8G
     )
     set _ROSBE_CCACHE=ccache 
 ) else (
