@@ -1,4 +1,4 @@
-*** Sep XXth, 2011 - RosBE 2.0 Released
+*** Oct XXth, 2011 - RosBE 2.0 Released
 
 - Updated parts of GCC
   * gmp 5.0.2
@@ -22,7 +22,7 @@
 - Make RosBE silent by changing the variable _ROSBE_NOSOUND to 1. (Daniel Reimer)
 - Make the log dir not dependent of the main tree. Use the current dir instead.
   This makes is possible to have different logs of different branches separate in their own folder.
-- Generate a own path variable again to bypass many problems with different apps in the path var (Daniel Reimer)
+- Generate a own optional path variable again to bypass many problems with different apps in the path var (Daniel Reimer)
 - New nice MSI Installer (Thx for the work goes to zguo aka z98 aka zwabbit)
 - Add CCACHE_SLOPPINESS=time_macros if CCACHE is set active. (Amine Khaldi)
 - Add the parameter "clean host-tools" to just clean cmake host-tools folder. (Daniel Reimer)
@@ -33,6 +33,7 @@ Follow Colin's idea for a better RosBE folder structure and rename the Tools Fol
 - Provide patched cmake and make sources to better suit out needs. (Colin Finck)
   - Commit a patch by Troy Runkel to fix the implementation of the jobserver under Windows builds of GNU Make.
   - Commit the patch containing Jérôme Gardou's CMake improvements.
+- Add new ccache 3.1.6 Windows build (Amine Khaldi)
 
 P.S. Win2000 Support is no more.
 
