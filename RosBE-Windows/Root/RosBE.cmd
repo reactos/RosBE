@@ -47,6 +47,10 @@ set CCACHE_SLOPPINESS=time_macros
 
 set _ROSBE_ORIGINALPATH=%_ROSBE_BASEDIR%;%_ROSBE_BASEDIR%\bin;%_ROSBE_BASEDIR%\samples;%PATH%
 
+if "%_ROSBE_COMPAT_MODE%" == "1" (
+    set _ROSBE_ORIGINALPATH=%_ROSBE_BASEDIR%;%_ROSBE_BASEDIR%\bin;%_ROSBE_BASEDIR%\samples;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem
+)
+
 :: Fix Bison package path (just in case RosBE is installed in a path which contains spaces)
 set BISON_PKGDATADIR=%~ds0%~sp0%i386\share\bison
 

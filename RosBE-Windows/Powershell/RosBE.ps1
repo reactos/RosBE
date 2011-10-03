@@ -69,6 +69,10 @@ $ENV:CCACHE_SLOPPINESS = "time_macros"
 
 $global:_ROSBE_ORIGINALPATH = "$_ROSBE_BASEDIR;$_ROSBE_BASEDIR\bin;$_ROSBE_BASEDIR\samples;$ENV:PATH
 
+if ("$ENV:_ROSBE_COMPAT_MODE" -eq "1") {
+    $global:_ROSBE_ORIGINALPATH = "$_ROSBE_BASEDIR;$_ROSBE_BASEDIR\bin;$ENV:SystemRoot\system32;$ENV:SystemRoot;$ENV:SystemRoot\System32\Wbem;$ENV:SYSTEMROOT\System32\WindowsPowerShell\v1.0"
+}
+
 # Fix Bison package path (just in case RosBE is installed in a path which contains spaces)
 $ENV:BISON_PKGDATADIR = ((New-Object -ComObject Scripting.FileSystemObject).GetFolder("$_ROSBE_HOST_MINGWPATH\share\bison")).ShortPath
 
