@@ -10,143 +10,143 @@ LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
 
 ID_DIALOG DIALOGEX DISCARDABLE  0, 0, 255, 290
 STYLE DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "ReactOS «Ø¸mÀô¹Ò³]¸m"
+CAPTION "ReactOS Â«?Â¸m?Ã´Â¹?Â³]Â¸m"
 FONT 8, "MS Shell Dlg"
 BEGIN
-  LTEXT "­I´ºÃC¦â", -1, 10, 10, 75, 12
-  LTEXT "¦rÅéÃC¦â", 0x0, 10, 27, 75, 12
+  LTEXT "Â­IÂ´Âº?CÂ¦Ã¢", -1, 10, 10, 75, 12
+  LTEXT "Â¦r?Ã©?CÂ¦Ã¢", 0x0, 10, 27, 75, 12
   COMBOBOX IDC_BACK, 135, 10, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
   COMBOBOX IDC_FONT, 135, 25, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
-  CONTROL "\n\n¥Ü¨Ò¤å¥»", ID_EXAMPLE, "static", WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_CENTER, 113, 50, 125, 36
-  CONTROL "Åã¥Ü«Ø¸m®É¶¡", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
-  CONTROL "¨Ï¥Î CCache", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
-  CONTROL "µô´î¿é¥X", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
-  CONTROL "«Ø¥ß½Õ¸Õ¥Îªº¥]¸ËÀÉ", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
-  CONTROL "Åã¥Üª©¥»¼ÐÀY", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
-  LTEXT "MinGW/GCC ªº¸ô®|", -1, 10, 107, 100, 15
+  CONTROL "\n\nÂ¥?Â¨?Â¤Ã¥Â¥Â»", ID_EXAMPLE, "static", WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_CENTER, 113, 50, 125, 36
+  CONTROL "?Ã£Â¥?Â«?Â¸mÂ®?Â¶Â¡", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
+  CONTROL "Â¨?Â¥? CCache", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
+  CONTROL "ÂµÃ´Â´Ã®Â¿Ã©Â¥X", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
+  CONTROL "Â«?Â¥?Â½?Â¸?Â¥?ÂªÂºÂ¥]Â¸???", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
+  CONTROL "?Ã£Â¥?ÂªÂ©Â¥Â»Â¼??Y", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
+  LTEXT "MinGW/GCC ÂªÂºÂ¸Ã´Â®|", -1, 10, 107, 100, 15
   EDITTEXT ID_MGWDIR, 10, 120, 200, 13, WS_TABSTOP
   PUSHBUTTON "...", ID_BROWSEMGW, 215, 120, 30, 13, WS_TABSTOP
-  CONTROL "Àx¦s¤é»x", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
+  CONTROL "?xÂ¦sÂ¤Ã©Â»x", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
   EDITTEXT ID_LOGDIR, 10, 156, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSE, 215, 156, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "§ó§ï OBJ ªº¥Ø¿ý", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
+  CONTROL "Â§Ã³Â§Ã¯ OBJ ÂªÂºÂ¥?Â¿Ã½", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
   EDITTEXT ID_OBJDIR, 10, 192, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOBJ, 215, 192, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "§ó§ï OUT ªº¥Ø¿ý", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
+  CONTROL "Â§Ã³Â§Ã¯ OUT ÂªÂºÂ¥?Â¿Ã½", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
   EDITTEXT ID_OUTDIR, 10, 228, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "Àx¦s", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "¨ú®ø", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
-  CONTROL "Åwªï¡I", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
+  PUSHBUTTON "?xÂ¦s", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
+  PUSHBUTTON "Â¨ÃºÂ®Ã¸", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
+  CONTROL "?wÂªÃ¯Â¡I", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
 END
 
 ID_DIALOG64 DIALOGEX DISCARDABLE  0, 0, 255, 290
 STYLE DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "ReactOS «Ø¸mÀô¹Ò³]¸m - AMD64"
+CAPTION "ReactOS Â«?Â¸m?Ã´Â¹?Â³]Â¸m - AMD64"
 FONT 8, "MS Shell Dlg"
 BEGIN
-  LTEXT "­I´ºÃC¦â", -1, 10, 10, 75, 12
-  LTEXT "¦rÅéÃC¦â", 0x0, 10, 27, 75, 12
+  LTEXT "Â­IÂ´Âº?CÂ¦Ã¢", -1, 10, 10, 75, 12
+  LTEXT "Â¦r?Ã©?CÂ¦Ã¢", 0x0, 10, 27, 75, 12
   COMBOBOX IDC_BACK, 135, 10, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
   COMBOBOX IDC_FONT, 135, 25, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
-  CONTROL "\n\n¥Ü¨Ò¤å¥»", ID_EXAMPLE, "static", WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_CENTER, 113, 50, 125, 36
-  CONTROL "Åã¥Ü«Ø¸m®É¶¡", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
-  CONTROL "¨Ï¥Î CCache", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
-  CONTROL "µô´î¿é¥X", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
-  CONTROL "«Ø¥ß½Õ¸Õ¥Îªº¥]¸ËÀÉ", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
-  CONTROL "Åã¥Üª©¥»¼ÐÀY", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
-  LTEXT "MinGW/GCC ªº¸ô®|", -1, 10, 107, 100, 15
+  CONTROL "\n\nÂ¥?Â¨?Â¤Ã¥Â¥Â»", ID_EXAMPLE, "static", WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_CENTER, 113, 50, 125, 36
+  CONTROL "?Ã£Â¥?Â«?Â¸mÂ®?Â¶Â¡", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
+  CONTROL "Â¨?Â¥? CCache", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
+  CONTROL "ÂµÃ´Â´Ã®Â¿Ã©Â¥X", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
+  CONTROL "Â«?Â¥?Â½?Â¸?Â¥?ÂªÂºÂ¥]Â¸???", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
+  CONTROL "?Ã£Â¥?ÂªÂ©Â¥Â»Â¼??Y", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
+  LTEXT "MinGW/GCC ÂªÂºÂ¸Ã´Â®|", -1, 10, 107, 100, 15
   EDITTEXT ID_MGWDIR, 10, 120, 200, 13, WS_TABSTOP
   PUSHBUTTON "...", ID_BROWSEMGW, 215, 120, 30, 13, WS_TABSTOP
-  CONTROL "Àx¦s¤é»x", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
+  CONTROL "?xÂ¦sÂ¤Ã©Â»x", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
   EDITTEXT ID_LOGDIR, 10, 156, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSE, 215, 156, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "§ó§ï OBJ ªº¥Ø¿ý", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
+  CONTROL "Â§Ã³Â§Ã¯ OBJ ÂªÂºÂ¥?Â¿Ã½", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
   EDITTEXT ID_OBJDIR, 10, 192, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOBJ, 215, 192, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "§ó§ï OUT ªº¥Ø¿ý", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
+  CONTROL "Â§Ã³Â§Ã¯ OUT ÂªÂºÂ¥?Â¿Ã½", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
   EDITTEXT ID_OUTDIR, 10, 228, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "Àx¦s", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "¨ú®ø", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
-  CONTROL "Åwªï¡I", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
+  PUSHBUTTON "?xÂ¦s", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
+  PUSHBUTTON "Â¨ÃºÂ®Ã¸", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
+  CONTROL "?wÂªÃ¯Â¡I", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
 END
 
 ID_DIALOGARM DIALOGEX DISCARDABLE  0, 0, 255, 290
 STYLE DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "ReactOS «Ø¸mÀô¹Ò³]¸m - ARM"
+CAPTION "ReactOS Â«?Â¸m?Ã´Â¹?Â³]Â¸m - ARM"
 FONT 8, "MS Shell Dlg"
 BEGIN
-  LTEXT "­I´ºÃC¦â", -1, 10, 10, 75, 12
-  LTEXT "¦rÅéÃC¦â", 0x0, 10, 27, 75, 12
+  LTEXT "Â­IÂ´Âº?CÂ¦Ã¢", -1, 10, 10, 75, 12
+  LTEXT "Â¦r?Ã©?CÂ¦Ã¢", 0x0, 10, 27, 75, 12
   COMBOBOX IDC_BACK, 135, 10, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
   COMBOBOX IDC_FONT, 135, 25, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
-  CONTROL "\n\n¥Ü¨Ò¤å¥»", ID_EXAMPLE, "static", WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_CENTER, 113, 50, 125, 36
-  CONTROL "Åã¥Ü«Ø¸m®É¶¡", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
-  CONTROL "¨Ï¥Î CCache", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
-  CONTROL "µô´î¿é¥X", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
-  CONTROL "«Ø¥ß½Õ¸Õ¥Îªº¥]¸ËÀÉ", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
-  CONTROL "Åã¥Üª©¥»¼ÐÀY", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
-  LTEXT "MinGW/GCC ªº¸ô®|", -1, 10, 107, 100, 15
+  CONTROL "\n\nÂ¥?Â¨?Â¤Ã¥Â¥Â»", ID_EXAMPLE, "static", WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_CENTER, 113, 50, 125, 36
+  CONTROL "?Ã£Â¥?Â«?Â¸mÂ®?Â¶Â¡", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
+  CONTROL "Â¨?Â¥? CCache", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
+  CONTROL "ÂµÃ´Â´Ã®Â¿Ã©Â¥X", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
+  CONTROL "Â«?Â¥?Â½?Â¸?Â¥?ÂªÂºÂ¥]Â¸???", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
+  CONTROL "?Ã£Â¥?ÂªÂ©Â¥Â»Â¼??Y", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
+  LTEXT "MinGW/GCC ÂªÂºÂ¸Ã´Â®|", -1, 10, 107, 100, 15
   EDITTEXT ID_MGWDIR, 10, 120, 200, 13, WS_TABSTOP
   PUSHBUTTON "...", ID_BROWSEMGW, 215, 120, 30, 13, WS_TABSTOP
-  CONTROL "Àx¦s¤é»x", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
+  CONTROL "?xÂ¦sÂ¤Ã©Â»x", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
   EDITTEXT ID_LOGDIR, 10, 156, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSE, 215, 156, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "§ó§ï OBJ ªº¥Ø¿ý", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
+  CONTROL "Â§Ã³Â§Ã¯ OBJ ÂªÂºÂ¥?Â¿Ã½", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
   EDITTEXT ID_OBJDIR, 10, 192, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOBJ, 215, 192, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "§ó§ï OUT ªº¥Ø¿ý", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
+  CONTROL "Â§Ã³Â§Ã¯ OUT ÂªÂºÂ¥?Â¿Ã½", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
   EDITTEXT ID_OUTDIR, 10, 228, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "Àx¦s", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "¨ú®ø", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
-  CONTROL "Åwªï¡I", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
+  PUSHBUTTON "?xÂ¦s", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
+  PUSHBUTTON "Â¨ÃºÂ®Ã¸", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
+  CONTROL "?wÂªÃ¯Â¡I", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
 END
 
 STRINGTABLE
 BEGIN
-  CLR0, "¶Â¦â"
-  CLR1, "ÂÅ¦â"
-  CLR2, "ºñ¦â"
-  CLR3, "¤ô¦â"
-  CLR4, "¬õ¦â"
-  CLR5, "µµ¦â"
-  CLR6, "¶À¦â"
-  CLR7, "¥Õ¦â"
-  CLR8, "¦Ç¦â"
-  CLR9, "²LÂÅ¦â"
-  CLR10, "²Lºñ¦â"
-  CLR11, "²L¤ô¦â"
-  CLR12, "²L¬õ¦â"
-  CLR13, "²Lµµ¦â"
-  CLR14, "²L¶À"
-  CLR15, "«G¥Õ¦â"
-  MSG_NOGCCFOUND, "§ä¤£¨ì MinGW/GCC¡I ½ÐÀË¬d§Aªº¥Ø¿ý¡C"
-  MSG_CMDFFAILED, "µLªk³Ð«Ø rosbe-options.cmd¡I"
-  MSG_PS1FFAILED, "µLªk³Ð«Ø rosbe-options.ps1¡I"
-  MSG_DIREFAILED, "µLªk³Ð«Ø¥Ø¿ý¡I"
-  MSG_SETLOADSUC, "¥ý«eªº³]¸m¤w³Q¦¨¥\¸ü¤J¡C"
-  MSG_FINDLOGDIR, "½Ð¿ï¾Ü¤@­ÓÀx¦s¤é»xªº¥Ø¿ý¡G"
-  MSG_FINDMGWDIR, "½Ð¿ï¾Ü MinGW/GCC ©Ò¦ì©óªº¥Ø¿ý¡G"
-  MSG_FINDOBJDIR, "½Ð¿ï¾ÜÀx¦s OBJ ÀÉ®×ªº¥Ø¿ý¡G"
-  MSG_FINDOUTDIR, "½Ð¿ï¾ÜÀx¦s OUT ÀÉ®×ªº¥Ø¿ý¡G"
-  MSG_WARNINGBOX, "Äµ§i"
-  MSG_EXITCHANGE, "±z½T©w­n¦b¤£Àx¦s¤U°h¥X¡H"
-  MSG_INVALIDDIR, "§A©Ò¿é¤Jªº¥Ø¿ý¨Ã¤£¦s¦b¡C§A­n³Ð«Ø¥¦¶Ü¡H"
+  CLR0, "Â¶?Â¦Ã¢"
+  CLR1, "??Â¦Ã¢"
+  CLR2, "ÂºÃ±Â¦Ã¢"
+  CLR3, "Â¤Ã´Â¦Ã¢"
+  CLR4, "Â¬ÃµÂ¦Ã¢"
+  CLR5, "ÂµÂµÂ¦Ã¢"
+  CLR6, "Â¶?Â¦Ã¢"
+  CLR7, "Â¥?Â¦Ã¢"
+  CLR8, "Â¦?Â¦Ã¢"
+  CLR9, "Â²L??Â¦Ã¢"
+  CLR10, "Â²LÂºÃ±Â¦Ã¢"
+  CLR11, "Â²LÂ¤Ã´Â¦Ã¢"
+  CLR12, "Â²LÂ¬ÃµÂ¦Ã¢"
+  CLR13, "Â²LÂµÂµÂ¦Ã¢"
+  CLR14, "Â²LÂ¶?"
+  CLR15, "Â«GÂ¥?Â¦Ã¢"
+  MSG_NOGCCFOUND, "Â§Ã¤Â¤Â£Â¨Ã¬ MinGW/GCCÂ¡I Â½???Â¬dÂ§AÂªÂºÂ¥?Â¿Ã½Â¡C"
+  MSG_CMDFFAILED, "ÂµLÂªkÂ³?Â«? rosbe-options.cmdÂ¡I"
+  MSG_PS1FFAILED, "ÂµLÂªkÂ³?Â«? rosbe-options.ps1Â¡I"
+  MSG_DIREFAILED, "ÂµLÂªkÂ³?Â«?Â¥?Â¿Ã½Â¡I"
+  MSG_SETLOADSUC, "Previous settings loaded successfully."
+  MSG_FINDLOGDIR, "Â½?Â¿Ã¯Â¾?Â¤@Â­??xÂ¦sÂ¤Ã©Â»xÂªÂºÂ¥?Â¿Ã½Â¡G"
+  MSG_FINDMGWDIR, "Â½?Â¿Ã¯Â¾? MinGW/GCC Â©?Â¦Ã¬Â©Ã³ÂªÂºÂ¥?Â¿Ã½Â¡G"
+  MSG_FINDOBJDIR, "Â½?Â¿Ã¯Â¾??xÂ¦s OBJ ??Â®?ÂªÂºÂ¥?Â¿Ã½Â¡G"
+  MSG_FINDOUTDIR, "Â½?Â¿Ã¯Â¾??xÂ¦s OUT ??Â®?ÂªÂºÂ¥?Â¿Ã½Â¡G"
+  MSG_WARNINGBOX, "?ÂµÂ§i"
+  MSG_EXITCHANGE, "Â±zÂ½TÂ©wÂ­nÂ¦bÂ¤Â£?xÂ¦sÂ¤UÂ°hÂ¥XÂ¡H"
+  MSG_INVALIDDIR, "Â§AÂ©?Â¿Ã©Â¤JÂªÂºÂ¥?Â¿Ã½Â¨?Â¤Â£Â¦sÂ¦bÂ¡CÂ§AÂ­nÂ³?Â«?Â¥Â¦Â¶?Â¡H"
   /* Help Strings */
-  HLP_BACKCOLORC, "¿ï¾Ü RosBE DOS µøµ¡ªº­I´ºÃC¦â¡C"
-  HLP_FONTCOLORC, "¿ï¾Ü RosBE DOS µøµ¡ªº¦rÅéÃC¦â¡C"
-  HLP_SBUILDTIME, "Åý§A¦b«Ø¸m§¹µ²®ÉÅã¥ÜÁ`«Ø¸m®É¶¡¡C"
-  HLP_CCACHEUSED, "¦pªG§A­n¨Ï¥Î ccache (½sÄ¶¾¹½w¦s)¡A½Ð¤Ä¹º¡C"
-  HLP_STRIPEDEXE, "¦pªG§A­n»s§@µô´îªºÀ³¥Îµ{¦¡ ¡A½Ð¤Ä¹º¡C"
-  HLP_FINDMGWDIR, "¦¹³]¸mÅý§A©w¸q MinGW/GCC ªº¦ì¸m¡C"
-  HLP_FINDLOGDIR, "¦¹³]¸mÅý§A©w¸q«Ø¸m¤é»xªºÀx¦s¦ì¸m¡C"
-  HLP_FINDOBJDIR, "¦¹³]¸mÅý§A©w¸q OBJ ÀÉ®×ªºÀx¦s¦ì¸m¡C"
-  HLP_FINDOUTDIR, "¦¹³]¸mÅý§A©w¸q OUT ÀÉ®×ªºÀx¦s¦ì¸m¡C"
-  HLP_SAVEBUTTON, "·í³]¸m³Q§ó§ï®É·|³Q±Ò°Ê¡A¥¦µ²§ô¤ÎÀx¦s³]¸m¡C"
-  HLP_QUITBUTTON, "¦¹«ö¶sÅý§A¦b¤£Àx¦s¤UÂ÷¶}³]¸m¡C"
-  HLP_DEFAULTMSG, "±N·Æ¹«²¾¹L±±¨î¶µ¥H¨ú±o¨ó§U¡C"
-  HLP_NOSTRIP,    "¬° ReactOS ½Õ¸Õ¾¹«Ø¥ß½Õ¸Õ¸ê°T¡C"
-  HLP_VERSION,    "Åã¥Ü RosBE ¤¸¥óªºª©¥»¡C"
+  HLP_BACKCOLORC, "Â¿Ã¯Â¾? RosBE DOS ÂµÃ¸ÂµÂ¡ÂªÂºÂ­IÂ´Âº?CÂ¦Ã¢Â¡C"
+  HLP_FONTCOLORC, "Â¿Ã¯Â¾? RosBE DOS ÂµÃ¸ÂµÂ¡ÂªÂºÂ¦r?Ã©?CÂ¦Ã¢Â¡C"
+  HLP_SBUILDTIME, "?Ã½Â§AÂ¦bÂ«?Â¸mÂ§Â¹ÂµÂ²Â®??Ã£Â¥??`Â«?Â¸mÂ®?Â¶Â¡Â¡C"
+  HLP_CCACHEUSED, "Â¦pÂªGÂ§AÂ­nÂ¨?Â¥? ccache (Â½s?Â¶Â¾Â¹Â½wÂ¦s)Â¡AÂ½?Â¤?Â¹ÂºÂ¡C"
+  HLP_STRIPEDEXE, "Â¦pÂªGÂ§AÂ­nÂ»sÂ§@ÂµÃ´Â´Ã®ÂªÂº?Â³Â¥?Âµ{Â¦Â¡ Â¡AÂ½?Â¤?Â¹ÂºÂ¡C"
+  HLP_FINDMGWDIR, "Â¦Â¹Â³]Â¸m?Ã½Â§AÂ©wÂ¸q MinGW/GCC ÂªÂºÂ¦Ã¬Â¸mÂ¡C"
+  HLP_FINDLOGDIR, "Â¦Â¹Â³]Â¸m?Ã½Â§AÂ©wÂ¸qÂ«?Â¸mÂ¤Ã©Â»xÂªÂº?xÂ¦sÂ¦Ã¬Â¸mÂ¡C"
+  HLP_FINDOBJDIR, "Â¦Â¹Â³]Â¸m?Ã½Â§AÂ©wÂ¸q OBJ ??Â®?ÂªÂº?xÂ¦sÂ¦Ã¬Â¸mÂ¡C"
+  HLP_FINDOUTDIR, "Â¦Â¹Â³]Â¸m?Ã½Â§AÂ©wÂ¸q OUT ??Â®?ÂªÂº?xÂ¦sÂ¦Ã¬Â¸mÂ¡C"
+  HLP_SAVEBUTTON, "Â·Ã­Â³]Â¸mÂ³QÂ§Ã³Â§Ã¯Â®?Â·|Â³QÂ±?Â°?Â¡AÂ¥Â¦ÂµÂ²Â§Ã´Â¤??xÂ¦sÂ³]Â¸mÂ¡C"
+  HLP_QUITBUTTON, "Â¦Â¹Â«Ã¶Â¶s?Ã½Â§AÂ¦bÂ¤Â£?xÂ¦sÂ¤U?Ã·Â¶}Â³]Â¸mÂ¡C"
+  HLP_DEFAULTMSG, "Â±NÂ·?Â¹Â«Â²Â¾Â¹LÂ±Â±Â¨Ã®Â¶ÂµÂ¥HÂ¨ÃºÂ±oÂ¨Ã³Â§UÂ¡C"
+  HLP_NOSTRIP,    "Â¬Â° ReactOS Â½?Â¸?Â¾Â¹Â«?Â¥?Â½?Â¸?Â¸ÃªÂ°TÂ¡C"
+  HLP_VERSION,    "?Ã£Â¥? RosBE Â¤Â¸Â¥Ã³ÂªÂºÂªÂ©Â¥Â»Â¡C"
 END
