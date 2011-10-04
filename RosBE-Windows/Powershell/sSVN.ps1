@@ -17,7 +17,7 @@ if ("$ENV:ROS_ARCH" -eq "amd64") {
         $ROS_SVNURL = "$ROS_SVNURL/branches/$ENV:ROS_BRANCH"
     }
 }
-"$ROS_SVNURL"
+
 get-webfile $ROS_SVNURL/reactos "$ENV:TEMP\tmp"
 if ("$_ROSBE_DWERRLVL" -eq "1") {
     get-webfile $ROS_SVNURL "$ENV:TEMP\tmp2"

@@ -30,7 +30,7 @@ BOOL CreateDir(HWND hwnd, WCHAR* dir)
     {
         if (CreateDirectory(dir, NULL) == 0)
         {
-            LoadString(hInstance, MSG_DIREFAILED, msgerror, 256);
+            LoadStringW(hInstance, MSG_DIREFAILED, msgerror, 256);
             MessageBox(hwnd, msgerror, NULL, MB_ICONERROR);
             return FALSE;
         }
@@ -208,8 +208,8 @@ WriteSettings(POPTIONS_DLG infoPtr)
     hFile = CreateFile(checkmgw, 0, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
     {
-        LoadString(hInstance, MSG_NOGCCFOUND, msgerror, 256);
-        MessageBox(infoPtr->hwndDlg, msgerror, NULL, MB_ICONERROR);
+        LoadStringW(hInstance, MSG_NOGCCFOUND, msgerror, 256);
+        MessageBoxW(infoPtr->hwndDlg, msgerror, NULL, MB_ICONERROR);
         return FALSE;
     }
     CloseHandle(hFile);
@@ -316,16 +316,16 @@ WriteSettings(POPTIONS_DLG infoPtr)
     {
         fclose(pFilecmd);
         fclose(pFileps1);
-        LoadString(hInstance, MSG_CMDFFAILED, msgerror, 256);
-        MessageBox(infoPtr->hwndDlg, msgerror, NULL, MB_ICONERROR);
+        LoadStringW(hInstance, MSG_CMDFFAILED, msgerror, 256);
+        MessageBoxW(infoPtr->hwndDlg, msgerror, NULL, MB_ICONERROR);
     }
 
     if (!pFileps1)
     {
         fclose(pFilecmd);
         fclose(pFileps1);
-        LoadString(hInstance, MSG_PS1FFAILED, msgerror, 256);
-        MessageBox(infoPtr->hwndDlg, msgerror, NULL, MB_ICONERROR);
+        LoadStringW(hInstance, MSG_PS1FFAILED, msgerror, 256);
+        MessageBoxW(infoPtr->hwndDlg, msgerror, NULL, MB_ICONERROR);
     }
     return FALSE;
 }
@@ -404,8 +404,8 @@ VOID LoadSettings(POPTIONS_DLG infoPtr)
             }
         }
         fclose(pFile);
-        LoadString(hInstance, MSG_SETLOADSUC, SBTitle, 256);
-        SetDlgItemText(infoPtr->hwndDlg, ID_STATUSBAR, SBTitle);
+        LoadStringW(hInstance, MSG_SETLOADSUC, SBTitle, 256);
+        SetDlgItemTextW(infoPtr->hwndDlg, ID_STATUSBAR, SBTitle);
     }
     else
     {
@@ -448,8 +448,8 @@ VOID LoadSettings(POPTIONS_DLG infoPtr)
             }
         }
 
-        LoadString(hInstance, HLP_DEFAULTMSG, SBTitle, 256);
-        SetDlgItemText(infoPtr->hwndDlg, ID_STATUSBAR, SBTitle);
+        LoadStringW(hInstance, HLP_DEFAULTMSG, SBTitle, 256);
+        SetDlgItemTextW(infoPtr->hwndDlg, ID_STATUSBAR, SBTitle);
     }
 
     if (!wcscmp(LoadedSettings->lstrip, L"yes"))
@@ -468,8 +468,8 @@ VOID LoadSettings(POPTIONS_DLG infoPtr)
     {
         LoadedSettings->nostrip = 0;
     }
-    SendDlgItemMessageW(infoPtr->hwndDlg, IDC_FONT, CB_SETCURSEL, LoadedSettings->foreground, 0);
-    SendDlgItemMessageW(infoPtr->hwndDlg, IDC_BACK, CB_SETCURSEL, LoadedSettings->background, 0);
+    SendDlgItemMessage(infoPtr->hwndDlg, IDC_FONT, CB_SETCURSEL, LoadedSettings->foreground, 0);
+    SendDlgItemMessage(infoPtr->hwndDlg, IDC_BACK, CB_SETCURSEL, LoadedSettings->background, 0);
     SendDlgItemMessage(infoPtr->hwndDlg, ID_SHOWBUILDTIME, BM_SETCHECK, LoadedSettings->showtime, 0);
     SendDlgItemMessage(infoPtr->hwndDlg, ID_SHOWVERSION, BM_SETCHECK, LoadedSettings->showversion, 0);
     SendDlgItemMessage(infoPtr->hwndDlg, ID_SAVELOGS, BM_SETCHECK, LoadedSettings->writelog, 0);
@@ -479,14 +479,14 @@ VOID LoadSettings(POPTIONS_DLG infoPtr)
         EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_LOGDIR), TRUE);
     }
     SendDlgItemMessage(infoPtr->hwndDlg, ID_USECCACHE, BM_SETCHECK, LoadedSettings->useccache, 0);
-    SendDlgItemMessageW(infoPtr->hwndDlg, ID_STRIP, BM_SETCHECK, LoadedSettings->strip, 0);
-    SendDlgItemMessageW(infoPtr->hwndDlg, ID_NOSTRIP, BM_SETCHECK, LoadedSettings->nostrip, 0);
-    SetDlgItemText(infoPtr->hwndDlg, ID_MGWDIR, LoadedSettings->mingwpath);
-    SetDlgItemText(infoPtr->hwndDlg, ID_LOGDIR, LoadedSettings->logdir);
+    SendDlgItemMessage(infoPtr->hwndDlg, ID_STRIP, BM_SETCHECK, LoadedSettings->strip, 0);
+    SendDlgItemMessage(infoPtr->hwndDlg, ID_NOSTRIP, BM_SETCHECK, LoadedSettings->nostrip, 0);
+    SetDlgItemTextW(infoPtr->hwndDlg, ID_MGWDIR, LoadedSettings->mingwpath);
+    SetDlgItemTextW(infoPtr->hwndDlg, ID_LOGDIR, LoadedSettings->logdir);
     if (LoadedSettings->objdir[0] != 0)
     {
         LoadedSettings->objstate = 1;
-        SetDlgItemText(infoPtr->hwndDlg, ID_OBJDIR, LoadedSettings->objdir);
+        SetDlgItemTextW(infoPtr->hwndDlg, ID_OBJDIR, LoadedSettings->objdir);
         SendDlgItemMessage(infoPtr->hwndDlg, ID_OTHEROBJ, BM_SETCHECK, BST_CHECKED, 0);
         EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_BROWSEOBJ), TRUE);
         EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_OBJDIR), TRUE);
@@ -494,7 +494,7 @@ VOID LoadSettings(POPTIONS_DLG infoPtr)
     if (LoadedSettings->outdir[0] != 0)
     {
         LoadedSettings->outstate = 1;
-        SetDlgItemText(infoPtr->hwndDlg, ID_OUTDIR, LoadedSettings->outdir);
+        SetDlgItemTextW(infoPtr->hwndDlg, ID_OUTDIR, LoadedSettings->outdir);
         SendDlgItemMessage(infoPtr->hwndDlg, ID_OTHEROUT, BM_SETCHECK, BST_CHECKED, 0);
         EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_BROWSEOUT), TRUE);
         EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_OUTDIR), TRUE);
@@ -583,7 +583,7 @@ BrowseProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
         case BFFM_INITIALIZED:
         {
             WCHAR ActualPath[MAX_PATH];
-            GetDlgItemText(hwndParent, (INT) lParam, ActualPath, MAX_PATH);
+            GetDlgItemTextW(hwndParent, (INT) lParam, ActualPath, MAX_PATH);
             SendMessage(Dlg, BFFM_SETSELECTION, TRUE, (LPARAM)ActualPath);
             break;
         }
@@ -593,9 +593,9 @@ BrowseProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
             {
                 WCHAR BoxMsg[256], BoxTitle[128];
                 size_t PathLen;
-                LoadString(hInstance, MSG_WARNINGBOX, BoxTitle, 128);
-                LoadString(hInstance, MSG_INVALIDDIR, BoxMsg, 256);
-                if (MessageBox(Dlg, BoxMsg, BoxTitle, MB_ICONWARNING | MB_YESNO) == IDYES)
+                LoadStringW(hInstance, MSG_WARNINGBOX, BoxTitle, 128);
+                LoadStringW(hInstance, MSG_INVALIDDIR, BoxMsg, 256);
+                if (MessageBoxW(Dlg, BoxMsg, BoxTitle, MB_ICONWARNING | MB_YESNO) == IDYES)
                 {
                     PathLen = wcslen((LPWSTR)wParam);
                     if (wcscmp((LPWSTR)wParam+PathLen, L"\\"))
@@ -604,12 +604,12 @@ BrowseProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
                     }
                     if (CreateDirectory((LPWSTR)wParam, NULL) == 0)
                     {
-                        LoadString(hInstance, MSG_DIREFAILED, BoxMsg, 256);
-                        MessageBox(Dlg, BoxMsg, NULL, MB_ICONERROR);
+                        LoadStringW(hInstance, MSG_DIREFAILED, BoxMsg, 256);
+                        MessageBoxW(Dlg, BoxMsg, NULL, MB_ICONERROR);
                     }
                     else
                     {
-                        SetDlgItemText(hwndParent, (INT) lParam, (LPWSTR)wParam);
+                        SetDlgItemTextW(hwndParent, (INT) lParam, (LPWSTR)wParam);
                     }
                 }
             }
@@ -730,7 +730,7 @@ DlgProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
 
             for(j = 0; j < 16; j++)
             {
-                LoadString(hInstance, j, TempColor, 256);
+                LoadStringW(hInstance, j, TempColor, 256);
                 SendDlgItemMessageW(Dlg, IDC_BACK, CB_ADDSTRING, 0, (LPARAM) TempColor);
                 SendDlgItemMessageW(Dlg, IDC_FONT, CB_ADDSTRING, 0, (LPARAM) TempColor);
             }
@@ -760,9 +760,9 @@ DlgProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
                         WCHAR BoxMsg[256], BoxTitle[128];
                         if ((IsWindowEnabled(GetDlgItem(Dlg, ID_OK))) && (wParam == ID_CANCEL))
                         {
-                            LoadString(hInstance, MSG_WARNINGBOX, BoxTitle, 128);
-                            LoadString(hInstance, MSG_EXITCHANGE, BoxMsg, 256);
-                            if (MessageBox(Dlg, BoxMsg, BoxTitle, MB_ICONWARNING | MB_YESNO) == IDNO)
+                            LoadStringW(hInstance, MSG_WARNINGBOX, BoxTitle, 128);
+                            LoadStringW(hInstance, MSG_EXITCHANGE, BoxMsg, 256);
+                            if (MessageBoxW(Dlg, BoxMsg, BoxTitle, MB_ICONWARNING | MB_YESNO) == IDNO)
                             {
                                 break;
                             }
@@ -807,13 +807,13 @@ DlgProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
                                 }
                                 PathInfo.lParam = Control;
                             }
-                            LoadString(hInstance, IDText, Text, 512);
+                            LoadStringW(hInstance, IDText, Text, 512);
                             PathInfo.lpszTitle = Text;
                             if ((pidl = SHBrowseForFolder(&PathInfo)) != NULL)
                             {
                                 if (SHGetPathFromIDList(pidl, path))
                                 {
-                                    SetDlgItemText(Dlg, Control, path);
+                                    SetDlgItemTextW(Dlg, Control, path);
                                 }
                                 pMalloc->lpVtbl->Free(pMalloc, pidl);
                             }
@@ -914,15 +914,15 @@ WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdline, int cmdshow)
         ZeroMemory(OptionsDlgInfo, sizeof(OPTIONS_DLG));
         if (amd64)
         {
-            DialogBoxParam(hInst, MAKEINTRESOURCE(ID_DIALOG64), 0, DlgProc, (LPARAM)OptionsDlgInfo);
+            DialogBoxParamW(hInst, MAKEINTRESOURCE(ID_DIALOG64), 0, DlgProc, (LPARAM)OptionsDlgInfo);
         }
         else if (arm)
         {
-            DialogBoxParam(hInst, MAKEINTRESOURCE(ID_DIALOGARM), 0, DlgProc, (LPARAM)OptionsDlgInfo);
+            DialogBoxParamW(hInst, MAKEINTRESOURCE(ID_DIALOGARM), 0, DlgProc, (LPARAM)OptionsDlgInfo);
         }
         else
         {
-            DialogBoxParam(hInst, MAKEINTRESOURCE(ID_DIALOG), 0, DlgProc, (LPARAM)OptionsDlgInfo);
+            DialogBoxParamW(hInst, MAKEINTRESOURCE(ID_DIALOG), 0, DlgProc, (LPARAM)OptionsDlgInfo);
         }
         HeapFree(GetProcessHeap(), 0, OptionsDlgInfo);
     }
