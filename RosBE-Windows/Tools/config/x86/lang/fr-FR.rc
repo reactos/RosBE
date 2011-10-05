@@ -2,10 +2,10 @@ LANGUAGE LANG_FRENCH, SUBLANG_NEUTRAL
 
 ID_DIALOG DIALOGEX DISCARDABLE  0, 0, 255, 290
 STYLE DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Paramètres de l'Environnement de Compilation de ReactOS"
+CAPTION "ParamÃ¨tres de l'Environnement de Compilation de ReactOS"
 FONT 8, "MS Shell Dlg"
 BEGIN
-  LTEXT "Couleur d'arrière plan", -1, 10, 10, 75, 12
+  LTEXT "Couleur d'arriÃ¨re plan", -1, 10, 10, 75, 12
   LTEXT "Couleur de la police", 0x0, 10, 27, 75, 12
   COMBOBOX IDC_BACK, 135, 10, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
   COMBOBOX IDC_FONT, 135, 25, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
@@ -21,10 +21,10 @@ BEGIN
   CONTROL "Sauvegarder le journal", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
   EDITTEXT ID_LOGDIR, 10, 156, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSE, 215, 156, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Changer de répertoire pour OBJ", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 150, 12
+  CONTROL "Changer de rÃ©pertoire pour OBJ", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 150, 12
   EDITTEXT ID_OBJDIR, 10, 192, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOBJ, 215, 192, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Changer de répertoire pour OUT", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 150, 12
+  CONTROL "Changer de rÃ©pertoire pour OUT", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 150, 12
   EDITTEXT ID_OUTDIR, 10, 228, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "Sauvegarder", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
@@ -34,10 +34,10 @@ END
 
 ID_DIALOG64 DIALOGEX DISCARDABLE  0, 0, 255, 290
 STYLE DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Paramètres de AMD64 l'Environnement de Compilation de ReactOS"
+CAPTION "ParamÃ¨tres de AMD64 l'Environnement de Compilation de ReactOS"
 FONT 8, "MS Shell Dlg"
 BEGIN
-  LTEXT "Couleur d'arrière plan", -1, 10, 10, 75, 12
+  LTEXT "Couleur d'arriÃ¨re plan", -1, 10, 10, 75, 12
   LTEXT "Couleur de la police", 0x0, 10, 27, 75, 12
   COMBOBOX IDC_BACK, 135, 10, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
   COMBOBOX IDC_FONT, 135, 25, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
@@ -53,10 +53,10 @@ BEGIN
   CONTROL "Sauvegarder le journal", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
   EDITTEXT ID_LOGDIR, 10, 156, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSE, 215, 156, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Changer de répertoire pour OBJ", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 150, 12
+  CONTROL "Changer de rÃ©pertoire pour OBJ", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 150, 12
   EDITTEXT ID_OBJDIR, 10, 192, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOBJ, 215, 192, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Changer de répertoire pour OUT", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 150, 12
+  CONTROL "Changer de rÃ©pertoire pour OUT", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 150, 12
   EDITTEXT ID_OUTDIR, 10, 228, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "Sauvegarder", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
@@ -66,10 +66,10 @@ END
 
 ID_DIALOGARM DIALOGEX DISCARDABLE  0, 0, 255, 290
 STYLE DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Paramètres de ARM l'Environnement de Compilation de ReactOS"
+CAPTION "ParamÃ¨tres de ARM l'Environnement de Compilation de ReactOS"
 FONT 8, "MS Shell Dlg"
 BEGIN
-  LTEXT "Couleur d'arrière plan", -1, 10, 10, 75, 12
+  LTEXT "Couleur d'arriÃ¨re plan", -1, 10, 10, 75, 12
   LTEXT "Couleur de la police", 0x0, 10, 27, 75, 12
   COMBOBOX IDC_BACK, 135, 10, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
   COMBOBOX IDC_FONT, 135, 25, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
@@ -85,10 +85,10 @@ BEGIN
   CONTROL "Sauvegarder le journal", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
   EDITTEXT ID_LOGDIR, 10, 156, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSE, 215, 156, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Changer de répertoire pour OBJ", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 150, 12
+  CONTROL "Changer de rÃ©pertoire pour OBJ", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 150, 12
   EDITTEXT ID_OBJDIR, 10, 192, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOBJ, 215, 192, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Changer de répertoire pour OUT", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 150, 12
+  CONTROL "Changer de rÃ©pertoire pour OUT", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 150, 12
   EDITTEXT ID_OUTDIR, 10, 228, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "Sauvegarder", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
@@ -114,31 +114,31 @@ BEGIN
   CLR13, "Violet Clair"
   CLR14, "Jaune Clair"
   CLR15, "Blanc Brillant"
-  MSG_NOGCCFOUND, "Impossible de trouver MinGW/GCC ! Veuillez vérifier votre répertoire."
-  MSG_CMDFFAILED, "Impossible de créer rosbe-options.cmd !"
-  MSG_PS1FFAILED, "Impossible de créer rosbe-options.ps1 !"
-  MSG_DIREFAILED, "Impossible de créer le répertoire !"
-  MSG_SETLOADSUC, "Paramètres précédents chargés avec succès."
-  MSG_FINDLOGDIR, "Veuillez choisir le répertoire où seront stockés les journaux :"
-  MSG_FINDMGWDIR, "Veuillez sélectionner le répertoire où se situe MingW/GCC :"
-  MSG_FINDOBJDIR, "Veuillez choisir le répertoire où vous désirez sauver les fichiers OBJ :"
-  MSG_FINDOUTDIR, "Veuillez choisir le répertoire où vous désirez sauver les fichiers OUT :"
+  MSG_NOGCCFOUND, "Impossible de trouver MinGW/GCC ! Veuillez vÃ©rifier votre rÃ©pertoire."
+  MSG_CMDFFAILED, "Impossible de crÃ©er rosbe-options.cmd !"
+  MSG_PS1FFAILED, "Impossible de crÃ©er rosbe-options.ps1 !"
+  MSG_DIREFAILED, "Impossible de crÃ©er le rÃ©pertoire !"
+  MSG_SETLOADSUC, "ParamÃ¨tres prÃ©cÃ©dents chargÃ©s avec succÃ¨s."
+  MSG_FINDLOGDIR, "Veuillez choisir le rÃ©pertoire oÃ¹ seront stockÃ©s les journaux :"
+  MSG_FINDMGWDIR, "Veuillez sÃ©lectionner le rÃ©pertoire oÃ¹ se situe MingW/GCC :"
+  MSG_FINDOBJDIR, "Veuillez choisir le rÃ©pertoire oÃ¹ vous dÃ©sirez sauver les fichiers OBJ :"
+  MSG_FINDOUTDIR, "Veuillez choisir le rÃ©pertoire oÃ¹ vous dÃ©sirez sauver les fichiers OUT :"
   MSG_WARNINGBOX, "Attention"
-  MSG_EXITCHANGE, "Êtes-vous sûr de vouloir quitter sans sauvegarder ?"
+  MSG_EXITCHANGE, "ÃŠtes-vous sÃ»r de vouloir quitter sans sauvegarder ?"
   MSG_INVALIDDIR, "The directory you entered doesn't exist. Do you want to create it?"
   /* Help Strings */
-  HLP_BACKCOLORC, "Choisissez la couleur de fond pour les fenêtres DOS du RosBE."
-  HLP_FONTCOLORC, "Choisissez la couleur du texte pour les fenêtres DOS du RosBE."
-  HLP_SBUILDTIME, "Vous permet d'afficher à la fin de la compilation le temps qu'elle a pris."
-  HLP_CCACHEUSED, "Cochez si vous désirez utiliser le cache de compilation."
-  HLP_STRIPEDEXE, "Cochez si vous désirez produire des exécutables optimisés."
-  HLP_FINDMGWDIR, "Ce paramètre vous permet de définir le repertoire où se situe MingW/GCC."
-  HLP_FINDLOGDIR, "Ce paramètre vous permet de choisir où seront stockés les journaux de compilation."
-  HLP_FINDOBJDIR, "Ce paramètre vous permet de choisir où seront stockés les fichiers OBJ."
-  HLP_FINDOUTDIR, "Ce paramètre vous permet de choisir où seront stockés les fichiers OUT."
-  HLP_SAVEBUTTON, "Activé quand un paramètre est changé, permet de quitter en sauvant."
+  HLP_BACKCOLORC, "Choisissez la couleur de fond pour les fenÃªtres DOS du RosBE."
+  HLP_FONTCOLORC, "Choisissez la couleur du texte pour les fenÃªtres DOS du RosBE."
+  HLP_SBUILDTIME, "Vous permet d'afficher Ã  la fin de la compilation le temps qu'elle a pris."
+  HLP_CCACHEUSED, "Cochez si vous dÃ©sirez utiliser le cache de compilation."
+  HLP_STRIPEDEXE, "Cochez si vous dÃ©sirez produire des exÃ©cutables optimisÃ©s."
+  HLP_FINDMGWDIR, "Ce paramÃ¨tre vous permet de dÃ©finir le repertoire oÃ¹ se situe MingW/GCC."
+  HLP_FINDLOGDIR, "Ce paramÃ¨tre vous permet de choisir oÃ¹ seront stockÃ©s les journaux de compilation."
+  HLP_FINDOBJDIR, "Ce paramÃ¨tre vous permet de choisir oÃ¹ seront stockÃ©s les fichiers OBJ."
+  HLP_FINDOUTDIR, "Ce paramÃ¨tre vous permet de choisir oÃ¹ seront stockÃ©s les fichiers OUT."
+  HLP_SAVEBUTTON, "ActivÃ© quand un paramÃ¨tre est changÃ©, permet de quitter en sauvant."
   HLP_QUITBUTTON, "Ce bouton vous permet de quitter la configuration sans sauvegarder."
-  HLP_DEFAULTMSG, "Passez sur un contrôle pour avoir de l'aide."
+  HLP_DEFAULTMSG, "Passez sur un contrÃ´le pour avoir de l'aide."
   HLP_NOSTRIP,    "Creates debug information for the ReactOS Debugger."
   HLP_VERSION,    "Show the Versions of the RosBE Components."
 END

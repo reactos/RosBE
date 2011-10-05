@@ -21,10 +21,10 @@ BEGIN
   CONTROL "Logs speichern", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
   EDITTEXT ID_LOGDIR, 10, 156, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSE, 215, 156, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Verzeichnis für OBJ ändern", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
+  CONTROL "Verzeichnis fÃ¼r OBJ Ã¤ndern", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
   EDITTEXT ID_OBJDIR, 10, 192, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOBJ, 215, 192, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Verzeichnis für OUT ändern", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
+  CONTROL "Verzeichnis fÃ¼r OUT Ã¤ndern", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
   EDITTEXT ID_OUTDIR, 10, 228, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "Speichern", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
@@ -53,10 +53,10 @@ BEGIN
   CONTROL "Logs speichern", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
   EDITTEXT ID_LOGDIR, 10, 156, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSE, 215, 156, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Verzeichnis für OBJ ändern", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
+  CONTROL "Verzeichnis fÃ¼r OBJ Ã¤ndern", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
   EDITTEXT ID_OBJDIR, 10, 192, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOBJ, 215, 192, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Verzeichnis für OUT ändern", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
+  CONTROL "Verzeichnis fÃ¼r OUT Ã¤ndern", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
   EDITTEXT ID_OUTDIR, 10, 228, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "Speichern", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
@@ -85,10 +85,10 @@ BEGIN
   CONTROL "Logs speichern", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
   EDITTEXT ID_LOGDIR, 10, 156, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSE, 215, 156, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Verzeichnis für OBJ ändern", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
+  CONTROL "Verzeichnis fÃ¼r OBJ Ã¤ndern", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
   EDITTEXT ID_OBJDIR, 10, 192, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOBJ, 215, 192, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Verzeichnis für OUT ändern", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
+  CONTROL "Verzeichnis fÃ¼r OUT Ã¤ndern", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
   EDITTEXT ID_OUTDIR, 10, 228, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "Speichern", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
@@ -100,45 +100,45 @@ STRINGTABLE
 BEGIN
   CLR0, "Schwarz"
   CLR1, "Blau"
-  CLR2, "Dunkelgrün"
-  CLR3, "Türkis"
+  CLR2, "DunkelgrÃ¼n"
+  CLR3, "TÃ¼rkis"
   CLR4, "Dunkelrot"
   CLR5, "Lila"
   CLR6, "Ockergelb"
   CLR7, "Grau"
   CLR8, "Dunkelgrau"
   CLR9, "Hellblau"
-  CLR10, "Grün"
+  CLR10, "GrÃ¼n"
   CLR11, "Cyanblau"
   CLR12, "Rot"
   CLR13, "Magenta"
   CLR14, "Gelb"
-  CLR15, "Weiß"
-  MSG_NOGCCFOUND, "Kein MinGW/GCC Compiler gefunden! Bitte überprüfen Sie Ihren Pfad."
+  CLR15, "WeiÃŸ"
+  MSG_NOGCCFOUND, "Kein MinGW/GCC Compiler gefunden! Bitte Ã¼berprÃ¼fen Sie Ihren Pfad."
   MSG_CMDFFAILED, "rosbe-options.cmd konnte nicht erstellt werden!"
   MSG_PS1FFAILED, "rosbe-options.ps1 konnte nicht erstellt werden!"
   MSG_DIREFAILED, "Ordner konnte nicht erstellt werden!"
   MSG_SETLOADSUC, "Vorherige Einstellungen erfolgreich geladen."
-  MSG_FINDLOGDIR, "Bitte wählen Sie einen Ordner, in dem die Logs gespeichert werden sollen:"
-  MSG_FINDMGWDIR, "Bitte wählen Sie den Ordner, in dem MinGW/GCC liegt:"
-  MSG_FINDOBJDIR, "Bitte wählen Sie den Ordner, in den Sie die OBJ Daten speichern wollen:"
-  MSG_FINDOUTDIR, "Bitte wählen Sie den Ordner, in den Sie die OUT Daten speichern wollen:"
+  MSG_FINDLOGDIR, "Bitte wÃ¤hlen Sie einen Ordner, in dem die Logs gespeichert werden sollen:"
+  MSG_FINDMGWDIR, "Bitte wÃ¤hlen Sie den Ordner, in dem MinGW/GCC liegt:"
+  MSG_FINDOBJDIR, "Bitte wÃ¤hlen Sie den Ordner, in den Sie die OBJ Daten speichern wollen:"
+  MSG_FINDOUTDIR, "Bitte wÃ¤hlen Sie den Ordner, in den Sie die OUT Daten speichern wollen:"
   MSG_WARNINGBOX, "Warnung"
   MSG_EXITCHANGE, "Sind Sie sicher, dass das Programm beenden wollen ohne zu speichern?"
   MSG_INVALIDDIR, "Der Ordner, den Sie eingegeben haben, existiert nicht. Wollen Sie ihn erstellen?"
   /* Help Strings */
-  HLP_BACKCOLORC, "Auswählen der Hintergrundfarbe des RosBE DOS Fensters."
-  HLP_FONTCOLORC, "Auswählen der Schriftfarbe des RosBE DOS Fensters."
-  HLP_SBUILDTIME, "Ermöglicht das Anzeigen der Zeitdauer, die der Kompiliervorgang benötigte."
-  HLP_CCACHEUSED, "Auswählen ob CCache genutzt werden soll."
-  HLP_STRIPEDEXE, "Auswählen ob man Stripped Anwendungen erstellen will."
-  HLP_FINDMGWDIR, "Dieser Parameter ermöglicht das Überschreiben des Standardpfades zu MinGW/GCC."
-  HLP_FINDLOGDIR, "Dieser Parameter ermöglicht das überschreiben des Standardpfades in dem die Build Logs gespeichert werden."
-  HLP_FINDOBJDIR, "Dieser Parameter ermöglicht das überschreiben des Standardpfades in dem die OBJ Daten gespeichert werden."
-  HLP_FINDOUTDIR, "Dieser Parameter ermöglicht das überschreiben des Standardpfades in dem die OUT Daten gespeichert werden."
-  HLP_SAVEBUTTON, "Aktiv, wenn Parameter verändert wurden. Beendet die Anwendung und speichert die Einstellungen."
-  HLP_QUITBUTTON, "Dieser Button lässt Sie das Programm, ohne die Konfiguration zu speichern, beenden."
-  HLP_DEFAULTMSG, "Bewegen Sie sich über eine Fläche um Hilfe zu erhalten."
-  HLP_NOSTRIP,    "Erzeugt Debuginformation für den ReactOS Debugger."
+  HLP_BACKCOLORC, "AuswÃ¤hlen der Hintergrundfarbe des RosBE DOS Fensters."
+  HLP_FONTCOLORC, "AuswÃ¤hlen der Schriftfarbe des RosBE DOS Fensters."
+  HLP_SBUILDTIME, "ErmÃ¶glicht das Anzeigen der Zeitdauer, die der Kompiliervorgang benÃ¶tigte."
+  HLP_CCACHEUSED, "AuswÃ¤hlen ob CCache genutzt werden soll."
+  HLP_STRIPEDEXE, "AuswÃ¤hlen ob man Stripped Anwendungen erstellen will."
+  HLP_FINDMGWDIR, "Dieser Parameter ermÃ¶glicht das Ãœberschreiben des Standardpfades zu MinGW/GCC."
+  HLP_FINDLOGDIR, "Dieser Parameter ermÃ¶glicht das Ã¼berschreiben des Standardpfades in dem die Build Logs gespeichert werden."
+  HLP_FINDOBJDIR, "Dieser Parameter ermÃ¶glicht das Ã¼berschreiben des Standardpfades in dem die OBJ Daten gespeichert werden."
+  HLP_FINDOUTDIR, "Dieser Parameter ermÃ¶glicht das Ã¼berschreiben des Standardpfades in dem die OUT Daten gespeichert werden."
+  HLP_SAVEBUTTON, "Aktiv, wenn Parameter verÃ¤ndert wurden. Beendet die Anwendung und speichert die Einstellungen."
+  HLP_QUITBUTTON, "Dieser Button lÃ¤sst Sie das Programm, ohne die Konfiguration zu speichern, beenden."
+  HLP_DEFAULTMSG, "Bewegen Sie sich Ã¼ber eine FlÃ¤che um Hilfe zu erhalten."
+  HLP_NOSTRIP,    "Erzeugt Debuginformation fÃ¼r den ReactOS Debugger."
   HLP_VERSION,    "Zeige die Versionen der RosBE Komponenten."
 END

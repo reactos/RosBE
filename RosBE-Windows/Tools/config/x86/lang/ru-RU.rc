@@ -4,143 +4,143 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 
 ID_DIALOG DIALOGEX DISCARDABLE  0, 0, 255, 290
 STYLE DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Установки переменных компилятора ReactOS"
-FONT 8,"MS Sans Serif",0,0
+CAPTION "РЈСЃС‚Р°РЅРѕРІРєРё РїРµСЂРµРјРµРЅРЅС‹С… РєРѕРјРїРёР»СЏС‚РѕСЂР° ReactOS"
+FONT 8,"MS Shell Dlg"
 BEGIN
-  LTEXT "Цвет фона", -1, 10, 10, 75, 12
-  LTEXT "Цвет шрифта", 0x0, 10, 27, 75, 12
+  LTEXT "Р¦РІРµС‚ С„РѕРЅР°", -1, 10, 10, 75, 12
+  LTEXT "Р¦РІРµС‚ С€СЂРёС„С‚Р°", 0x0, 10, 27, 75, 12
   COMBOBOX IDC_BACK, 135, 10, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
   COMBOBOX IDC_FONT, 135, 25, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
-  CONTROL "\n\nПример текста", ID_EXAMPLE, "static", WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_CENTER, 113, 50, 125, 36
-  CONTROL "Отображать время компиляции", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
-  CONTROL "Использовать кеширование", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
-  CONTROL "Вырезать пустой код при компил.", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
-  CONTROL "Оставлять в файлах информацию для возможности работы дебагера", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
+  CONTROL "\n\nРџСЂРёРјРµСЂ С‚РµРєСЃС‚Р°", ID_EXAMPLE, "static", WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_CENTER, 113, 50, 125, 36
+  CONTROL "РћС‚РѕР±СЂР°Р¶Р°С‚СЊ РІСЂРµРјСЏ РєРѕРјРїРёР»СЏС†РёРё", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
+  CONTROL "РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РєРµС€РёСЂРѕРІР°РЅРёРµ", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
+  CONTROL "Р’С‹СЂРµР·Р°С‚СЊ РїСѓСЃС‚РѕР№ РєРѕРґ РїСЂРё РєРѕРјРїРёР».", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
+  CONTROL "РћСЃС‚Р°РІР»СЏС‚СЊ РІ С„Р°Р№Р»Р°С… РёРЅС„РѕСЂРјР°С†РёСЋ РґР»СЏ РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё СЂР°Р±РѕС‚С‹ РґРµР±Р°РіРµСЂР°", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
   CONTROL "Show Versions Header", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
-  LTEXT "Путь к компилятору GCC", -1, 10, 107, 100, 15
+  LTEXT "РџСѓС‚СЊ Рє РєРѕРјРїРёР»СЏС‚РѕСЂСѓ GCC", -1, 10, 107, 100, 15
   EDITTEXT ID_MGWDIR, 10, 120, 200, 13, WS_TABSTOP
   PUSHBUTTON "...", ID_BROWSEMGW, 215, 120, 30, 13, WS_TABSTOP
-  CONTROL "Вести логи", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
+  CONTROL "Р’РµСЃС‚Рё Р»РѕРіРё", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
   EDITTEXT ID_LOGDIR, 10, 156, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSE, 215, 156, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Путь к каталогу объектов", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
+  CONTROL "РџСѓС‚СЊ Рє РєР°С‚Р°Р»РѕРіСѓ РѕР±СЉРµРєС‚РѕРІ", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
   EDITTEXT ID_OBJDIR, 10, 192, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOBJ, 215, 192, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Путь к каталогу вывода", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
+  CONTROL "РџСѓС‚СЊ Рє РєР°С‚Р°Р»РѕРіСѓ РІС‹РІРѕРґР°", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
   EDITTEXT ID_OUTDIR, 10, 228, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "Сохранить", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "Отмена", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
-  CONTROL "Введение", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
+  PUSHBUTTON "РЎРѕС…СЂР°РЅРёС‚СЊ", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
+  PUSHBUTTON "РћС‚РјРµРЅР°", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
+  CONTROL "Р’РІРµРґРµРЅРёРµ", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
 END
 
 ID_DIALOG64 DIALOGEX DISCARDABLE  0, 0, 255, 290
 STYLE DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Установки переменных компилятора ReactOS - AMD64"
-FONT 8,"MS Sans Serif",0,0
+CAPTION "РЈСЃС‚Р°РЅРѕРІРєРё РїРµСЂРµРјРµРЅРЅС‹С… РєРѕРјРїРёР»СЏС‚РѕСЂР° ReactOS - AMD64"
+FONT 8,"MS Shell Dlg"
 BEGIN
-  LTEXT "Цвет фона", -1, 10, 10, 75, 12
-  LTEXT "Цвет шрифта", 0x0, 10, 27, 75, 12
+  LTEXT "Р¦РІРµС‚ С„РѕРЅР°", -1, 10, 10, 75, 12
+  LTEXT "Р¦РІРµС‚ С€СЂРёС„С‚Р°", 0x0, 10, 27, 75, 12
   COMBOBOX IDC_BACK, 135, 10, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
   COMBOBOX IDC_FONT, 135, 25, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
-  CONTROL "\n\nПример текста", ID_EXAMPLE, "static", WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_CENTER, 113, 50, 125, 36
-  CONTROL "Отображать время компиляции", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
-  CONTROL "Использовать кеширование", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
-  CONTROL "Вырезать пустой код при компил.", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
-  CONTROL "Оставлять в файлах информацию для возможности работы дебагера", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
+  CONTROL "\n\nРџСЂРёРјРµСЂ С‚РµРєСЃС‚Р°", ID_EXAMPLE, "static", WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_CENTER, 113, 50, 125, 36
+  CONTROL "РћС‚РѕР±СЂР°Р¶Р°С‚СЊ РІСЂРµРјСЏ РєРѕРјРїРёР»СЏС†РёРё", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
+  CONTROL "РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РєРµС€РёСЂРѕРІР°РЅРёРµ", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
+  CONTROL "Р’С‹СЂРµР·Р°С‚СЊ РїСѓСЃС‚РѕР№ РєРѕРґ РїСЂРё РєРѕРјРїРёР».", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
+  CONTROL "РћСЃС‚Р°РІР»СЏС‚СЊ РІ С„Р°Р№Р»Р°С… РёРЅС„РѕСЂРјР°С†РёСЋ РґР»СЏ РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё СЂР°Р±РѕС‚С‹ РґРµР±Р°РіРµСЂР°", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
   CONTROL "Show Versions Header", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
-  LTEXT "Путь к компилятору GCC", -1, 10, 107, 100, 15
+  LTEXT "РџСѓС‚СЊ Рє РєРѕРјРїРёР»СЏС‚РѕСЂСѓ GCC", -1, 10, 107, 100, 15
   EDITTEXT ID_MGWDIR, 10, 120, 200, 13, WS_TABSTOP
   PUSHBUTTON "...", ID_BROWSEMGW, 215, 120, 30, 13, WS_TABSTOP
-  CONTROL "Вести логи", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
+  CONTROL "Р’РµСЃС‚Рё Р»РѕРіРё", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
   EDITTEXT ID_LOGDIR, 10, 156, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSE, 215, 156, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Путь к каталогу объектов", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
+  CONTROL "РџСѓС‚СЊ Рє РєР°С‚Р°Р»РѕРіСѓ РѕР±СЉРµРєС‚РѕРІ", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
   EDITTEXT ID_OBJDIR, 10, 192, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOBJ, 215, 192, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Путь к каталогу вывода", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
+  CONTROL "РџСѓС‚СЊ Рє РєР°С‚Р°Р»РѕРіСѓ РІС‹РІРѕРґР°", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
   EDITTEXT ID_OUTDIR, 10, 228, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "Сохранить", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "Отмена", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
-  CONTROL "Введение", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
+  PUSHBUTTON "РЎРѕС…СЂР°РЅРёС‚СЊ", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
+  PUSHBUTTON "РћС‚РјРµРЅР°", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
+  CONTROL "Р’РІРµРґРµРЅРёРµ", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
 END
 
 ID_DIALOGARM DIALOGEX DISCARDABLE  0, 0, 255, 290
 STYLE DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Установки переменных компилятора ReactOS - ARM"
-FONT 8,"MS Sans Serif",0,0
+CAPTION "РЈСЃС‚Р°РЅРѕРІРєРё РїРµСЂРµРјРµРЅРЅС‹С… РєРѕРјРїРёР»СЏС‚РѕСЂР° ReactOS - ARM"
+FONT 8,"MS Shell Dlg"
 BEGIN
-  LTEXT "Цвет фона", -1, 10, 10, 75, 12
-  LTEXT "Цвет шрифта", 0x0, 10, 27, 75, 12
+  LTEXT "Р¦РІРµС‚ С„РѕРЅР°", -1, 10, 10, 75, 12
+  LTEXT "Р¦РІРµС‚ С€СЂРёС„С‚Р°", 0x0, 10, 27, 75, 12
   COMBOBOX IDC_BACK, 135, 10, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
   COMBOBOX IDC_FONT, 135, 25, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
-  CONTROL "\n\nПример текста", ID_EXAMPLE, "static", WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_CENTER, 113, 50, 125, 36
-  CONTROL "Отображать время компиляции", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
-  CONTROL "Использовать кеширование", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
-  CONTROL "Вырезать пустой код при компил.", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
-  CONTROL "Оставлять в файлах информацию для возможности работы дебагера", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
+  CONTROL "\n\nРџСЂРёРјРµСЂ С‚РµРєСЃС‚Р°", ID_EXAMPLE, "static", WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_CENTER, 113, 50, 125, 36
+  CONTROL "РћС‚РѕР±СЂР°Р¶Р°С‚СЊ РІСЂРµРјСЏ РєРѕРјРїРёР»СЏС†РёРё", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
+  CONTROL "РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РєРµС€РёСЂРѕРІР°РЅРёРµ", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
+  CONTROL "Р’С‹СЂРµР·Р°С‚СЊ РїСѓСЃС‚РѕР№ РєРѕРґ РїСЂРё РєРѕРјРїРёР».", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
+  CONTROL "РћСЃС‚Р°РІР»СЏС‚СЊ РІ С„Р°Р№Р»Р°С… РёРЅС„РѕСЂРјР°С†РёСЋ РґР»СЏ РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё СЂР°Р±РѕС‚С‹ РґРµР±Р°РіРµСЂР°", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
   CONTROL "Show Versions Header", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
-  LTEXT "Путь к компилятору GCC", -1, 10, 107, 100, 15
+  LTEXT "РџСѓС‚СЊ Рє РєРѕРјРїРёР»СЏС‚РѕСЂСѓ GCC", -1, 10, 107, 100, 15
   EDITTEXT ID_MGWDIR, 10, 120, 200, 13, WS_TABSTOP
   PUSHBUTTON "...", ID_BROWSEMGW, 215, 120, 30, 13, WS_TABSTOP
-  CONTROL "Вести логи", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
+  CONTROL "Р’РµСЃС‚Рё Р»РѕРіРё", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
   EDITTEXT ID_LOGDIR, 10, 156, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSE, 215, 156, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Путь к каталогу объектов", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
+  CONTROL "РџСѓС‚СЊ Рє РєР°С‚Р°Р»РѕРіСѓ РѕР±СЉРµРєС‚РѕРІ", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
   EDITTEXT ID_OBJDIR, 10, 192, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOBJ, 215, 192, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Путь к каталогу вывода", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
+  CONTROL "РџСѓС‚СЊ Рє РєР°С‚Р°Р»РѕРіСѓ РІС‹РІРѕРґР°", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
   EDITTEXT ID_OUTDIR, 10, 228, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "Сохранить", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "Отмена", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
-  CONTROL "Введение", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
+  PUSHBUTTON "РЎРѕС…СЂР°РЅРёС‚СЊ", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
+  PUSHBUTTON "РћС‚РјРµРЅР°", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
+  CONTROL "Р’РІРµРґРµРЅРёРµ", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
 END
 
 STRINGTABLE
 BEGIN
-  CLR0, "Чёрный"
-  CLR1, "Синий"
-  CLR2, "Зеленый"
-  CLR3, "Аква"
-  CLR4, "Красный"
-  CLR5, "Пурпурный"
-  CLR6, "Жёлтый"
-  CLR7, "Белый"
-  CLR8, "Серый"
-  CLR9, "Светло-голубой"
-  CLR10, "Светло-зелёный"
-  CLR11, "Светло-аква"
-  CLR12, "Ярко-красный"
-  CLR13, "Светло-пурпурный"
-  CLR14, "Ярко-жёлтый"
-  CLR15, "Ярко-белый"
-  MSG_NOGCCFOUND, "Компилятор GCC не найден! Проверьте правильность установки."
-  MSG_CMDFFAILED, "Невозможно создать файл rosbe-options.cmd"
-  MSG_PS1FFAILED, "Невозможно создать файл rosbe-options.ps1"
-  MSG_DIREFAILED, "Не удалось создать директорию!"
-  MSG_SETLOADSUC, "Ранее сохраненные настройки загружены."
-  MSG_FINDLOGDIR, "Укажите каталог сохранения лог-файлов:"
-  MSG_FINDMGWDIR, "Укажите каталог расположения компилятора MinGW:"
-  MSG_FINDOBJDIR, "Укажите каталог сохранения объектных файлов:"
-  MSG_FINDOUTDIR, "Укажите каталог сохранения компилированных файлов:"
-  MSG_WARNINGBOX, "Внимание!"
-  MSG_EXITCHANGE, "Вы закрываете программу не сохранив настройки?"
-  MSG_INVALIDDIR, "Указанная директория не существует. Создать ее?"
+  CLR0, "Р§С‘СЂРЅС‹Р№"
+  CLR1, "РЎРёРЅРёР№"
+  CLR2, "Р—РµР»РµРЅС‹Р№"
+  CLR3, "РђРєРІР°"
+  CLR4, "РљСЂР°СЃРЅС‹Р№"
+  CLR5, "РџСѓСЂРїСѓСЂРЅС‹Р№"
+  CLR6, "Р–С‘Р»С‚С‹Р№"
+  CLR7, "Р‘РµР»С‹Р№"
+  CLR8, "РЎРµСЂС‹Р№"
+  CLR9, "РЎРІРµС‚Р»Рѕ-РіРѕР»СѓР±РѕР№"
+  CLR10, "РЎРІРµС‚Р»Рѕ-Р·РµР»С‘РЅС‹Р№"
+  CLR11, "РЎРІРµС‚Р»Рѕ-Р°РєРІР°"
+  CLR12, "РЇСЂРєРѕ-РєСЂР°СЃРЅС‹Р№"
+  CLR13, "РЎРІРµС‚Р»Рѕ-РїСѓСЂРїСѓСЂРЅС‹Р№"
+  CLR14, "РЇСЂРєРѕ-Р¶С‘Р»С‚С‹Р№"
+  CLR15, "РЇСЂРєРѕ-Р±РµР»С‹Р№"
+  MSG_NOGCCFOUND, "РљРѕРјРїРёР»СЏС‚РѕСЂ GCC РЅРµ РЅР°Р№РґРµРЅ! РџСЂРѕРІРµСЂСЊС‚Рµ РїСЂР°РІРёР»СЊРЅРѕСЃС‚СЊ СѓСЃС‚Р°РЅРѕРІРєРё."
+  MSG_CMDFFAILED, "РќРµРІРѕР·РјРѕР¶РЅРѕ СЃРѕР·РґР°С‚СЊ С„Р°Р№Р» rosbe-options.cmd"
+  MSG_PS1FFAILED, "РќРµРІРѕР·РјРѕР¶РЅРѕ СЃРѕР·РґР°С‚СЊ С„Р°Р№Р» rosbe-options.ps1"
+  MSG_DIREFAILED, "РќРµ СѓРґР°Р»РѕСЃСЊ СЃРѕР·РґР°С‚СЊ РґРёСЂРµРєС‚РѕСЂРёСЋ!"
+  MSG_SETLOADSUC, "Р Р°РЅРµРµ СЃРѕС…СЂР°РЅРµРЅРЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё Р·Р°РіСЂСѓР¶РµРЅС‹."
+  MSG_FINDLOGDIR, "РЈРєР°Р¶РёС‚Рµ РєР°С‚Р°Р»РѕРі СЃРѕС…СЂР°РЅРµРЅРёСЏ Р»РѕРі-С„Р°Р№Р»РѕРІ:"
+  MSG_FINDMGWDIR, "РЈРєР°Р¶РёС‚Рµ РєР°С‚Р°Р»РѕРі СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ РєРѕРјРїРёР»СЏС‚РѕСЂР° MinGW:"
+  MSG_FINDOBJDIR, "РЈРєР°Р¶РёС‚Рµ РєР°С‚Р°Р»РѕРі СЃРѕС…СЂР°РЅРµРЅРёСЏ РѕР±СЉРµРєС‚РЅС‹С… С„Р°Р№Р»РѕРІ:"
+  MSG_FINDOUTDIR, "РЈРєР°Р¶РёС‚Рµ РєР°С‚Р°Р»РѕРі СЃРѕС…СЂР°РЅРµРЅРёСЏ РєРѕРјРїРёР»РёСЂРѕРІР°РЅРЅС‹С… С„Р°Р№Р»РѕРІ:"
+  MSG_WARNINGBOX, "Р’РЅРёРјР°РЅРёРµ!"
+  MSG_EXITCHANGE, "Р’С‹ Р·Р°РєСЂС‹РІР°РµС‚Рµ РїСЂРѕРіСЂР°РјРјСѓ РЅРµ СЃРѕС…СЂР°РЅРёРІ РЅР°СЃС‚СЂРѕР№РєРё?"
+  MSG_INVALIDDIR, "РЈРєР°Р·Р°РЅРЅР°СЏ РґРёСЂРµРєС‚РѕСЂРёСЏ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚. РЎРѕР·РґР°С‚СЊ РµРµ?"
   /* Help Strings */
-  HLP_BACKCOLORC, "Выберите цвет фона в окне консоли RosBE"
-  HLP_FONTCOLORC, "Выберите цвет шрифта в окне консоли RosBE"
-  HLP_SBUILDTIME, "Позволяет видеть время затраченное от начала до конца процесса компиляции"
-  HLP_CCACHEUSED, "Отметьте если вы хотите использовать кеш компилятора"
-  HLP_STRIPEDEXE, "Отметьте если вы хотите удалить неиспользуемый код из исполняемых файлов"
-  HLP_FINDMGWDIR, "Этот параметр определяет расположение MinGW"
-  HLP_FINDLOGDIR, "Этот параметр определяет место сохранения логов"
-  HLP_FINDOBJDIR, "Этот параметр определяет место для хранения файлов объектных модулей"
-  HLP_FINDOUTDIR, "Этот параметр определяет место для сохранения откомпилированных исполняемых файлов"
-  HLP_SAVEBUTTON, "Активное состояние кнопки указывает на возможность сохранения измененных настроек"
-  HLP_QUITBUTTON, "Это клавиша позволяет выйти без сохранения изменений"
-  HLP_DEFAULTMSG, "Помощь по изначальным параметрам"
-  HLP_NOSTRIP,    "Компиляция файлов ReactOS'а с созданием информации для дебагера."
+  HLP_BACKCOLORC, "Р’С‹Р±РµСЂРёС‚Рµ С†РІРµС‚ С„РѕРЅР° РІ РѕРєРЅРµ РєРѕРЅСЃРѕР»Рё RosBE"
+  HLP_FONTCOLORC, "Р’С‹Р±РµСЂРёС‚Рµ С†РІРµС‚ С€СЂРёС„С‚Р° РІ РѕРєРЅРµ РєРѕРЅСЃРѕР»Рё RosBE"
+  HLP_SBUILDTIME, "РџРѕР·РІРѕР»СЏРµС‚ РІРёРґРµС‚СЊ РІСЂРµРјСЏ Р·Р°С‚СЂР°С‡РµРЅРЅРѕРµ РѕС‚ РЅР°С‡Р°Р»Р° РґРѕ РєРѕРЅС†Р° РїСЂРѕС†РµСЃСЃР° РєРѕРјРїРёР»СЏС†РёРё"
+  HLP_CCACHEUSED, "РћС‚РјРµС‚СЊС‚Рµ РµСЃР»Рё РІС‹ С…РѕС‚РёС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РєРµС€ РєРѕРјРїРёР»СЏС‚РѕСЂР°"
+  HLP_STRIPEDEXE, "РћС‚РјРµС‚СЊС‚Рµ РµСЃР»Рё РІС‹ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ РЅРµРёСЃРїРѕР»СЊР·СѓРµРјС‹Р№ РєРѕРґ РёР· РёСЃРїРѕР»РЅСЏРµРјС‹С… С„Р°Р№Р»РѕРІ"
+  HLP_FINDMGWDIR, "Р­С‚РѕС‚ РїР°СЂР°РјРµС‚СЂ РѕРїСЂРµРґРµР»СЏРµС‚ СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ MinGW"
+  HLP_FINDLOGDIR, "Р­С‚РѕС‚ РїР°СЂР°РјРµС‚СЂ РѕРїСЂРµРґРµР»СЏРµС‚ РјРµСЃС‚Рѕ СЃРѕС…СЂР°РЅРµРЅРёСЏ Р»РѕРіРѕРІ"
+  HLP_FINDOBJDIR, "Р­С‚РѕС‚ РїР°СЂР°РјРµС‚СЂ РѕРїСЂРµРґРµР»СЏРµС‚ РјРµСЃС‚Рѕ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ С„Р°Р№Р»РѕРІ РѕР±СЉРµРєС‚РЅС‹С… РјРѕРґСѓР»РµР№"
+  HLP_FINDOUTDIR, "Р­С‚РѕС‚ РїР°СЂР°РјРµС‚СЂ РѕРїСЂРµРґРµР»СЏРµС‚ РјРµСЃС‚Рѕ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ РѕС‚РєРѕРјРїРёР»РёСЂРѕРІР°РЅРЅС‹С… РёСЃРїРѕР»РЅСЏРµРјС‹С… С„Р°Р№Р»РѕРІ"
+  HLP_SAVEBUTTON, "РђРєС‚РёРІРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ РєРЅРѕРїРєРё СѓРєР°Р·С‹РІР°РµС‚ РЅР° РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ СЃРѕС…СЂР°РЅРµРЅРёСЏ РёР·РјРµРЅРµРЅРЅС‹С… РЅР°СЃС‚СЂРѕРµРє"
+  HLP_QUITBUTTON, "Р­С‚Рѕ РєР»Р°РІРёС€Р° РїРѕР·РІРѕР»СЏРµС‚ РІС‹Р№С‚Рё Р±РµР· СЃРѕС…СЂР°РЅРµРЅРёСЏ РёР·РјРµРЅРµРЅРёР№"
+  HLP_DEFAULTMSG, "РџРѕРјРѕС‰СЊ РїРѕ РёР·РЅР°С‡Р°Р»СЊРЅС‹Рј РїР°СЂР°РјРµС‚СЂР°Рј"
+  HLP_NOSTRIP,    "РљРѕРјРїРёР»СЏС†РёСЏ С„Р°Р№Р»РѕРІ ReactOS'Р° СЃ СЃРѕР·РґР°РЅРёРµРј РёРЅС„РѕСЂРјР°С†РёРё РґР»СЏ РґРµР±Р°РіРµСЂР°."
   HLP_VERSION,    "Show the Versions of the RosBE Components."
 END

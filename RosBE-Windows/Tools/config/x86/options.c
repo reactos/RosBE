@@ -31,7 +31,7 @@ BOOL CreateDir(HWND hwnd, WCHAR* dir)
         if (CreateDirectory(dir, NULL) == 0)
         {
             LoadStringW(hInstance, MSG_DIREFAILED, msgerror, 256);
-            MessageBox(hwnd, msgerror, NULL, MB_ICONERROR);
+            MessageBoxW(hwnd, msgerror, NULL, MB_ICONERROR);
             return FALSE;
         }
     }
@@ -144,12 +144,12 @@ WriteSettings(POPTIONS_DLG infoPtr)
     HANDLE hFile;
     FILE *pFilecmd, *pFileps1;
 
-    showtime = (SendDlgItemMessage(infoPtr->hwndDlg, ID_SHOWBUILDTIME, BM_GETCHECK, 0, 0) == BST_CHECKED);
-    writelog = (SendDlgItemMessage(infoPtr->hwndDlg, ID_SAVELOGS, BM_GETCHECK, 0, 0) == BST_CHECKED);
-    useccache = (SendDlgItemMessage(infoPtr->hwndDlg, ID_USECCACHE, BM_GETCHECK, 0, 0) == BST_CHECKED);
+    showtime = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_SHOWBUILDTIME, BM_GETCHECK, 0, 0) == BST_CHECKED);
+    writelog = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_SAVELOGS, BM_GETCHECK, 0, 0) == BST_CHECKED);
+    useccache = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_USECCACHE, BM_GETCHECK, 0, 0) == BST_CHECKED);
     strip = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_STRIP, BM_GETCHECK, 0, 0) == BST_CHECKED);
     nostrip = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_NOSTRIP, BM_GETCHECK, 0, 0) == BST_CHECKED);
-    objstate = (SendDlgItemMessage(infoPtr->hwndDlg, ID_OTHEROBJ, BM_GETCHECK, 0, 0) == BST_CHECKED);
+    objstate = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_OTHEROBJ, BM_GETCHECK, 0, 0) == BST_CHECKED);
     outstate = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_OTHEROUT, BM_GETCHECK, 0, 0) == BST_CHECKED);
     showversion = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_SHOWVERSION, BM_GETCHECK, 0, 0) == BST_CHECKED);
     foreground = (INT) SendDlgItemMessageW(infoPtr->hwndDlg, IDC_FONT, CB_GETCURSEL, 0, 0);
@@ -468,26 +468,26 @@ VOID LoadSettings(POPTIONS_DLG infoPtr)
     {
         LoadedSettings->nostrip = 0;
     }
-    SendDlgItemMessage(infoPtr->hwndDlg, IDC_FONT, CB_SETCURSEL, LoadedSettings->foreground, 0);
-    SendDlgItemMessage(infoPtr->hwndDlg, IDC_BACK, CB_SETCURSEL, LoadedSettings->background, 0);
-    SendDlgItemMessage(infoPtr->hwndDlg, ID_SHOWBUILDTIME, BM_SETCHECK, LoadedSettings->showtime, 0);
-    SendDlgItemMessage(infoPtr->hwndDlg, ID_SHOWVERSION, BM_SETCHECK, LoadedSettings->showversion, 0);
-    SendDlgItemMessage(infoPtr->hwndDlg, ID_SAVELOGS, BM_SETCHECK, LoadedSettings->writelog, 0);
+    SendDlgItemMessageW(infoPtr->hwndDlg, IDC_FONT, CB_SETCURSEL, LoadedSettings->foreground, 0);
+    SendDlgItemMessageW(infoPtr->hwndDlg, IDC_BACK, CB_SETCURSEL, LoadedSettings->background, 0);
+    SendDlgItemMessageW(infoPtr->hwndDlg, ID_SHOWBUILDTIME, BM_SETCHECK, LoadedSettings->showtime, 0);
+    SendDlgItemMessageW(infoPtr->hwndDlg, ID_SHOWVERSION, BM_SETCHECK, LoadedSettings->showversion, 0);
+    SendDlgItemMessageW(infoPtr->hwndDlg, ID_SAVELOGS, BM_SETCHECK, LoadedSettings->writelog, 0);
     if (LoadedSettings->writelog)
     {
         EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_BROWSE), TRUE);
         EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_LOGDIR), TRUE);
     }
-    SendDlgItemMessage(infoPtr->hwndDlg, ID_USECCACHE, BM_SETCHECK, LoadedSettings->useccache, 0);
-    SendDlgItemMessage(infoPtr->hwndDlg, ID_STRIP, BM_SETCHECK, LoadedSettings->strip, 0);
-    SendDlgItemMessage(infoPtr->hwndDlg, ID_NOSTRIP, BM_SETCHECK, LoadedSettings->nostrip, 0);
+    SendDlgItemMessageW(infoPtr->hwndDlg, ID_USECCACHE, BM_SETCHECK, LoadedSettings->useccache, 0);
+    SendDlgItemMessageW(infoPtr->hwndDlg, ID_STRIP, BM_SETCHECK, LoadedSettings->strip, 0);
+    SendDlgItemMessageW(infoPtr->hwndDlg, ID_NOSTRIP, BM_SETCHECK, LoadedSettings->nostrip, 0);
     SetDlgItemTextW(infoPtr->hwndDlg, ID_MGWDIR, LoadedSettings->mingwpath);
     SetDlgItemTextW(infoPtr->hwndDlg, ID_LOGDIR, LoadedSettings->logdir);
     if (LoadedSettings->objdir[0] != 0)
     {
         LoadedSettings->objstate = 1;
         SetDlgItemTextW(infoPtr->hwndDlg, ID_OBJDIR, LoadedSettings->objdir);
-        SendDlgItemMessage(infoPtr->hwndDlg, ID_OTHEROBJ, BM_SETCHECK, BST_CHECKED, 0);
+        SendDlgItemMessageW(infoPtr->hwndDlg, ID_OTHEROBJ, BM_SETCHECK, BST_CHECKED, 0);
         EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_BROWSEOBJ), TRUE);
         EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_OBJDIR), TRUE);
     }
@@ -495,7 +495,7 @@ VOID LoadSettings(POPTIONS_DLG infoPtr)
     {
         LoadedSettings->outstate = 1;
         SetDlgItemTextW(infoPtr->hwndDlg, ID_OUTDIR, LoadedSettings->outdir);
-        SendDlgItemMessage(infoPtr->hwndDlg, ID_OTHEROUT, BM_SETCHECK, BST_CHECKED, 0);
+        SendDlgItemMessageW(infoPtr->hwndDlg, ID_OTHEROUT, BM_SETCHECK, BST_CHECKED, 0);
         EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_BROWSEOUT), TRUE);
         EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_OUTDIR), TRUE);
     }
@@ -526,9 +526,9 @@ VOID SetSaveState(POPTIONS_DLG infoPtr)
         DefaultSettings->nostrip = 0;
     }
 
-    showtime = (SendDlgItemMessage(infoPtr->hwndDlg, ID_SHOWBUILDTIME, BM_GETCHECK, 0, 0) == BST_CHECKED);
-    writelog = (SendDlgItemMessage(infoPtr->hwndDlg, ID_SAVELOGS, BM_GETCHECK, 0, 0) == BST_CHECKED);
-    useccache = (SendDlgItemMessage(infoPtr->hwndDlg, ID_USECCACHE, BM_GETCHECK, 0, 0) == BST_CHECKED);
+    showtime = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_SHOWBUILDTIME, BM_GETCHECK, 0, 0) == BST_CHECKED);
+    writelog = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_SAVELOGS, BM_GETCHECK, 0, 0) == BST_CHECKED);
+    useccache = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_USECCACHE, BM_GETCHECK, 0, 0) == BST_CHECKED);
     strip = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_STRIP, BM_GETCHECK, 0, 0) == BST_CHECKED);
     nostrip = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_NOSTRIP, BM_GETCHECK, 0, 0) == BST_CHECKED);
     objstate = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_OTHEROBJ, BM_GETCHECK, 0, 0) == BST_CHECKED);

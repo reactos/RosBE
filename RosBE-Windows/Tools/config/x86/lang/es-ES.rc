@@ -2,7 +2,7 @@ LANGUAGE LANG_SPANISH, SUBLANG_NEUTRAL
 
 ID_DIALOG DIALOGEX DISCARDABLE  0, 0, 255, 290
 STYLE DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Configuración de ReactOS Build Environment"
+CAPTION "ConfiguraciÃ³n de ReactOS Build Environment"
 FONT 8, "MS Shell Dlg"
 BEGIN
   LTEXT "Color de fondo", -1, 10, 10, 75, 12
@@ -10,10 +10,10 @@ BEGIN
   COMBOBOX IDC_BACK, 135, 10, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
   COMBOBOX IDC_FONT, 135, 25, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
   CONTROL "\n\nTexto ejemplo", ID_EXAMPLE, "static", WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_CENTER, 113, 50, 125, 36
-  CONTROL "Mostrar tiempo de creación", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
+  CONTROL "Mostrar tiempo de creaciÃ³n", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
   CONTROL "Usar CCache", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
   CONTROL "Limpiar salida", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
-  CONTROL "Cree archivos no limpios para depuración", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
+  CONTROL "Cree archivos no limpios para depuraciÃ³n", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
   CONTROL "Show Versions Header", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
   LTEXT "Ruta de MinGW/GCC", -1, 10, 107, 100, 15
   EDITTEXT ID_MGWDIR, 10, 120, 200, 13, WS_TABSTOP
@@ -29,12 +29,12 @@ BEGIN
   PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "Guardar", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "Cancelar", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
-  CONTROL "¡Bienvenido!", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
+  CONTROL "Â¡Bienvenido!", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
 END
 
 ID_DIALOG64 DIALOGEX DISCARDABLE  0, 0, 255, 290
 STYLE DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Configuración de ReactOS AMD64 Build Environment"
+CAPTION "ConfiguraciÃ³n de ReactOS AMD64 Build Environment"
 FONT 8, "MS Shell Dlg"
 BEGIN
   LTEXT "Color de fondo", -1, 10, 10, 75, 12
@@ -42,10 +42,10 @@ BEGIN
   COMBOBOX IDC_BACK, 135, 10, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
   COMBOBOX IDC_FONT, 135, 25, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
   CONTROL "\n\nTexto ejemplo", ID_EXAMPLE, "static", WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_CENTER, 113, 50, 125, 36
-  CONTROL "Mostrar tiempo de creación", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
+  CONTROL "Mostrar tiempo de creaciÃ³n", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
   CONTROL "Usar CCache", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
   CONTROL "Limpiar salida", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
-  CONTROL "Cree archivos no limpios para depuración", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
+  CONTROL "Cree archivos no limpios para depuraciÃ³n", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
   CONTROL "Show Versions Header", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
   LTEXT "Ruta de MinGW/GCC", -1, 10, 107, 100, 15
   EDITTEXT ID_MGWDIR, 10, 120, 200, 13, WS_TABSTOP
@@ -61,12 +61,12 @@ BEGIN
   PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "Guardar", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "Cancelar", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
-  CONTROL "¡Bienvenido!", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
+  CONTROL "Â¡Bienvenido!", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
 END
 
 ID_DIALOGARM DIALOGEX DISCARDABLE  0, 0, 255, 290
 STYLE DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Configuración de ReactOS ARM Build Environment"
+CAPTION "ConfiguraciÃ³n de ReactOS ARM Build Environment"
 FONT 8, "MS Shell Dlg"
 BEGIN
   LTEXT "Color de fondo", -1, 10, 10, 75, 12
@@ -74,10 +74,10 @@ BEGIN
   COMBOBOX IDC_BACK, 135, 10, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
   COMBOBOX IDC_FONT, 135, 25, 100, 100, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_VSCROLL | CBS_DROPDOWNLIST
   CONTROL "\n\nTexto ejemplo", ID_EXAMPLE, "static", WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_CENTER, 113, 50, 125, 36
-  CONTROL "Mostrar tiempo de creación", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
+  CONTROL "Mostrar tiempo de creaciÃ³n", ID_SHOWBUILDTIME, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 45, 100, 12
   CONTROL "Usar CCache", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
   CONTROL "Limpiar salida", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
-  CONTROL "Cree archivos no limpios para depuración", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
+  CONTROL "Cree archivos no limpios para depuraciÃ³n", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
   CONTROL "Show Versions Header", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
   LTEXT "Ruta de MinGW/GCC", -1, 10, 107, 100, 15
   EDITTEXT ID_MGWDIR, 10, 120, 200, 13, WS_TABSTOP
@@ -93,7 +93,7 @@ BEGIN
   PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "Guardar", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "Cancelar", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
-  CONTROL "¡Bienvenido!", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
+  CONTROL "Â¡Bienvenido!", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
 END
 
 STRINGTABLE
@@ -114,31 +114,31 @@ BEGIN
   CLR13, "MOrado claro"
   CLR14, "Amarillo claro"
   CLR15, "Blanco brillante"
-  MSG_NOGCCFOUND, "¡No se ha encontrado MinGW/GCC! Por favor, comprueba tu directorio."
-  MSG_CMDFFAILED, "¡Fallo al crear rosbe-options.cmd!"
-  MSG_PS1FFAILED, "¡Fallo al crear rosbe-options.ps1!"
-  MSG_DIREFAILED, "¡Fallo al crear directorio!"
+  MSG_NOGCCFOUND, "Â¡No se ha encontrado MinGW/GCC! Por favor, comprueba tu directorio."
+  MSG_CMDFFAILED, "Â¡Fallo al crear rosbe-options.cmd!"
+  MSG_PS1FFAILED, "Â¡Fallo al crear rosbe-options.ps1!"
+  MSG_DIREFAILED, "Â¡Fallo al crear directorio!"
   MSG_SETLOADSUC, "Opciones cargadas satisfactoriamente."
-  MSG_FINDLOGDIR, "Por favor, seleccione un directorio donde los logs (registros) serán almacenados:"
+  MSG_FINDLOGDIR, "Por favor, seleccione un directorio donde los logs (registros) serÃ¡n almacenados:"
   MSG_FINDMGWDIR, "Por favor, seleccione el directorio donde esta ubicado MinGW/GCC:"
   MSG_FINDOBJDIR, "Por favor, seleccione un directorio donde quiere guardar los archivos OBJ:"
   MSG_FINDOUTDIR, "Por favor, seleccione un directorio donde quiere guardar los archivos OUT:"
   MSG_WARNINGBOX, "Advertencia"
-  MSG_EXITCHANGE, "¿Esta seguro de salir sin guardar los cambios?"
-  MSG_INVALIDDIR, "El directorio que ha introducido no existe. ¿Quiere crearlo?"
+  MSG_EXITCHANGE, "Â¿Esta seguro de salir sin guardar los cambios?"
+  MSG_INVALIDDIR, "El directorio que ha introducido no existe. Â¿Quiere crearlo?"
   /* Help Strings */
   HLP_BACKCOLORC, "Seleccione el color de fondo para la ventana Dos de RosBE."
   HLP_FONTCOLORC, "Seleccione el color para el texto en la ventana Dos de RosBE."
-  HLP_SBUILDTIME, "Le muestra el tiempo total de compilación al final de la misma."
+  HLP_SBUILDTIME, "Le muestra el tiempo total de compilaciÃ³n al final de la misma."
   HLP_CCACHEUSED, "Seleccione si quiere usar (compilador cache)."
   HLP_STRIPEDEXE, "Seleccione si quiere producir ejecutables comprimidos  stripped executables."
-  HLP_FINDMGWDIR, "Esta opción le permite seleccionar donde está ubicado MinGW/GCC."
-  HLP_FINDLOGDIR, "Esta opción le permite seleccionar donde se guardarán los archivos logs (Registros) creados."
-  HLP_FINDOBJDIR, "Esta opción le permite seleccionar donde se guardarán los archivos OBJ."
-  HLP_FINDOUTDIR, "Esta opción le permite seleccionar donde se guardarán los archivos OUT."
-  HLP_SAVEBUTTON, "Se activa cuando la configuración ha sido cambiada, cerra guardando los cambios."
-  HLP_QUITBUTTON, "Este botón le permite salir de la configuración sin guardar los cambios."
+  HLP_FINDMGWDIR, "Esta opciÃ³n le permite seleccionar donde estÃ¡ ubicado MinGW/GCC."
+  HLP_FINDLOGDIR, "Esta opciÃ³n le permite seleccionar donde se guardarÃ¡n los archivos logs (Registros) creados."
+  HLP_FINDOBJDIR, "Esta opciÃ³n le permite seleccionar donde se guardarÃ¡n los archivos OBJ."
+  HLP_FINDOUTDIR, "Esta opciÃ³n le permite seleccionar donde se guardarÃ¡n los archivos OUT."
+  HLP_SAVEBUTTON, "Se activa cuando la configuraciÃ³n ha sido cambiada, cerra guardando los cambios."
+  HLP_QUITBUTTON, "Este botÃ³n le permite salir de la configuraciÃ³n sin guardar los cambios."
   HLP_DEFAULTMSG, "Situese sobre un control para obtener ayuda."
-  HLP_NOSTRIP,    "Crea información de depuración para el ReactOS Debugger."
+  HLP_NOSTRIP,    "Crea informaciÃ³n de depuraciÃ³n para el ReactOS Debugger."
   HLP_VERSION,    "Show the Versions of the RosBE Components."
 END
