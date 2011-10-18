@@ -7,6 +7,7 @@
 ::                             Daniel Reimer <reimer.daniel@freenet.de>
 ::                             Peter Ward <dralnix@gmail.com>
 ::                             Colin Finck <colin@reactos.org>
+::                             Thomas Faber
 ::
 
 @echo off
@@ -54,11 +55,11 @@ if errorlevel 2 (
     for /f "usebackq" %%i in (`"dir /a:-d /s /b "%FILEPATH%" 2>NUL | findstr "%FILEPATH%""`) do set FILEPATH=%%i
 )
 
-if not "%ROS_OUTPUT%" == "" (
-    log2lines.exe -d "%ROS_OUTPUT%" "%FILEPATH%" "%ADDRESS%"
-) else (
-    log2lines.exe "%FILEPATH%" "%ADDRESS%"
-)
+for /f "tokens=2" %%a in ('objdump -p %FILEPATH% ^| find "ImageBase"') do set BASE=0x%%a
+
+set /a ADDRESS+=%BASE%
+for /f %%i in ('"echoh.exe !ADDRESS!"') do set RELBASE=%%i
+addr2line.exe -p -f -a -e !FILEPATH! !RELBASE!
 
 :EOC
 title ReactOS Build Environment %_ROSBE_VERSION%
