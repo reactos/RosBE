@@ -57,6 +57,10 @@ if errorlevel 2 (
 
 for /f "tokens=2" %%a in ('objdump -p %FILEPATH% ^| find "ImageBase"') do set BASE=0x%%a
 
+if not "%ADDRESS:~0,2%" =="0x" (
+    set ADDRESS=0x%ADDRESS%
+)
+
 set /a ADDRESS+=%BASE%
 for /f %%i in ('"echoh.exe !ADDRESS!"') do set RELBASE=%%i
 addr2line.exe -p -f -a -e !FILEPATH! !RELBASE!
