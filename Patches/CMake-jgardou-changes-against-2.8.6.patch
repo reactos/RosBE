@@ -1,0 +1,108 @@
+diff --git a/Source/cmDependsC.cxx b/Source/cmDependsC.cxx
+index a76b3af..e58c3a3 100644
+--- a/Source/cmDependsC.cxx
++++ b/Source/cmDependsC.cxx
+@@ -511,7 +511,7 @@ void cmDependsC::SetupTransforms()
+       xform += tri->first;
+       sep = "|";
+       }
+-    xform += ")[ \t]*\\(([^),]*)\\)";
++    xform += ")[ \t]*\\(?([^),]*)\\)?";
+     this->IncludeRegexTransform.compile(xform.c_str());
+ 
+     // Build a string that encodes all transformation rules and will
+@@ -522,8 +522,8 @@ void cmDependsC::SetupTransforms()
+       {
+       this->IncludeRegexTransformString += " ";
+       this->IncludeRegexTransformString += tri->first;
+-      this->IncludeRegexTransformString += "(%)=";
+-      this->IncludeRegexTransformString += tri->second;
++      this->IncludeRegexTransformString += tri->second.equals;
++      this->IncludeRegexTransformString += tri->second.value;
+       }
+     }
+ }
+@@ -534,13 +534,19 @@ void cmDependsC::ParseTransform(std::string const& xform)
+   // A transform rule is of the form SOME_MACRO(%)=value-with-%
+   // We can simply separate with "(%)=".
+   std::string::size_type pos = xform.find("(%)=");
++  int substringPos = 4;
++  if(pos == xform.npos || pos == 0)
++    {
++    pos = xform.find("=");
++    substringPos = 1;
++    }
+   if(pos == xform.npos || pos == 0)
+     {
+     return;
+     }
+   std::string name = xform.substr(0, pos);
+-  std::string value = xform.substr(pos+4, xform.npos);
+-  this->TransformRules[name] = value;
++  this->TransformRules[name].equals = xform.substr(pos, substringPos);
++  this->TransformRules[name].value = xform.substr(pos+substringPos, xform.npos);
+ }
+ 
+ //----------------------------------------------------------------------------
+@@ -557,11 +563,15 @@ void cmDependsC::TransformLine(std::string& line)
+     {
+     return;
+     }
+-
++  if(tri->second.equals == "=")
++    {
++    line.replace(line.find(tri->first),tri->first.length(), tri->second.value);
++    return;
++    }
+   // Construct the transformed line.
+   std::string newline = this->IncludeRegexTransform.match(1);
+   std::string arg = this->IncludeRegexTransform.match(4);
+-  for(const char* c = tri->second.c_str(); *c; ++c)
++  for(const char* c = tri->second.value.c_str(); *c; ++c)
+     {
+     if(*c == '%')
+       {
+diff --git a/Source/cmDependsC.h b/Source/cmDependsC.h
+index bd9a4b7..d4a94c3 100644
+--- a/Source/cmDependsC.h
++++ b/Source/cmDependsC.h
+@@ -58,7 +58,13 @@ protected:
+   // Regex to transform #include lines.
+   std::string IncludeRegexTransformString;
+   cmsys::RegularExpression IncludeRegexTransform;
+-  typedef std::map<cmStdString, cmStdString> TransformRulesType;
++  class TransformRule
++  {
++  public:
++    cmStdString equals;
++    cmStdString value;
++  };
++  typedef std::map<cmStdString, TransformRule> TransformRulesType;
+   TransformRulesType TransformRules;
+   void SetupTransforms();
+   void ParseTransform(std::string const& xform);
+diff --git a/Source/cmLocalUnixMakefileGenerator3.cxx b/Source/cmLocalUnixMakefileGenerator3.cxx
+index 2eae9d0..da6a1c6 100644
+--- a/Source/cmLocalUnixMakefileGenerator3.cxx
++++ b/Source/cmLocalUnixMakefileGenerator3.cxx
+@@ -1559,7 +1559,7 @@ cmLocalUnixMakefileGenerator3
+ 
+     // Create the scanner for this language
+     cmDepends *scanner = 0;
+-    if(lang == "C" || lang == "CXX" || lang == "RC")
++    if(lang == "C" || lang == "CXX" || lang == "RC" || lang == "ASM")
+       {
+       // TODO: Handle RC (resource files) dependencies correctly.
+       scanner = new cmDependsC(this, targetDir, lang.c_str(), &validDeps);
+diff --git a/Source/cmMakefileTargetGenerator.cxx b/Source/cmMakefileTargetGenerator.cxx
+index 8b91194..7f71c4b 100644
+--- a/Source/cmMakefileTargetGenerator.cxx
++++ b/Source/cmMakefileTargetGenerator.cxx
+@@ -1831,6 +1831,7 @@ void cmMakefileTargetGenerator::AddIncludeFlags(std::string& flags,
+     }
+   else
+     {
++    cmSystemTools::ConvertToUnixSlashes(includeFlags);
+     this->LocalGenerator->AppendFlags(flags, includeFlags.c_str());
+     }
+ }
