@@ -1,6 +1,6 @@
 # Shared functions for RosBE-Unix components
 # Part of RosBE for Unix-based Operating Systems
-# Copyright 2009-2010 Colin Finck <colin@reactos.org>
+# Copyright 2009-2011 Colin Finck <colin@reactos.org>
 #
 # Released under GNU GPL v2 or any later version.
 
@@ -21,8 +21,6 @@ change_architecture()
 
 	export PATH="$_ROSBE_ROSSCRIPTDIR/$ROS_ARCH/bin:$_ROSBE_OLDPATH"
 	export ROS_ARCH
-
-	source "$_ROSBE_ROSSCRIPTDIR/$ROS_ARCH/setvars.sh"
 }
 
 # Check whether we're running as root and warn the user in case we don't

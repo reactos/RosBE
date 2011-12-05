@@ -1,6 +1,6 @@
 ###############################################################################
 # Shared setup functions for RosBE-Windows' buildtoolchain and RosBE-Unix
-# Copyright 2009 Colin Finck <colin@reactos.org>
+# Copyright 2009-2011 Colin Finck <colin@reactos.org>
 #
 # Released under GNU GPL v2 or any later version.
 ###############################################################################
@@ -23,6 +23,20 @@ rs_boldmsg()
 # Check for several requirements, which need to be met in order to run the installation script properly
 rs_check_requirements()
 {
+	# Check for the processor architecture
+	local cpuarch=`uname -m`
+	case "$cpuarch" in
+		"i686")
+			rs_abi=32
+			;;
+		"x86_64")
+			rs_abi=64
+			;;
+		*)
+			echo "Your processor architecture is not supported by RosBE-Unix!"
+			exit 1;;
+	esac
+
 	# Test if the script directory is writable
 	if [ ! -w "$rs_scriptdir" ]; then
 		rs_redmsg "The script directory \"$rs_scriptdir\" is not writable, aborted!"
@@ -65,9 +79,10 @@ rs_check_requirements()
 	
 	for app in $checkapps; do
 		if $app -v 2>&1 | grep "GNU Make" >& /dev/null; then
-			rs_makecmd="$app"
+			# Store the complete path in $rs_makecmd to prevent collisions with our own Make.
+			rs_makecmd=`which $app`
 			rs_greenmsg "OK"
-		fi
+        fi
 	done
 	
 	if [ "$rs_makecmd" = "" ]; then

@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # ReactOS Build Environment for Unix-based Operating Systems - Builder Tool for the Base package
-# Copyright 2007-2010 Colin Finck <colin@reactos.org>
+# Copyright 2007-2011 Colin Finck <colin@reactos.org>
 # partially based on the BuildMingwCross script (http://www.mingw.org/MinGWiki/index.php/BuildMingwCross)
 #
 # Released under GNU GPL v2 or any later version.
@@ -11,7 +11,7 @@
 rs_host_cflags="-pipe -O2"
 rs_needed_tools="bison flex gcc g++ grep makeinfo"        # GNU Make has a special check
 rs_target="mingw32"
-rs_target_cflags="-pipe -gstabs+ -O2 -march=pentium -mtune=i686"
+rs_target_cflags="-pipe -O2 -march=pentium -mtune=i686"
 
 # Get the absolute path to the script directory
 cd `dirname $0`
@@ -21,8 +21,8 @@ rs_sourcedir="$rs_scriptdir/sources"
 
 # RosBE-Unix Constants
 DEFAULT_INSTALL_DIR="/usr/local/RosBE"
-KNOWN_ROSBE_VERSIONS="0.3.6 1.1 1.4 1.4.2 1.5"
-ROSBE_VERSION="1.5"
+KNOWN_ROSBE_VERSIONS="0.3.6 1.1 1.4 1.4.2 1.5 2.0"
+ROSBE_VERSION="2.0"
 TARGET_ARCH="i386"
 
 source "$rs_scriptdir/scripts/rosbelibrary.sh"
@@ -184,20 +184,19 @@ else
 fi
 
 if $update; then
-	# No update supported for RosBE-Unix 1.5 due to lots of changes.
+	# No update supported for RosBE-Unix 2.0 due to lots of changes.
 	# Add this part back from older versions once we need to update again.
 	exit 1
 else
 	rs_process_binutils=true
 	rs_process_buildtime=true
+    rs_process_cmake=true
 	rs_process_cpucount=true
 	rs_process_gcc=true
-	rs_process_getincludes=true
 	rs_process_gmp=true
 	rs_process_make=true
 	rs_process_mingw_runtime_dev=true
 	rs_process_mpfr=true
-	rs_process_nasm=true
 	rs_process_scut=true
 	rs_process_w32api=true
 
@@ -216,15 +215,16 @@ if [ ! -w "$installdir" ]; then
 	exit 1
 fi
 
-rs_prefixdir="$installdir/$TARGET_ARCH"
+rs_prefixdir="$installdir"
+rs_archprefixdir="$installdir/$TARGET_ARCH"
 rs_supportprefixdir="$installdir/support"
-rs_mkdir_if_not_exists "$installdir/bin"
 
 
 ##### BEGIN almost shared buildtoolchain/RosBE-Unix building part #############
 rs_boldmsg "Building..."
 
-rs_mkdir_if_not_exists "$rs_prefixdir/$rs_target"
+rs_mkdir_if_not_exists "$rs_prefixdir/bin"
+rs_mkdir_if_not_exists "$rs_archprefixdir/$rs_target"
 rs_mkdir_if_not_exists "$rs_supportprefixdir"
 
 # Use -march=native if the host compiler supports it
@@ -238,39 +238,50 @@ else
 	echo "no"
 fi
 
-rs_extract_module "mingw_runtime_dev" "$rs_prefixdir/$rs_target"
-rs_extract_module "w32api" "$rs_prefixdir/$rs_target"
+rs_extract_module "mingw_runtime_dev" "$rs_archprefixdir/$rs_target"
+rs_extract_module "w32api" "$rs_archprefixdir/$rs_target"
 
 if $rs_process_buildtime; then
-	rs_do_command gcc -s -o "$installdir/bin/buildtime" "$rs_scriptdir/tools/buildtime.c"
+	rs_do_command gcc -s -o "$rs_prefixdir/bin/buildtime" "$rs_scriptdir/tools/buildtime.c"
 fi
 
 if $rs_process_cpucount; then
-	rs_do_command gcc -s -o "$installdir/bin/cpucount" "$rs_scriptdir/tools/cpucount.c"
+	rs_do_command gcc -s -o "$rs_prefixdir/bin/cpucount" "$rs_scriptdir/tools/cpucount.c"
 fi
 
-rs_cpucount=`$installdir/bin/cpucount -x1`
-
-if $rs_process_getincludes; then
-	rs_do_command gcc -s -o "$installdir/bin/getincludes" "$rs_scriptdir/tools/getincludes.c"
-fi
+rs_cpucount=`$rs_prefixdir/bin/cpucount -x1`
 
 if $rs_process_scut; then
-	rs_do_command gcc -s -o "$installdir/bin/scut" "$rs_scriptdir/tools/scut.c"
+	rs_do_command gcc -s -o "$rs_prefixdir/bin/scut" "$rs_scriptdir/tools/scut.c"
+fi
+
+if rs_prepare_module "cmake"; then
+	export CFLAGS="$rs_host_cflags"
+
+	rs_do_command ../cmake/bootstrap --prefix="$rs_prefixdir" --parallel=$rs_cpucount
+	rs_do_command $rs_makecmd -j $rs_cpucount
+	rs_do_command $rs_makecmd install
+	rs_clean_module "cmake"
+
+	unset CFLAGS
 fi
 
 if rs_prepare_module "gmp"; then
-	rs_do_command ../gmp/configure --prefix="$rs_supportprefixdir" --disable-shared --disable-werror
+	export CFLAGS="$rs_host_cflags"
+
+	rs_do_command ../gmp/configure ABI=$rs_abi --prefix="$rs_supportprefixdir" --disable-shared --disable-werror
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd check
 	rs_do_command $rs_makecmd install
 	rs_clean_module "gmp"
+
+	unset CFLAGS
 fi
 
 if rs_prepare_module "mpfr"; then
 	export CFLAGS="$rs_host_cflags"
 
-	rs_do_command ../mpfr/configure --prefix="$rs_supportprefixdir" --with-gmp="$rs_supportprefixdir" --disable-shared
+	rs_do_command ../mpfr/configure --prefix="$rs_supportprefixdir" --with-gmp="$rs_supportprefixdir" --disable-shared --disable-werror
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd check
 	rs_do_command $rs_makecmd install
@@ -282,7 +293,7 @@ fi
 if rs_prepare_module "binutils"; then
 	export CFLAGS="$rs_host_cflags"
 	
-	rs_do_command ../binutils/configure --prefix="$rs_prefixdir" --target="$rs_target" --disable-nls --disable-werror
+	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --target="$rs_target" --disable-nls --disable-werror
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "binutils"
@@ -295,7 +306,7 @@ if rs_prepare_module "gcc"; then
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
 	
-	rs_do_command ../gcc/configure --prefix="$rs_prefixdir" --target="$rs_target" --with-gmp="$rs_supportprefixdir" --with-mpfr="$rs_supportprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-checking=release --enable-version-specific-runtime-libs --disable-shared --disable-nls --disable-werror
+	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-gmp="$rs_supportprefixdir" --with-mpfr="$rs_supportprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-checking=release --enable-version-specific-runtime-libs --disable-shared --disable-nls --disable-werror
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "gcc"
@@ -308,7 +319,7 @@ fi
 if rs_prepare_module "make"; then
 	export CFLAGS="$rs_host_cflags"
 
-	rs_do_command ../make/configure --prefix="$installdir" --disable-dependency-tracking --disable-nls --enable-case-insensitive-file-system --disable-job-server --disable-rpath --disable-werror
+	rs_do_command ../make/configure --prefix="$rs_prefixdir" --disable-nls --disable-werror
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "make"
@@ -316,34 +327,29 @@ if rs_prepare_module "make"; then
 	unset CFLAGS
 fi
 
-# NASM doesn't compile in a dedicated build directory, so just extract it
-if rs_extract_module "nasm" "$rs_workdir"; then
-	export CFLAGS="$rs_host_cflags"
-
-	cd "nasm"
-	rs_do_command ./configure --prefix="$rs_prefixdir"
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
-	rs_clean_module "nasm"
-
-	unset CFLAGS
-fi
-
 # Final actions
 echo
 rs_boldmsg "Final actions"
-cd "$installdir"
 
 echo "Removing unneeded files..."
-rm -rf share
-rm -rf $rs_prefixdir/include $rs_prefixdir/info $rs_prefixdir/man $rs_prefixdir/share
-rm -f $rs_prefixdir/lib/* >& /dev/null
+cd "$rs_prefixdir"
+rm -rf doc man share/info share/man
+
+cd "$rs_archprefixdir"
+rm -rf $rs_target/doc $rs_target/share include info man share
+rm -f lib/* >& /dev/null
 
 # Keep the "include" and "lib" directories of the support files in case a subsequent RosBE-Unix package needs them
-rm -rf $rs_supportprefixdir/info $rs_supportprefixdir/share
+cd "$rs_supportprefixdir"
+rm -rf info share
 
 echo "Removing debugging symbols..."
+cd "$rs_prefixdir"
 find -executable -type f -exec strip -s {} ";" >& /dev/null
+
+# Executables are created for the host system while most libraries are linked to target components
+find -name "*.a" -type f -exec "$rs_archprefixdir/bin/mingw32-strip" -d {} ";" >& /dev/null
+find -name "*.o" -type f -exec "$rs_archprefixdir/bin/mingw32-strip" -d {} ";" >& /dev/null
 ##### END almost shared buildtoolchain/RosBE-Unix building part ###############
 
 

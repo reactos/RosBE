@@ -1,5 +1,5 @@
                            ReactOS Build Environment
-                 Version 1.5 for Unix-based operating systems
+                 Version 2.0 for Unix-based operating systems
                       Base package and i386 build tools
                       by Colin Finck (colin@reactos.org)
 
@@ -103,8 +103,12 @@ Version Information
   This version of RosBE for Unix-based operating systems uses the following
 components:
 
-  * GNU Binutils v2.20-20091222 (snapshot)
+  * GNU Binutils v2.20.51-20091222 (snapshot)
     compiled for mingw32
+
+  * CMake 2.8.5
+    patched with:
+      - http://svn.reactos.org/project-tools/trunk/RosBE/Patches/CMake-jgardou-changes-against-2.8.5.patch?p=1320
 
   * GCC, The GNU Compiler Collection v4.4.3
     compiled for mingw32
@@ -114,9 +118,16 @@ components:
 
     NOTE: This GCC version only supports C and C++
 
-  * Make 20071219 (CVS version)
+  * GMP 5.0.2
+    patched with:
+      - http://svn.reactos.org/project-tools/trunk/RosBE/Patches/GMP-OSX-10.7-fixes-against-5.0.2.patch?p=1322
+
+  * Make 3.82
+    patched with:
+      - http://svn.reactos.org/project-tools/trunk/RosBE/Patches/Make-Windows-jobserver-against-3.8.2.patch?p=1321
+
   * MinGW-Runtime 3.17
-  * NASM, The Netwide assembler v2.07
+  * MPFR 3.0.1
   * W32api 3.14
 
 
@@ -140,14 +151,20 @@ http://www.mingw.org
 Binutils, the Binary Tools Collection
 http://www.gnu.org/software/binutils
 
+CMake, Cross Platform Make
+http://www.cmake.org
+
 GCC, the GNU Compiler Collection
 http://www.gcc.org
+
+GMP, the GNU MP Bignum library
+http://www.gmplib.org
 
 Make, the Makefile processor
 http://www.gnu.org/software/make
 
-NASM, the Netwide Assembler
-http://nasm.sourceforge.net
+The GNU MPFR library
+http://www.mpfr.org
 
 
 Credits
@@ -155,9 +172,9 @@ Credits
 Colin Finck (colin@reactos.org)
 
 Thanks go also to the members of the RosBE-Windows team, namely:
-Daniel Reimer (reimer.daniel@freenet.de)
+Daniel Reimer (daniel.reimer@reactos.org)
 Peter Ward (dralnix@gmail.com)
-Pierre Schweitzer (heis_spiter@hotmail.com)
+Pierre Schweitzer (pierre.schweitzer@reactos.org)
 
   Special thanks to ROSFan, who created the nice ReactOS Build Environment
 Logo.

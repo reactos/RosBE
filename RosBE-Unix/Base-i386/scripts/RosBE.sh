@@ -2,7 +2,7 @@
 #
 # Script for initializing RosBE
 # Part of RosBE for Unix-based Operating Systems
-# Copyright 2007-2010 Colin Finck <colin@reactos.org>
+# Copyright 2007-2011 Colin Finck <colin@reactos.org>
 #
 # Released under GNU GPL v2 or any later version.
 
@@ -21,10 +21,6 @@ export HOST=
 export CFLAGS=
 export CXXFLAGS=
 export LDFLAGS=
-
-# Export the host compiler search pathes to make them available for other build tools
-export ROSBE_HOST_CFLAGS=`cpp -x c -v < /dev/null 2>&1 | $_ROSBE_ROSSCRIPTDIR/bin/getincludes`
-export ROSBE_HOST_CXXFLAGS=`cpp -x c++ -v < /dev/null 2>&1 | $_ROSBE_ROSSCRIPTDIR/bin/getincludes`
 
 # Read the RosBE version
 # The file "RosBE-Version" has been created by the RosBE-Builder.sh script
