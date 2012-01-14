@@ -103,12 +103,15 @@ Version Information
   This version of RosBE for Unix-based operating systems uses the following
 components:
 
-  * GNU Binutils v2.20.51-20091222 (snapshot)
+  * GNU Binutils v2.22
     compiled for mingw32
-
-  * CMake 2.8.5
     patched with:
-      - http://svn.reactos.org/project-tools/trunk/RosBE/Patches/CMake-jgardou-changes-against-2.8.5.patch?p=1320
+      - http://svn.reactos.org/project-tools/trunk/RosBE/Patches/binutils-changes-against-2.22.patch?p=1352
+      - http://cygwin.com/ml/binutils/2011-10/msg00152.html
+
+  * CMake 2.8.7
+    patched with:
+      - http://svn.reactos.org/project-tools/trunk/RosBE/Patches/CMake-jgardou-changes-against-2.8.7.patch?p=1353
 
   * GCC, The GNU Compiler Collection v4.4.3
     compiled for mingw32
@@ -174,7 +177,7 @@ Colin Finck (colin@reactos.org)
 Thanks go also to the members of the RosBE-Windows team, namely:
 Daniel Reimer (daniel.reimer@reactos.org)
 Peter Ward (dralnix@gmail.com)
-Pierre Schweitzer (pierre.schweitzer@reactos.org)
+Pierre Schweitzer (pierre@reactos.org)
 
   Special thanks to ROSFan, who created the nice ReactOS Build Environment
 Logo.
