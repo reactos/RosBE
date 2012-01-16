@@ -6,10 +6,17 @@
 #
 # Released under GNU GPL v2 or any later version.
 
+if [ "x$CC" == "x" ]; then
+	CC=gcc
+fi
+
+if [ "x$CXX" == "x" ]; then
+	CXX=g++
+fi
 
 # RosBE Setup Variables
 rs_host_cflags="-pipe -O2"
-rs_needed_tools="bison flex gcc g++ grep makeinfo"        # GNU Make has a special check
+rs_needed_tools="bison flex $CC $CXX grep makeinfo"        # GNU Make has a special check
 rs_target="mingw32"
 rs_target_cflags="-pipe -O2 -march=pentium -mtune=i686"
 
@@ -190,7 +197,7 @@ if $update; then
 else
 	rs_process_binutils=true
 	rs_process_buildtime=true
-    rs_process_cmake=true
+	rs_process_cmake=true
 	rs_process_cpucount=true
 	rs_process_gcc=true
 	rs_process_gmp=true
@@ -230,7 +237,7 @@ rs_mkdir_if_not_exists "$rs_supportprefixdir"
 # Use -march=native if the host compiler supports it
 echo -n "Checking if the host compiler supports -march=native... "
 
-if `gcc -march=native -o "$rs_workdir/dummy" "$rs_scriptdir/tools/dummy.c" >& /dev/null`; then
+if `$CC -march=native -o "$rs_workdir/dummy" "$rs_scriptdir/tools/dummy.c" >& /dev/null`; then
 	echo "yes"
 	rs_host_cflags+=" -march=native"
 	rm "$rs_workdir/dummy"
@@ -242,17 +249,17 @@ rs_extract_module "mingw_runtime_dev" "$rs_archprefixdir/$rs_target"
 rs_extract_module "w32api" "$rs_archprefixdir/$rs_target"
 
 if $rs_process_buildtime; then
-	rs_do_command gcc -s -o "$rs_prefixdir/bin/buildtime" "$rs_scriptdir/tools/buildtime.c"
+	rs_do_command $CC -s -o "$rs_prefixdir/bin/buildtime" "$rs_scriptdir/tools/buildtime.c"
 fi
 
 if $rs_process_cpucount; then
-	rs_do_command gcc -s -o "$rs_prefixdir/bin/cpucount" "$rs_scriptdir/tools/cpucount.c"
+	rs_do_command $CC -s -o "$rs_prefixdir/bin/cpucount" "$rs_scriptdir/tools/cpucount.c"
 fi
 
 rs_cpucount=`$rs_prefixdir/bin/cpucount -x1`
 
 if $rs_process_scut; then
-	rs_do_command gcc -s -o "$rs_prefixdir/bin/scut" "$rs_scriptdir/tools/scut.c"
+	rs_do_command $CC -s -o "$rs_prefixdir/bin/scut" "$rs_scriptdir/tools/scut.c"
 fi
 
 if rs_prepare_module "cmake"; then
@@ -292,12 +299,12 @@ fi
 
 if rs_prepare_module "binutils"; then
 	export CFLAGS="$rs_host_cflags"
-	
+
 	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --target="$rs_target" --disable-nls --disable-werror
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "binutils"
-	
+
 	unset CFLAGS
 fi
 
@@ -305,12 +312,12 @@ if rs_prepare_module "gcc"; then
 	export CFLAGS="$rs_host_cflags"
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
-	
+
 	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-gmp="$rs_supportprefixdir" --with-mpfr="$rs_supportprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-checking=release --enable-version-specific-runtime-libs --disable-shared --disable-nls --disable-werror
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "gcc"
-	
+
 	unset CFLAGS
 	unset CFLAGS_FOR_TARGET
 	unset CXXFLAGS_FOR_TARGET
