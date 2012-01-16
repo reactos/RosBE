@@ -76,7 +76,7 @@ rs_check_requirements()
 	local app
 	local checkapps="make gmake"
 	rs_makecmd=""
-	
+
 	for app in $checkapps; do
 		if $app -v 2>&1 | grep "GNU Make" >& /dev/null; then
 			# Store the complete path in $rs_makecmd to prevent collisions with our own Make.
@@ -84,13 +84,13 @@ rs_check_requirements()
 			rs_greenmsg "OK"
         fi
 	done
-	
+
 	if [ "$rs_makecmd" = "" ]; then
 		rs_redmsg "MISSING"
 		toolmissing=true
 	fi
 
-	
+
 	if $toolmissing; then
 		echo "At least one needed tool is missing, aborted!"
 		exit 1
@@ -145,7 +145,7 @@ rs_extract_module()
 {
 	local module=$1
 	local target_dir=$2
-	
+
 	if ! `eval echo \\$rs_process_$module`; then
 		return 1
 	fi
@@ -174,7 +174,7 @@ rs_mkdir_empty()
 	if [ -d "$1" ]; then
 		rm -rf "$1"
 	fi
-	
+
 	mkdir -p "$1"
 }
 
@@ -203,7 +203,7 @@ rs_prepare_module()
 	rm -rf "$module-build"
 	mkdir "$module-build"
 	cd "$module-build"
-	
+
 	return 0
 }
 
