@@ -14,6 +14,12 @@ if [ "x$CXX" == "x" ]; then
 	CXX=g++
 fi
 
+if [ "x$CFLAGS" != "x" ]; then
+	use_cflags=1
+else
+	use_cflags=0
+fi
+
 # RosBE Setup Variables
 rs_host_cflags="-pipe -O2"
 rs_needed_tools="bison flex $CC $CXX grep makeinfo"        # GNU Make has a special check
@@ -234,15 +240,17 @@ rs_mkdir_if_not_exists "$rs_prefixdir/bin"
 rs_mkdir_if_not_exists "$rs_archprefixdir/$rs_target"
 rs_mkdir_if_not_exists "$rs_supportprefixdir"
 
-# Use -march=native if the host compiler supports it
-echo -n "Checking if the host compiler supports -march=native... "
+if [ $use_cflags -eq 0 ]; then
+	# Use -march=native if the host compiler supports it
+	echo -n "Checking if the host compiler supports -march=native... "
 
-if `$CC -march=native -o "$rs_workdir/dummy" "$rs_scriptdir/tools/dummy.c" >& /dev/null`; then
-	echo "yes"
-	rs_host_cflags+=" -march=native"
-	rm "$rs_workdir/dummy"
-else
-	echo "no"
+	if `$CC -march=native -o "$rs_workdir/dummy" "$rs_scriptdir/tools/dummy.c" >& /dev/null`; then
+		echo "yes"
+		rs_host_cflags+=" -march=native"
+		rm "$rs_workdir/dummy"
+	else
+		echo "no"
+	fi
 fi
 
 rs_extract_module "mingw_runtime_dev" "$rs_archprefixdir/$rs_target"
@@ -263,18 +271,24 @@ if $rs_process_scut; then
 fi
 
 if rs_prepare_module "cmake"; then
-	export CFLAGS="$rs_host_cflags"
+	if [ $use_cflags -eq 0 ]; then
+		export CFLAGS="$rs_host_cflags"
+	fi
 
 	rs_do_command ../cmake/bootstrap --prefix="$rs_prefixdir" --parallel=$rs_cpucount
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "cmake"
 
-	unset CFLAGS
+	if [ $use_cflags -eq 0 ]; then
+		unset CFLAGS
+	fi
 fi
 
 if rs_prepare_module "gmp"; then
-	export CFLAGS="$rs_host_cflags"
+	if [ $use_cflags -eq 0 ]; then
+		export CFLAGS="$rs_host_cflags"
+	fi
 
 	rs_do_command ../gmp/configure ABI=$rs_abi --prefix="$rs_supportprefixdir" --disable-shared --disable-werror
 	rs_do_command $rs_makecmd -j $rs_cpucount
@@ -282,11 +296,15 @@ if rs_prepare_module "gmp"; then
 	rs_do_command $rs_makecmd install
 	rs_clean_module "gmp"
 
-	unset CFLAGS
+	if [ $use_cflags -eq 0 ]; then
+		unset CFLAGS
+	fi
 fi
 
 if rs_prepare_module "mpfr"; then
-	export CFLAGS="$rs_host_cflags"
+	if [ $use_cflags -eq 0 ]; then
+		export CFLAGS="$rs_host_cflags"
+	fi
 
 	rs_do_command ../mpfr/configure --prefix="$rs_supportprefixdir" --with-gmp="$rs_supportprefixdir" --disable-shared --disable-werror
 	rs_do_command $rs_makecmd -j $rs_cpucount
@@ -294,22 +312,31 @@ if rs_prepare_module "mpfr"; then
 	rs_do_command $rs_makecmd install
 	rs_clean_module "mpfr"
 
-	unset CFLAGS
+	if [ $use_cflags -eq 0 ]; then
+		unset CFLAGS
+	fi
 fi
 
 if rs_prepare_module "binutils"; then
-	export CFLAGS="$rs_host_cflags"
+	if [ $use_cflags -eq 0 ]; then
+		export CFLAGS="$rs_host_cflags"
+	fi
 
 	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --target="$rs_target" --disable-nls --disable-werror
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "binutils"
 
-	unset CFLAGS
+	if [ $use_cflags -eq 0 ]; then
+		unset CFLAGS
+	fi
 fi
 
 if rs_prepare_module "gcc"; then
-	export CFLAGS="$rs_host_cflags"
+	if [ $use_cflags -eq 0 ]; then
+		export CFLAGS="$rs_host_cflags"
+	fi
+
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
 
@@ -318,20 +345,26 @@ if rs_prepare_module "gcc"; then
 	rs_do_command $rs_makecmd install
 	rs_clean_module "gcc"
 
-	unset CFLAGS
+	if [ $use_cflags -eq 0 ]; then
+		unset CFLAGS
+	fi
 	unset CFLAGS_FOR_TARGET
 	unset CXXFLAGS_FOR_TARGET
 fi
 
 if rs_prepare_module "make"; then
-	export CFLAGS="$rs_host_cflags"
+	if [ $use_cflags -eq 0 ]; then
+		export CFLAGS="$rs_host_cflags"
+	fi
 
 	rs_do_command ../make/configure --prefix="$rs_prefixdir" --disable-nls --disable-werror
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "make"
 
-	unset CFLAGS
+	if [ $use_cflags -eq 0 ]; then
+		unset CFLAGS
+	fi
 fi
 
 # Final actions
