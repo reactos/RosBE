@@ -33,10 +33,8 @@ if ("$ADDRESS" -eq "") {
     throw {"ERROR: You must specify a address to analyze."}
 }
 
-if ("$ENV:ROS_OUTPUT" -ne "") {
-    IEX "& log2lines.exe -d '$ENV:ROS_OUTPUT' '$FILEPATH' '$ADDRESS'"
-} else {
-    IEX "& log2lines.exe '$FILEPATH' '$ADDRESS'"
-}
-
+$base = (objdump -p $FILEPATH | select-string "ImageBase").tostring().split()[$base.length - 1]
+$address = ("$base" | % {[Convert]::ToInt64($_,16)}) + ("$ADDRESS" | % {[Convert]::ToInt64($_,16)})
+$calcbase = ("{0:X}" -f $address)
+IEX "& addr2line.exe -p -f -a -e '$FILEPATH' '$CALCBASE'"
 $host.ui.RawUI.WindowTitle = "ReactOS Build Environment $_ROSBE_VERSION"
