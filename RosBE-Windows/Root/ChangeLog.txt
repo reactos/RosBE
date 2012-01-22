@@ -1,4 +1,4 @@
-*** Oct XXth, 2011 - RosBE 2.0 Released
+*** Jan XXth, 2012 - RosBE 2.0 Released
 
 - Updated parts of GCC
   * gmp 5.0.2
@@ -7,7 +7,8 @@
 - Updated make 3.8.2 (Amine Khaldi)
 - Updated gdb 7.3-2 (Daniel Reimer)
 - Updated 7-zip 9.2.0 (Daniel Reimer)
-- Updated SVN to 1.6.17 (Daniel Reimer)
+- Updated cmake to 2.8.7 patched (Amine Khaldi)
+- Updated svn to 1.7.2 (Daniel Reimer)
 - Bug 5426 resolved (Adam Kachwalla)
 - Cleanup the options tool (Christoph von Wittich)
 - Add Support for the cmake bringup branch. Just install cmake and type make/makex inside the branch (Daniel Reimer)
