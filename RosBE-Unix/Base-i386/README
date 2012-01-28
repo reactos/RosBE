@@ -80,6 +80,8 @@ your used operating system:
      personal directory, you don't need superuser privileges.
   2. Call the "RosBE-Builder.sh" script in the directory of the unpacked
      RosBE files.
+     NOTE: Advanced users can make use of CFLAGS, CC, CXX variables to modulate
+     the way tools will be built.
   3. Follow the directions on the screen until the script ends with "Finished
      successfully!"
   4. Type "exit" to switch back to your normal user account. Then call the
