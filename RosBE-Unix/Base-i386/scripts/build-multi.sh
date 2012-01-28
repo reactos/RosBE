@@ -6,5 +6,9 @@
 #
 # Released under GNU GPL v2 or any later version.
 
+source "$_ROSBE_ROSSCRIPTDIR/rosbelibrary.sh"
+
 CPUCOUNT=`cpucount -x1`
+execute_hooks pre-build $*
 buildtime make -j $CPUCOUNT $*
+execute_hooks post-build $*

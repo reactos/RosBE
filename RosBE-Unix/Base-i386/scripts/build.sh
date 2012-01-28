@@ -6,4 +6,8 @@
 #
 # Released under GNU GPL v2 or any later version.
 
+source "$_ROSBE_ROSSCRIPTDIR/rosbelibrary.sh"
+
+execute_hooks pre-build $*
 buildtime make $*
+execute_hooks post-build $*

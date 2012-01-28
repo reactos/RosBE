@@ -1,0 +1,4 @@
+Place here all the hooks that will be executed before the build actually begins.
+You have to name it that way: ID-name.sh
+Scripts with lower IDs will be executed first.
+All the hook scripts will receive as arguments the build target.

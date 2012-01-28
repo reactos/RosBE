@@ -1,0 +1,6 @@
+Place here all the hooks that will be executed after the build ends.
+You have to name it that way: ID-name.sh
+Scripts with lower IDs will be executed first.
+All the hook scripts will receive as arguments the build target.
+The hooks will be executed even if the build failed. You have
+no way to know the result of the build once the hook is called.
