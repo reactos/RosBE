@@ -9,6 +9,8 @@
 - Updated 7-zip 9.2.0 (Daniel Reimer)
 - Updated cmake to 2.8.7 patched (Amine Khaldi)
 - Updated svn to 1.7.2 (Daniel Reimer)
+- Updated bison to 2.5 (Daniel Reimer)
+- Updated flex to 2.5.35 (Daniel Reimer)
 - Bug 5426 resolved (Adam Kachwalla)
 - Cleanup the options tool (Christoph von Wittich)
 - Add Support for the cmake bringup branch. Just install cmake and type make/makex inside the branch (Daniel Reimer)

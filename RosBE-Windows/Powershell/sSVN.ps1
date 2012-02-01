@@ -6,7 +6,7 @@
 # COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
-$ROS_SVNURL = "http://svn.reactos.org/reactos"
+$ROS_SVNURL = "svn://svn.reactos.org/reactos"
 
 if ("$ENV:ROS_ARCH" -eq "amd64") {
     $ROS_SVNURL = "$ROS_SVNURL/branches/ros-amd64-bringup"

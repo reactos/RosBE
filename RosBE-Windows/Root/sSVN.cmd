@@ -14,7 +14,7 @@ if %_ROSBE_DEBUG% == 1 (
 
 setlocal enabledelayedexpansion
 
-set ROS_SVNURL=http://svn.reactos.org/reactos
+set ROS_SVNURL=svn://svn.reactos.org/reactos
 
 if "%ROS_ARCH%" == "amd64" (
     set ROS_SVNURL=%ROS_SVNURL%/branches/ros-amd64-bringup
