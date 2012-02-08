@@ -36,7 +36,7 @@ Copyright (c) 2011, Ziliang Guo
     <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
       <Product xmlns="http://schemas.microsoft.com/wix/2006/wi"
        Id="877D13F9-FC8A-42DC-9D57-A7F55A4FEA3A" Name="ReactOS Build Environment"
-       Language="1033" Version="1.5.2"
+       Language="1033" Version="2.0"
        Manufacturer="ReactOS Project" UpgradeCode="AC1907F1-2D33-4809-A275-91FDEE93F401">
         <Package InstallerVersion="300" Compressed="yes"/>
         <Media Id="1" Cabinet="media1.cab" EmbedCab="yes"/>

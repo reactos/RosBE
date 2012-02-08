@@ -1,4 +1,4 @@
-*** Jan XXth, 2012 - RosBE 2.0 Released
+*** Feb XXth, 2012 - RosBE 2.0 Released
 
 - Updated parts of GCC
   * gmp 5.0.2
