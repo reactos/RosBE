@@ -47,24 +47,29 @@ Copyright (c) 2011, Ziliang Guo
             <Directory Id="RosBE" Name="ReactOS Build Environment">
             </Directory>
 
-            <!-- Update the registry, ENV, and FW -->
-           <Component Id="CondorRegNEnv" Guid="E282D017-976B-4685-A330-5180B27277C0">
-             <RegistryKey Root="HKLM" Key="SOFTWARE\Condor" Action="createAndRemoveOnUninstall" >
-                 <RegistryValue Type="string" Name="CONDOR_CONFIG" Value="[INSTALLLOCATION]condor_config" KeyPath="yes" />
-                 <RegistryValue Type="string" Name="RELEASE_DIR" Value="[INSTALLLOCATION]"/>
-             </RegistryKey>
-             <Environment Id="CondorBin" Action="set" Name="PATH" Part="last" Permanent="no" System="yes" Value="[INSTALLLOCATION]bin\"/>
-           </Component>
-
           </Directory>
         </Directory>
+		
+		<Property Id="SourceCheckout" Value="SRC_DIR"/>
+		
+		<DirectoryRef Id="RosBE">
+			<Component Id="RosBEShortcut" Guid="9D59FF49-93A1-4394-918B-A84456B47BAB">
+				<Shortcut Id="StartMenuShortcut" Name="ReactOS BE" Description="ReactOS Build Environment" Target="[RosBE]RosBE.cmd" WorkingDirectory="SourceCheckout" />
+				<RemoveFolder Id="RosBE" On="uninstall"/>
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\RosBE" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+			</Component>
+		</DirectoryRef>
 
         <Condition Message="This application is only supported on Windows XP(SP2) or higher">
           <![CDATA[(VersionNT >= 501)]]>
         </Condition>
         <!-- Feature Block e.g. ComponentRef's -->
-        <Feature Id="RosBE" Title="ReactOS Build Environment" Level="1" Display="expand">
-          <Feature Id="x86" Title="x86 Build Tools" Level="1">
+        <Feature Id="ReactOS_Build_Environment" Title="ReactOS Build Environment" Level="1" Display="expand">
+		<Feature Id="x86" Title="x86 Build Tools" Level="1">
+		<xsl:apply-templates select="wix:Fragment" mode="CompRef" />
+		<ComponentRef Id="RosBEShortcut" />
+		</Feature>
+          <!--<Feature Id="x86" Title="x86 Build Tools" Level="1">
             <xsl:apply-templates select="wix:Fragment" mode="CompRef">
               <xsl:with-param name="ftype">i386</xsl:with-param>
             </xsl:apply-templates>
@@ -75,22 +80,19 @@ Copyright (c) 2011, Ziliang Guo
             </xsl:apply-templates>
           </Feature>
           <Feature Id="ARM" Title="ARM Build Tools" Level="1">
-          </Feature>
+          </Feature>-->
         </Feature>
 
         <!-- UI Flow + our custom dialogs -->
         <UI Id="MyWixUI_FeatureTree">
             <UIRef Id="WixUI_FeatureTree" />
-            <!--<Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="CustomizeDlg" Order="2">LicenseAccepted = "1"</Publish>
-            <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg">1</Publish>-->
+			<DialogRef Id="RosBESrcPathDlg" />
+            <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="RosBESrcPathDlg" Order="2">LicenseAccepted = "1"</Publish>
+            <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="RosBESrcPathDlg">1</Publish>
         </UI>
 
         <!--<UIRef Id="WixUI_FeatureTree" />-->
         <UIRef Id="WixUI_ErrorProgressText" />
-
-        <!-- Update  -->
-        <WixVariable Id="WixUIBannerBmp" Overridable="yes" Value="../Bitmaps/bannrbmp.bmp"/>
-        <WixVariable Id="WixUIDialogBmp" Overridable="yes" Value="../Bitmaps/dlgbmp.bmp"/>
 
       </Product>
 
