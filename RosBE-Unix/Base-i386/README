@@ -141,7 +141,7 @@ Tested Operating Systems
   The Build Environment was designed to work on all Unix-based operating
 systems. Nevertheless, it is impossible to test it on all possible systems out
 there.
-  The current primary development and test system is Ubuntu 9.10. But users
+  The current primary development and test system is Ubuntu 11.04. But users
 also reported that it works well under other Linux systems such as Fedora or
 openSUSE and Unix derivates like FreeBSD or Mac OS X.
   You should be able to compile the build tools on both i386 (32-bit) and
@@ -175,11 +175,11 @@ http://www.mpfr.org
 Credits
 --------
 Colin Finck (colin@reactos.org)
+Pierre Schweitzer (pierre@reactos.org)
 
 Thanks go also to the members of the RosBE-Windows team, namely:
 Daniel Reimer (daniel.reimer@reactos.org)
 Peter Ward (dralnix@gmail.com)
-Pierre Schweitzer (pierre@reactos.org)
 
   Special thanks to ROSFan, who created the nice ReactOS Build Environment
 Logo.
