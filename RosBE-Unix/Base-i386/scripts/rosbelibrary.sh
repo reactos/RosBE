@@ -56,7 +56,7 @@ execute_hooks()
 
 	echo "Executing $hook_type hooks"
 
-	for file in `ls -1 $_ROSBE_ROSSCRIPTDIR/$hook_type/ | grep [:digit:]-*.sh`; do
+	for file in `ls -1 $_ROSBE_ROSSCRIPTDIR/$hook_type/ | grep [[:digit:]]-*.sh`; do
 		$_ROSBE_ROSSCRIPTDIR/$hook_type/$file $*
 	done
 }
