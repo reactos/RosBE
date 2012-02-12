@@ -131,8 +131,9 @@ function LoadAliases {
     set-alias CLEAN "$_ROSBE_BASEDIR\Clean.ps1" -scope Global
 
     set-alias HELP "$_ROSBE_BASEDIR\Help.ps1" -scope Global
+
     function global:MAKE {
-        IEX "&'$_ROSBE_BASEDIR\Build.ps1'"
+        IEX "&'$_ROSBE_BASEDIR\Build.ps1' $args"
     }
 
     function global:MAKEX {
