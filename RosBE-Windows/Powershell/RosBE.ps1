@@ -78,7 +78,7 @@ $ENV:BISON_PKGDATADIR = ((New-Object -ComObject Scripting.FileSystemObject).GetF
 
 # Get the number of CPUs in the system so we know how many jobs to execute.
 # To modify the number used, see the cpucount usage for getting to know about the possible options
-$global:_ROSBE_MAKEX_JOBS = (gwmi win32_processor).numberofcores + 1
+$global:_ROSBE_MAKEX_JOBS = [Int]$ENV:NUMBER_OF_PROCESSORS + 1
 
 if ("$ENV:_ROSBE_CCACHE_DIR" -eq "") {
     $ENV:CCACHE_DIR = "$ENV:APPDATA\RosBE\.ccache"
