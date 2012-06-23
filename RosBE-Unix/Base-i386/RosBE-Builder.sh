@@ -385,11 +385,24 @@ rm -rf info share
 
 echo "Removing debugging symbols..."
 cd "$rs_prefixdir"
-find -executable -type f -exec strip -s {} ";" >& /dev/null
+for exe in `find -executable -type f -print`; do
+	objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
+	objcopy --strip-debug $exe 2>/dev/null
+	objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
+done
 
 # Executables are created for the host system while most libraries are linked to target components
-find -name "*.a" -type f -exec "$rs_archprefixdir/bin/mingw32-strip" -d {} ";" >& /dev/null
-find -name "*.o" -type f -exec "$rs_archprefixdir/bin/mingw32-strip" -d {} ";" >& /dev/null
+for exe in `find -name "*.a" -type f -print`; do
+	$rs_archprefixdir/bin/mingw32-objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
+	$rs_archprefixdir/bin/mingw32-objcopy --strip-debug $exe 2>/dev/null
+	$rs_archprefixdir/bin/mingw32-objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
+done
+
+for exe in `find -name "*.o" -type f -print`; do
+	$rs_archprefixdir/bin/mingw32-objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
+	$rs_archprefixdir/bin/mingw32-objcopy --strip-debug $exe 2>/dev/null
+	$rs_archprefixdir/bin/mingw32-objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
+done
 ##### END almost shared buildtoolchain/RosBE-Unix building part ###############
 
 
