@@ -314,7 +314,6 @@ WriteSettings(POPTIONS_DLG infoPtr)
 
     if (!pFilecmd)
     {
-        fclose(pFilecmd);
         fclose(pFileps1);
         LoadStringW(hInstance, MSG_CMDFFAILED, msgerror, 256);
         MessageBoxW(infoPtr->hwndDlg, msgerror, NULL, MB_ICONERROR);
@@ -323,7 +322,6 @@ WriteSettings(POPTIONS_DLG infoPtr)
     if (!pFileps1)
     {
         fclose(pFilecmd);
-        fclose(pFileps1);
         LoadStringW(hInstance, MSG_PS1FFAILED, msgerror, 256);
         MessageBoxW(infoPtr->hwndDlg, msgerror, NULL, MB_ICONERROR);
     }
