@@ -1,12 +1,25 @@
-*** Feb XXth, 2012 - RosBE 2.0 Released
+*** Sep XXth, 2012 - RosBE 2.1 Released
+- Amine Edition -
+
+- Updated GCC to 4.7.1 mingw-w64 (Amine Khaldi)
+- Updated ccache to 3.1.8 (Amine Khaldi)
+- Updated cmake to 2.8.9 (Amine Khaldi)
+- Added ninja 120715 (Amine Khaldi)
+- Updated nasm to 2.10.5 (Daniel Reimer)
+- Updated SVN to 1.7.6 (Daniel Reimer)
+- Updated NSIS to 2.46.5 unicode (Daniel Reimer)
+- Fix detection of all CPU cores in VMWare ESXi environment (Daniel Reimer)
+- Stop SEGV from trying to fclose(NULL) in options.exe (Mike Nordell)
+
+*** Feb 12th, 2012 - RosBE 2.0 Released
 
 - Updated parts of GCC
   * gmp 5.0.2
   * mpfr 3.0.1
-- Updated pexports 0.44.1 (Daniel Reimer)
-- Updated make 3.8.2 (Amine Khaldi)
-- Updated gdb 7.3-2 (Daniel Reimer)
-- Updated 7-zip 9.2.0 (Daniel Reimer)
+- Updated pexports to 0.44.1 (Daniel Reimer)
+- Updated make to 3.8.2 (Amine Khaldi)
+- Updated gdb to 7.3-2 (Daniel Reimer)
+- Updated 7-zip to 9.2.0 (Daniel Reimer)
 - Updated cmake to 2.8.7 patched (Amine Khaldi)
 - Updated svn to 1.7.2 (Daniel Reimer)
 - Updated bison to 2.5 (Daniel Reimer)

@@ -1,5 +1,5 @@
-!define PRODUCT_NAME "ReactOS Build Environment for Windows"
-!define PRODUCT_VERSION "2.0"
+!define PRODUCT_NAME "ReactOS Build Environment Amine Edition"
+!define PRODUCT_VERSION "2.1"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RosBE.cmd"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKCU"
@@ -17,7 +17,7 @@ ShowUnInstDetails show
 ;;
 ;; Add version/product information metadata to the installation file.
 ;;
-VIAddVersionKey /LANG=1033 "FileVersion" "2.0.0.0"
+VIAddVersionKey /LANG=1033 "FileVersion" "2.1.0.0"
 VIAddVersionKey /LANG=1033 "ProductVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey /LANG=1033 "ProductName" "${PRODUCT_NAME}"
 VIAddVersionKey /LANG=1033 "Comments" "This installer was written by Peter Ward and Daniel Reimer using Nullsoft Scriptable Install System"
@@ -25,7 +25,7 @@ VIAddVersionKey /LANG=1033 "CompanyName" "ReactOS Foundation"
 VIAddVersionKey /LANG=1033 "LegalTrademarks" "Copyright © 2012 ReactOS Foundation"
 VIAddVersionKey /LANG=1033 "LegalCopyright" "Copyright © 2012 ReactOS Foundation"
 VIAddVersionKey /LANG=1033 "FileDescription" "${PRODUCT_NAME} Setup"
-VIProductVersion "2.0.0.0"
+VIProductVersion "2.1.0.0"
 
 CRCCheck force
 SetDatablockOptimize on
@@ -36,7 +36,6 @@ SetCompressor /FINAL /SOLID lzma
 !include "InstallOptions.nsh"
 !include "RosSourceDir.nsh"
 !include "LogicLib.nsh"
-!include "x64.nsh"
 
 ;;
 ;; Read our custom page ini, remove previous version and make sure only
@@ -51,11 +50,7 @@ Function .onInit
     StrCmp $R0 0 +3
         MessageBox MB_OK|MB_ICONEXCLAMATION "The ${PRODUCT_NAME} v${PRODUCT_VERSION} installer is already running."
         Abort
-    ${If} ${RunningX64}
-        StrCpy $INSTDIR "$PROGRAMFILES64\RosBE"
-    ${Else}
-        StrCpy $INSTDIR "$PROGRAMFILES\RosBE"
-    ${Endif}
+    StrCpy $INSTDIR "C:\RosBE"
     Call UninstallPrevious
     !insertmacro INSTALLOPTIONS_EXTRACT "RosSourceDir.ini"
 FunctionEnd
@@ -131,6 +126,7 @@ Section -BaseFiles SEC01
     File /r Root\Makex.cmd
     File /r Root\options.cmd
     File /r Root\raddr2line.cmd
+    File /r Root\raddr2lineNW.cmd
     File /r Root\Remake.cmd
     File /r Root\Remakex.cmd
     File /r Root\Renv.cmd
@@ -147,12 +143,15 @@ Section -BaseFiles SEC01
     SetOutPath "$INSTDIR\Bin"
     SetOverwrite try
     File /r Components\Bin\7z.exe
+    File /r Components\Bin\apr_ldap-1.dll
     File /r Components\Bin\bison.exe
     File /r Components\Bin\buildtime.exe
     File /r Components\Bin\ccache.exe
     File /r Components\Bin\chknewer.exe
     File /r Components\Bin\chkslash.exe
     File /r Components\Bin\cmake.exe
+    File /r Components\Bin\cmake-gui.exe
+    File /r Components\Bin\cmcldeps.exe
     File /r Components\Bin\cmp.exe
     File /r Components\Bin\cmw9xcom.exe
     File /r Components\Bin\cpack.exe
@@ -167,23 +166,6 @@ Section -BaseFiles SEC01
     File /r Components\Bin\gdb.exe
     File /r Components\Bin\gdbserver.exe
     File /r Components\Bin\getdate.exe
-    File /r Components\Bin\log2lines.exe
-    File /r Components\Bin\m4.exe
-    File /r Components\Bin\mingw32-make.exe
-    File /r Components\Bin\options.exe
-    File /r Components\Bin\patch.exe
-    File /r Components\Bin\pexports.exe
-    File /r Components\Bin\piperead.exe
-    File /r Components\Bin\playwav.exe
-    File /r Components\Bin\rquote.exe
-    File /r Components\Bin\scut.exe
-    File /r Components\Bin\sdiff.exe
-    File /r Components\Bin\svn.exe
-    File /r Components\Bin\svnrdump.exe
-    File /r Components\Bin\svnversion.exe
-    File /r Components\Bin\tee.exe
-    File /r Components\Bin\wget.exe
-    File /r Components\Bin\apr_ldap-1.dll
     File /r Components\Bin\libapr-1.dll
     File /r Components\Bin\libapriconv-1.dll
     File /r Components\Bin\libaprutil-1.dll
@@ -204,16 +186,36 @@ Section -BaseFiles SEC01
     File /r Components\Bin\libsvn_subr-1.dll
     File /r Components\Bin\libsvn_wc-1.dll
     File /r Components\Bin\libsvnjavahl-1.dll
+    File /r Components\Bin\log2lines.exe
+    File /r Components\Bin\m4.exe
+    File /r Components\Bin\mingw32-make.exe
+    File /r Components\Bin\MSVCM90.dll
+    File /r Components\Bin\MSVCP90.dll
+    File /r Components\Bin\MSVCR90.dll
     File /r Components\Bin\MSVCP100.dll
     File /r Components\Bin\MSVCR100.dll
+    File /r Components\Bin\ninja.exe
+    File /r Components\Bin\options.exe
+    File /r Components\Bin\patch.exe
+    File /r Components\Bin\pexports.exe
+    File /r Components\Bin\piperead.exe
+    File /r Components\Bin\playwav.exe
     File /r Components\Bin\regex2.dll
+    File /r Components\Bin\rquote.exe
     File /r Components\Bin\saslANONYMOUS.dll
     File /r Components\Bin\saslCRAMMD5.dll
     File /r Components\Bin\saslDIGESTMD5.dll
     File /r Components\Bin\saslLOGIN.dll
     File /r Components\Bin\saslNTLM.dll
     File /r Components\Bin\saslPLAIN.dll
+    File /r Components\Bin\scut.exe
+    File /r Components\Bin\sdiff.exe
     File /r Components\Bin\ssleay32.dll
+    File /r Components\Bin\svn.exe
+    File /r Components\Bin\svnrdump.exe
+    File /r Components\Bin\svnversion.exe
+    File /r Components\Bin\tee.exe
+    File /r Components\Bin\wget.exe
     File /r Components\Bin\zlib1.dll
     SetOutPath "$INSTDIR\Bin\license"
     SetOverwrite try
@@ -246,6 +248,7 @@ SetShellVarContext current
     File /r Components\Powershell\options.ps1
     File /r Components\Powershell\playwav.ps1
     File /r Components\Powershell\reladdr2line.ps1
+    File /r Components\Powershell\reladdr2lineNW.ps1
     File /r Components\Powershell\Remake.ps1
     File /r Components\Powershell\Remakex.ps1
     File /r Components\Powershell\RosBE.ps1
@@ -389,8 +392,10 @@ Section Uninstall
     Delete /REBOOTOK "$INSTDIR\options.ps1"
     Delete /REBOOTOK "$INSTDIR\playwav.ps1"
     Delete /REBOOTOK "$INSTDIR\raddr2line.cmd"
+    Delete /REBOOTOK "$INSTDIR\raddr2lineNW.cmd"
     Delete /REBOOTOK "$INSTDIR\README.pdf"
     Delete /REBOOTOK "$INSTDIR\reladdr2line.ps1"
+    Delete /REBOOTOK "$INSTDIR\reladdr2lineNW.ps1"
     Delete /REBOOTOK "$INSTDIR\Remake.cmd"
     Delete /REBOOTOK "$INSTDIR\Remakex.cmd"
     Delete /REBOOTOK "$INSTDIR\Remake.ps1"
