@@ -34,8 +34,8 @@ rs_sourcedir="$rs_scriptdir/sources"
 
 # RosBE-Unix Constants
 DEFAULT_INSTALL_DIR="/usr/local/RosBE"
-KNOWN_ROSBE_VERSIONS="0.3.6 1.1 1.4 1.4.2 1.5 2.0"
-ROSBE_VERSION="2.0"
+KNOWN_ROSBE_VERSIONS="0.3.6 1.1 1.4 1.4.2 1.5 2.0 2.1"
+ROSBE_VERSION="2.1"
 TARGET_ARCH="i386"
 
 source "$rs_scriptdir/scripts/rosbelibrary.sh"
@@ -208,8 +208,10 @@ else
 	rs_process_gcc=true
 	rs_process_gmp=true
 	rs_process_make=true
+	rs_process_ninja=true
 	rs_process_mingw_runtime_dev=true
 	rs_process_mpfr=true
+	rs_process_mpc=true
 	rs_process_scut=true
 	rs_process_w32api=true
 
@@ -317,6 +319,22 @@ if rs_prepare_module "mpfr"; then
 	fi
 fi
 
+if rs_prepare_module "mpc"; then
+	if [ $use_cflags -eq 0 ]; then
+		export CFLAGS="$rs_host_cflags"
+	fi
+
+	rs_do_command ../mpc/configure --prefix="$rs_supportprefixdir" --with-gmp="$rs_supportprefixdir" --with-mpfr="$rs_supportprefixdir" --disable-shared --disable-werror
+	rs_do_command $rs_makecmd -j $rs_cpucount
+	rs_do_command $rs_makecmd check
+	rs_do_command $rs_makecmd install
+	rs_clean_module "mpc"
+
+	if [ $use_cflags -eq 0 ]; then
+		unset CFLAGS
+	fi
+fi
+
 if rs_prepare_module "binutils"; then
 	if [ $use_cflags -eq 0 ]; then
 		export CFLAGS="$rs_host_cflags"
@@ -340,7 +358,7 @@ if rs_prepare_module "gcc"; then
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
 
-	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-gmp="$rs_supportprefixdir" --with-mpfr="$rs_supportprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-checking=release --enable-version-specific-runtime-libs --disable-shared --disable-nls --disable-werror
+	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-gmp="$rs_supportprefixdir" --with-mpfr="$rs_supportprefixdir" --with-mpc="$rs_supportprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-checking=release --enable-version-specific-runtime-libs --disable-shared --disable-sjlj-exceptions --disable-nls --disable-werror
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "gcc"
@@ -361,6 +379,19 @@ if rs_prepare_module "make"; then
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "make"
+
+	if [ $use_cflags -eq 0 ]; then
+		unset CFLAGS
+	fi
+fi
+
+if rs_prepare_module "ninja"; then
+	if [ $use_cflags -eq 0 ]; then
+		export CFLAGS="$rs_host_cflags"
+	fi
+	rs_do_command ../ninja/bootstrap.py
+	rs_do_command install ../ninja/ninja $rs_prefixdir/bin/ninja
+	rs_clean_module "ninja"
 
 	if [ $use_cflags -eq 0 ]; then
 		unset CFLAGS

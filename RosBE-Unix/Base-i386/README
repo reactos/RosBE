@@ -1,7 +1,7 @@
                            ReactOS Build Environment
-                 Version 2.0 for Unix-based operating systems
+                 Version 2.1 for Unix-based operating systems
                       Base package and i386 build tools
-                      by Colin Finck (colin@reactos.org)
+                      by Pierre Schweitzer (pierre@reactos.org)
 
 Introduction
 -------------
@@ -105,35 +105,29 @@ Version Information
   This version of RosBE for Unix-based operating systems uses the following
 components:
 
-  * GNU Binutils v2.22
+  * GNU Binutils v2.23
     compiled for mingw32
     patched with:
       - http://svn.reactos.org/project-tools/trunk/RosBE/Patches/binutils-changes-against-2.22.patch?p=1352
-      - http://cygwin.com/ml/binutils/2011-10/msg00152.html
+      - http://sourceware.org/ml/binutils/2012-10/msg00061.html
+      - http://sourceware.org/ml/binutils/2012-10/msg00062.html
 
-  * CMake 2.8.7
-    patched with:
-      - http://svn.reactos.org/project-tools/trunk/RosBE/Patches/CMake-jgardou-changes-against-2.8.7.patch?p=1353
-
-  * GCC, The GNU Compiler Collection v4.4.3
+  * GCC, The GNU Compiler Collection v4.7.1
     compiled for mingw32
-    patched with:
-      - http://gcc.gnu.org/bugzilla/attachment.cgi?id=18882&action=view
-        (committed in GCC r153606)
 
     NOTE: This GCC version only supports C and C++
-
-  * GMP 5.0.2
-    patched with:
-      - http://svn.reactos.org/project-tools/trunk/RosBE/Patches/GMP-OSX-10.7-fixes-against-5.0.2.patch?p=1322
 
   * Make 3.82
     patched with:
       - http://svn.reactos.org/project-tools/trunk/RosBE/Patches/Make-Windows-jobserver-against-3.8.2.patch?p=1321
 
+  * CMake 2.8.9
+  * GMP 5.0.5
+  * Ninja 120715
   * MinGW-Runtime 3.17
-  * MPFR 3.0.1
+  * MPFR 3.1.1
   * W32api 3.14
+  * MPC 1.0.1
 
 
 Tested Operating Systems
@@ -141,7 +135,7 @@ Tested Operating Systems
   The Build Environment was designed to work on all Unix-based operating
 systems. Nevertheless, it is impossible to test it on all possible systems out
 there.
-  The current primary development and test system is Ubuntu 11.04. But users
+  The current primary development and test system is Ubuntu 12.04. But users
 also reported that it works well under other Linux systems such as Fedora or
 openSUSE and Unix derivates like FreeBSD or Mac OS X.
   You should be able to compile the build tools on both i386 (32-bit) and
