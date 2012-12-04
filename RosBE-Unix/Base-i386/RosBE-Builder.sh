@@ -23,7 +23,7 @@ fi
 # RosBE Setup Variables
 rs_host_cflags="-pipe -O2"
 rs_needed_tools="bison flex $CC $CXX grep makeinfo"        # GNU Make has a special check
-rs_target="mingw32"
+rs_target="i686-w64-mingw32"
 rs_target_cflags="-pipe -O2 -march=pentium -mtune=i686"
 
 # Get the absolute path to the script directory
@@ -209,7 +209,9 @@ else
 	rs_process_gmp=true
 	rs_process_make=true
 	rs_process_ninja=true
-	rs_process_mingw_runtime_dev=true
+	rs_process_mingw_runtime_dev=false
+	rs_process_mingw_w64_headers=true
+	rs_process_mingw_w64_crt=true
 	rs_process_mpfr=true
 	rs_process_mpc=true
 	rs_process_scut=true
@@ -255,7 +257,9 @@ if [ $use_cflags -eq 0 ]; then
 	fi
 fi
 
-rs_extract_module "mingw_runtime_dev" "$rs_archprefixdir/$rs_target"
+if $rs_process_mingw_runtime_dev; then
+	rs_extract_module "mingw_runtime_dev" "$rs_archprefixdir/$rs_target"
+fi
 rs_extract_module "w32api" "$rs_archprefixdir/$rs_target"
 
 if $rs_process_buildtime; then
@@ -287,63 +291,32 @@ if rs_prepare_module "cmake"; then
 	fi
 fi
 
-if rs_prepare_module "gmp"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
-
-	rs_do_command ../gmp/configure ABI=$rs_abi --prefix="$rs_supportprefixdir" --disable-shared --disable-werror
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd check
-	rs_do_command $rs_makecmd install
-	rs_clean_module "gmp"
-
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
-fi
-
-if rs_prepare_module "mpfr"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
-
-	rs_do_command ../mpfr/configure --prefix="$rs_supportprefixdir" --with-gmp="$rs_supportprefixdir" --disable-shared --disable-werror
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd check
-	rs_do_command $rs_makecmd install
-	rs_clean_module "mpfr"
-
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
-fi
-
-if rs_prepare_module "mpc"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
-
-	rs_do_command ../mpc/configure --prefix="$rs_supportprefixdir" --with-gmp="$rs_supportprefixdir" --with-mpfr="$rs_supportprefixdir" --disable-shared --disable-werror
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd check
-	rs_do_command $rs_makecmd install
-	rs_clean_module "mpc"
-
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
-fi
-
 if rs_prepare_module "binutils"; then
 	if [ $use_cflags -eq 0 ]; then
 		export CFLAGS="$rs_host_cflags"
 	fi
 
-	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --target="$rs_target" --disable-nls --disable-werror
+	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --target="$rs_target" --disable-multilib --disable-werror
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "binutils"
+
+	if [ $use_cflags -eq 0 ]; then
+		unset CFLAGS
+	fi
+fi
+
+if rs_prepare_module "mingw_w64_headers"; then
+	if [ $use_cflags -eq 0 ]; then
+		export CFLAGS="$rs_host_cflags"
+	fi
+
+	rs_do_command ../mingw_w64_headers/configure --prefix="$rs_archprefixdir" --host="$rs_target"
+	rs_do_command $rs_makecmd -j $rs_cpucount
+	rs_do_command $rs_makecmd install
+	rs_clean_module "mingw_w64_headers"
+	rs_do_command ln -s $rs_archprefixdir/$rs_target $rs_archprefixdir/mingw
+	rs_do_command mkdir -p $rs_archprefixdir/$rs_target/lib
 
 	if [ $use_cflags -eq 0 ]; then
 		unset CFLAGS
@@ -354,13 +327,42 @@ if rs_prepare_module "gcc"; then
 	if [ $use_cflags -eq 0 ]; then
 		export CFLAGS="$rs_host_cflags"
 	fi
+	
+	rs_extract_module gmp $PWD/../gcc
+	rs_extract_module mpc $PWD/../gcc
+	rs_extract_module mpfr $PWD/../gcc
+	
+	cd ../gcc-build
+	
+	export old_path=$PATH
+	export PATH="$PATH:$rs_archprefixdir/bin"
 
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
 
-	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-gmp="$rs_supportprefixdir" --with-mpfr="$rs_supportprefixdir" --with-mpc="$rs_supportprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-checking=release --enable-version-specific-runtime-libs --disable-shared --disable-sjlj-exceptions --disable-nls --disable-werror
-	rs_do_command $rs_makecmd -j $rs_cpucount
+	rs_do_command ../gcc/configure --target="$rs_target" --host=x86_64-unknown-linux --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --with-gnu-ld --with-gnu-as --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror
+	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
+	rs_do_command $rs_makecmd install-gcc
+
+    if rs_prepare_module "mingw_w64_crt"; then
+	    if [ $use_cflags -eq 0 ]; then
+		    export CFLAGS="$rs_host_cflags"
+	    fi
+
+	    rs_do_command ../mingw_w64_crt/configure --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --host="$rs_target"
+	    rs_do_command $rs_makecmd -j $rs_cpucount
+	    rs_do_command $rs_makecmd install
+	    rs_clean_module "mingw_w64_crt"
+
+	    if [ $use_cflags -eq 0 ]; then
+		    unset CFLAGS
+	    fi
+    fi
+    
+    cd "$rs_workdir/gcc-build"
+    rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
+    
 	rs_clean_module "gcc"
 
 	if [ $use_cflags -eq 0 ]; then
@@ -368,6 +370,9 @@ if rs_prepare_module "gcc"; then
 	fi
 	unset CFLAGS_FOR_TARGET
 	unset CXXFLAGS_FOR_TARGET
+	
+	export PATH=$old_path
+	unset old_path
 fi
 
 if rs_prepare_module "make"; then
