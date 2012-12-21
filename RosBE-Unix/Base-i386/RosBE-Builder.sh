@@ -21,10 +21,10 @@ else
 fi
 
 # RosBE Setup Variables
-rs_host_cflags="-pipe -O2"
+rs_host_cflags="-pipe -O2 -Wl,-S -g0"
 rs_needed_tools="bison flex $CC $CXX grep makeinfo"        # GNU Make has a special check
 rs_target="i686-w64-mingw32"
-rs_target_cflags="-pipe -O2 -march=pentium -mtune=i686"
+rs_target_cflags="-pipe -O2 -Wl,-S -g0 -march=pentium -mtune=i686"
 
 # Get the absolute path to the script directory
 cd `dirname $0`
@@ -209,13 +209,11 @@ else
 	rs_process_gmp=true
 	rs_process_make=true
 	rs_process_ninja=true
-	rs_process_mingw_runtime_dev=false
 	rs_process_mingw_w64_headers=true
 	rs_process_mingw_w64_crt=true
 	rs_process_mpfr=true
 	rs_process_mpc=true
 	rs_process_scut=true
-	rs_process_w32api=true
 
 	if $reinstall; then
 		# Empty the directory if we're reinstalling
@@ -257,11 +255,6 @@ if [ $use_cflags -eq 0 ]; then
 	fi
 fi
 
-if $rs_process_mingw_runtime_dev; then
-	rs_extract_module "mingw_runtime_dev" "$rs_archprefixdir/$rs_target"
-fi
-rs_extract_module "w32api" "$rs_archprefixdir/$rs_target"
-
 if $rs_process_buildtime; then
 	rs_do_command $CC -s -o "$rs_prefixdir/bin/buildtime" "$rs_scriptdir/tools/buildtime.c"
 fi
@@ -296,7 +289,7 @@ if rs_prepare_module "binutils"; then
 		export CFLAGS="$rs_host_cflags"
 	fi
 
-	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --target="$rs_target" --disable-multilib --disable-werror
+	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --target="$rs_target" --disable-multilib --disable-werror --enable-lto --with-zlib=yes
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "binutils"
@@ -311,12 +304,12 @@ if rs_prepare_module "mingw_w64_headers"; then
 		export CFLAGS="$rs_host_cflags"
 	fi
 
-	rs_do_command ../mingw_w64_headers/configure --prefix="$rs_archprefixdir" --host="$rs_target"
+	rs_do_command ../mingw_w64_headers/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target"
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
-	rs_clean_module "mingw_w64_headers"
-	rs_do_command ln -s $rs_archprefixdir/$rs_target $rs_archprefixdir/mingw
+	rs_do_command ln -s -f $rs_archprefixdir/$rs_target $rs_archprefixdir/mingw
 	rs_do_command mkdir -p $rs_archprefixdir/$rs_target/lib
+	rs_clean_module "mingw_w64_headers"
 
 	if [ $use_cflags -eq 0 ]; then
 		unset CFLAGS
@@ -334,22 +327,25 @@ if rs_prepare_module "gcc"; then
 	
 	cd ../gcc-build
 	
+	ln -s "$rs_archprefixdir" ../gcc/winsup
+	
 	export old_path=$PATH
 	export PATH="$PATH:$rs_archprefixdir/bin"
 
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
 
-	rs_do_command ../gcc/configure --target="$rs_target" --host=x86_64-unknown-linux --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --with-gnu-ld --with-gnu-as --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror
+	rs_do_command ../gcc/configure --target="$rs_target" --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --with-gnu-ld --with-gnu-as
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
+	rs_do_command $rs_makecmd install-lto-plugin || true
 
     if rs_prepare_module "mingw_w64_crt"; then
 	    if [ $use_cflags -eq 0 ]; then
 		    export CFLAGS="$rs_host_cflags"
 	    fi
 
-	    rs_do_command ../mingw_w64_crt/configure --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --host="$rs_target"
+	    rs_do_command ../mingw_w64_crt/configure --prefix="$rs_archprefixdir/$rs_target" --with-sysroot="$rs_archprefixdir/$rs_target" --host="$rs_target"
 	    rs_do_command $rs_makecmd -j $rs_cpucount
 	    rs_do_command $rs_makecmd install
 	    rs_clean_module "mingw_w64_crt"
@@ -429,15 +425,15 @@ done
 
 # Executables are created for the host system while most libraries are linked to target components
 for exe in `find -name "*.a" -type f -print`; do
-	$rs_archprefixdir/bin/mingw32-objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
-	$rs_archprefixdir/bin/mingw32-objcopy --strip-debug $exe 2>/dev/null
-	$rs_archprefixdir/bin/mingw32-objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
+	$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
+	$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --strip-debug $exe 2>/dev/null
+	$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
 done
 
 for exe in `find -name "*.o" -type f -print`; do
-	$rs_archprefixdir/bin/mingw32-objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
-	$rs_archprefixdir/bin/mingw32-objcopy --strip-debug $exe 2>/dev/null
-	$rs_archprefixdir/bin/mingw32-objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
+	$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
+	$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --strip-debug $exe 2>/dev/null
+	$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
 done
 ##### END almost shared buildtoolchain/RosBE-Unix building part ###############
 
