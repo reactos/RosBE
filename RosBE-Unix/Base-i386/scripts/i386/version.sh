@@ -4,5 +4,5 @@
 #
 # Released under GNU GPL v2 or any later version.
 
-mingw32-gcc -v 2>&1 | grep "gcc version"
-mingw32-ld -v
+i686-w64-mingw32-gcc -v 2>&1 | grep "gcc version"
+i686-w64-mingw32-ld -v

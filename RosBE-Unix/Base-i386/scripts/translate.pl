@@ -6,7 +6,7 @@
 # Released under GNU GPL v2 or any later version.
 
 my $SYMBOL_STORE = "./symbols";
-my $ADDR2LINE = "mingw32-addr2line";
+my $ADDR2LINE = "i686-w64-mingw32-addr2line";
 my $CPPFILT = "c++filt";
 
 # Input: one log is required
