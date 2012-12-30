@@ -229,13 +229,14 @@ Section -BaseFiles SEC01
 SectionEnd
 
 Section -MinGWGCCNASM SEC02
+    SetShellVarContext current
     SetOutPath "$INSTDIR\i386"
     SetOverwrite try
     File /r Components\i386\*.*
 SectionEnd
 
 Section "PowerShell Version" SEC03
-SetShellVarContext current
+    SetShellVarContext current
     SetOutPath "$INSTDIR"
     SetOverwrite try
     File /r Components\Powershell\Build.ps1
@@ -289,7 +290,7 @@ Section -StartMenuShortcuts SEC04
 SectionEnd
 
 Section /o "Desktop Shortcuts" SEC05
-    SetShellVarContext current
+    SetShellVarContext all
 
     ;;
     ;; Add our desktop shortcuts.
