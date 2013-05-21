@@ -3,7 +3,7 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/Build-Shared.cmd
 :: PURPOSE:     Perform the build of ReactOS - Shared commands.
-:: COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
+:: COPYRIGHT:   Copyright 2013 Daniel Reimer <daniel.reimer@reactos.org>
 ::                             Colin Finck <colin@reactos.org>
 ::                             Peter Ward <dralnix@gmail.com>
 ::
@@ -28,6 +28,17 @@ set HOST_CPP=%_ROSBE_CCACHE%g++
 set TARGET_CC=%_ROSBE_CCACHE%%_ROSBE_PREFIX%gcc
 set TARGET_CPP=%_ROSBE_CCACHE%%_ROSBE_PREFIX%g++
 
+if not exist "%_ROSBE_ROSSOURCEDIR%\output-MinGW-i386\*" (
+    echo No Build Files found. You may want to use "configure" first.
+    goto :EOF
+)
+
+if exist "*.ninja" (
+    set MAKE_INT=ninja.exe
+) else (
+    set MAKE_INT=mingw32-make.exe
+)
+
 :: Get the current date and time for use in in our build log's file name.
 call "%_ROSBE_BASEDIR%\TimeDate.cmd"
 
@@ -44,9 +55,9 @@ if %_ROSBE_WRITELOG% == 1 (
     if not exist "%_ROSBE_LOGDIR%\." (
         mkdir "%_ROSBE_LOGDIR%" 1> NUL 2> NUL
     )
-    %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %* 2>&1 | tee.exe "%_ROSBE_LOGDIR%\BuildLog-%ROS_ARCH%-%datename%-%timename%.txt"
+    %BUILDTIME_COMMAND% %MAKE_INT% -j %MAKE_JOBS% %* 2>&1 | tee.exe "%_ROSBE_LOGDIR%\BuildLog-%ROS_ARCH%-%datename%-%timename%.txt"
 ) else (
-    %BUILDTIME_COMMAND% mingw32-make.exe -j %MAKE_JOBS% %*
+    %BUILDTIME_COMMAND% %MAKE_INT% -j %MAKE_JOBS% %*
 )
 
 :EOC
@@ -62,4 +73,6 @@ if not %_ROSBE_NOSOUND% == 1 (
 
 flash.exe
 
+:EOF
 title ReactOS Build Environment %_ROSBE_VERSION%
+echo.

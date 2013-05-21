@@ -35,6 +35,17 @@ if ("$($args[0])" -eq "multi") {
     $TITLE_COMMAND = "make $($args)"
 }
 
+if (!(Test-Path "$_ROSBE_ROSSOURCEDIR\output-MinGW-i386\*")) {
+    write-host "No Build Files found. You may want to use ""configure"" first."
+    exit
+}
+
+if (Test-Path "*.ninja") {
+    $MAKE_INT = "ninja.exe"
+} else {
+    $MAKE_INT = "mingw32-make.exe"
+}
+
 $host.ui.RawUI.WindowTitle = "'$TITLE_COMMAND' build started: $TIMERAW   ($ENV:ROS_ARCH)"
 
 # Do the actual building
@@ -49,9 +60,9 @@ if ($_ROSBE_WRITELOG -eq 1) {
         New-Item -path "$_ROSBE_LOGDIR" -type directory
     }
     $file = "$_ROSBE_LOGDIR\BuildLog-$ENV:ROS_ARCH-$DATENAME-$TIMENAME.txt"
-    &{IEX "&'mingw32-make.exe' -j $MAKE_JOBS $($args)"} $($args) 2>&1 | tee-object $file
+    &{IEX "&'$MAKE_INT' -j $MAKE_JOBS $($args)"} $($args) 2>&1 | tee-object $file
 } else {
-    &{IEX "&'mingw32-make.exe' -j $MAKE_JOBS $($args)"} $($args)
+    &{IEX "&'$MAKE_INT' -j $MAKE_JOBS $($args)"} $($args)
 }
 if ($_ROSBE_SHOWTIME -eq 1) {
     $sw.Stop()
