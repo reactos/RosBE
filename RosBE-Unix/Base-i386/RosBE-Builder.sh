@@ -232,15 +232,12 @@ fi
 
 rs_prefixdir="$installdir"
 rs_archprefixdir="$installdir/$TARGET_ARCH"
-rs_supportprefixdir="$installdir/support"
-
 
 ##### BEGIN almost shared buildtoolchain/RosBE-Unix building part #############
 rs_boldmsg "Building..."
 
 rs_mkdir_if_not_exists "$rs_prefixdir/bin"
 rs_mkdir_if_not_exists "$rs_archprefixdir/$rs_target"
-rs_mkdir_if_not_exists "$rs_supportprefixdir"
 
 if [ $use_cflags -eq 0 ]; then
 	# Use -march=native if the host compiler supports it
@@ -410,10 +407,6 @@ rm -rf doc man share/info share/man
 cd "$rs_archprefixdir"
 rm -rf $rs_target/doc $rs_target/share include info man share
 rm -f lib/* >& /dev/null
-
-# Keep the "include" and "lib" directories of the support files in case a subsequent RosBE-Unix package needs them
-cd "$rs_supportprefixdir"
-rm -rf info share
 
 echo "Removing debugging symbols..."
 cd "$rs_prefixdir"
