@@ -320,15 +320,15 @@ if rs_prepare_module "gcc"; then
 	if [ $use_cflags -eq 0 ]; then
 		export CFLAGS="$rs_host_cflags"
 	fi
-	
+
 	rs_extract_module gmp $PWD/../gcc
 	rs_extract_module mpc $PWD/../gcc
 	rs_extract_module mpfr $PWD/../gcc
-	
+
 	cd ../gcc-build
-	
-	ln -s "$rs_archprefixdir" ../gcc/winsup
-	
+
+	rs_do_command ln -s "$rs_archprefixdir" ../gcc/winsup
+
 	export old_path=$PATH
 	export PATH="$PATH:$rs_archprefixdir/bin"
 
@@ -340,25 +340,25 @@ if rs_prepare_module "gcc"; then
 	rs_do_command $rs_makecmd install-gcc
 	rs_do_command $rs_makecmd install-lto-plugin || true
 
-    if rs_prepare_module "mingw_w64_crt"; then
-	    if [ $use_cflags -eq 0 ]; then
-		    export CFLAGS="$rs_host_cflags"
-	    fi
+	if rs_prepare_module "mingw_w64_crt"; then
+		if [ $use_cflags -eq 0 ]; then
+			export CFLAGS="$rs_host_cflags"
+		fi
 
-	    rs_do_command ../mingw_w64_crt/configure --prefix="$rs_archprefixdir/$rs_target" --with-sysroot="$rs_archprefixdir/$rs_target" --host="$rs_target"
-	    rs_do_command $rs_makecmd -j $rs_cpucount
-	    rs_do_command $rs_makecmd install
-	    rs_clean_module "mingw_w64_crt"
+		rs_do_command ../mingw_w64_crt/configure --prefix="$rs_archprefixdir/$rs_target" --with-sysroot="$rs_archprefixdir/$rs_target" --host="$rs_target"
+		rs_do_command $rs_makecmd -j $rs_cpucount
+		rs_do_command $rs_makecmd install
+		rs_clean_module "mingw_w64_crt"
 
-	    if [ $use_cflags -eq 0 ]; then
-		    unset CFLAGS
-	    fi
-    fi
-    
-    cd "$rs_workdir/gcc-build"
-    rs_do_command $rs_makecmd -j $rs_cpucount
+		if [ $use_cflags -eq 0 ]; then
+			unset CFLAGS
+		fi
+	fi
+
+	cd "$rs_workdir/gcc-build"
+	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
-    
+
 	rs_clean_module "gcc"
 
 	if [ $use_cflags -eq 0 ]; then
@@ -366,7 +366,7 @@ if rs_prepare_module "gcc"; then
 	fi
 	unset CFLAGS_FOR_TARGET
 	unset CXXFLAGS_FOR_TARGET
-	
+
 	export PATH=$old_path
 	unset old_path
 fi
