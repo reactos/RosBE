@@ -335,7 +335,7 @@ if rs_prepare_module "gcc"; then
 	rs_do_command ../gcc/configure --target="$rs_target" --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --with-gnu-ld --with-gnu-as
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
-	rs_do_command $rs_makecmd install-lto-plugin || true
+	rs_do_command_can_fail $rs_makecmd install-lto-plugin
 
 	if rs_prepare_module "mingw_w64_crt"; then
 		if [ $use_cflags -eq 0 ]; then
