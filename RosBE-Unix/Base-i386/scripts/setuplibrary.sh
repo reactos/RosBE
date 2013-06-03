@@ -106,15 +106,17 @@ rs_check_requirements()
 rs_check_run()
 {
 	if [ $? -ne 0 ]; then
-		rs_redmsg "FAILED"
-		echo "Please take a look at the log file \"$rs_workdir/build.log\""
-		echo "If you did not do something wrong, please save the log file and contact the ReactOS Team."
-
 		if [ $1 -eq 0 ]; then
+			rs_redmsg "FAILED"
+			echo "Please take a look at the log file \"$rs_workdir/build.log\""
+			echo "If you did not do something wrong, please save the log file and contact the ReactOS Team."
+
 			echo "Aborted!"
 			exit 1
 		else
-			echo "Ignored!"
+			rs_yellowmsg "ERRORS"
+			cat "$rs_workdir/build.log" >> "$rs_workdir/build-ignored.log"
+			rm "$rs_workdir/build.log"
 		fi
 	else
 		rs_greenmsg "OK"
@@ -180,6 +182,14 @@ rs_extract_module()
 rs_greenmsg()
 {
 	echo -e $2 "\e[32m$1\e[0m"
+}
+
+# Print a message in yellow color
+#   Parameter 1: The message
+#   Parameter 2: Optional additional parameters for "echo"
+rs_yellowmsg()
+{
+	echo -e $2 "\e[33m$1\e[0m"
 }
 
 # Creates the given directory if it does not exist and cleans it if it does.
