@@ -96,6 +96,9 @@ if not exist "%APPDATA%\RosBE\." (
 call "%_ROSBE_BASEDIR%\rosbe-gcc-env.cmd"
 doskey update="%_ROSBE_BASEDIR%\bin\elevate.exe" "%_ROSBE_BASEDIR%\update.cmd" $*
 
+:: Use the default prompt
+prompt
+
 cls
 echo *******************************************************************************
 echo *                                                                             *
