@@ -1,4 +1,9 @@
-*** Sep XXth, 2012 - RosBE 2.1 Released
+*** Dec XXth, 2013 - RosBE 2.1.1 Released
+- Amine Edition #2 -
+
+- Updated make scripts to use mingw32-make if the makefiles for it are there otherwise use ninja from now on. (Daniel Reimer)
+
+*** Dec 22th, 2012 - RosBE 2.1 Released
 - Amine Edition -
 
 - Updated GCC to 4.7.1 mingw-w64 (Amine Khaldi)
