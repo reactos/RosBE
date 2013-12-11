@@ -6,7 +6,7 @@
 *** Dec 22th, 2012 - RosBE 2.1 Released
 - Amine Edition -
 
-- Updated GCC to 4.7.1 mingw-w64 (Amine Khaldi)
+- Updated GCC to 4.7.2 mingw-w64 (Amine Khaldi)
 - Updated ccache to 3.1.8 (Amine Khaldi)
 - Updated cmake to 2.8.9 (Amine Khaldi)
 - Added ninja 120715 (Amine Khaldi)
