@@ -55,6 +55,16 @@ automatically checks for them:
     package called "texinfo".
 
 
+Needed Libraries
+--------------------
+  Make sure that the following libraries are installed on your system.
+They are needed to extract the compiler tools. The "RosBE-Builder.sh" script
+automatically checks for them:
+
+  * zlib
+    The library file is generally called "libz.so".
+
+
 Preparing the installation
 ---------------------------
   Under some operating systems, you need to perform additional steps before

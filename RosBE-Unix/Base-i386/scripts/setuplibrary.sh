@@ -90,6 +90,17 @@ rs_check_requirements()
 		toolmissing=true
 	fi
 
+	# Check for libs
+	for lib in $rs_needed_libs; do
+		echo -n "Checking for $lib... "
+
+		if ldconfig -p | grep $lib >& /dev/null; then
+			rs_greenmsg "OK"
+		else
+			rs_redmsg "MISSING"
+			toolmissing=true
+		fi
+	done
 
 	if $toolmissing; then
 		echo "At least one needed tool is missing, aborted!"
