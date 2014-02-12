@@ -119,7 +119,6 @@ Section -BaseFiles SEC01
     File /r Root\chdefdir.cmd
     File /r Root\chdefgcc.cmd
     File /r Root\Clean.cmd
-    File /r Root\convert.cmd
     File /r Root\Help.cmd
     File /r Root\kdbg.cmd
     File /r Root\Make.cmd
@@ -150,7 +149,6 @@ Section -BaseFiles SEC01
     File /r Components\Bin\chknewer.exe
     File /r Components\Bin\chkslash.exe
     File /r Components\Bin\cmake.exe
-    File /r Components\Bin\cmake-gui.exe
     File /r Components\Bin\cmcldeps.exe
     File /r Components\Bin\cmp.exe
     File /r Components\Bin\cmw9xcom.exe
@@ -166,9 +164,11 @@ Section -BaseFiles SEC01
     File /r Components\Bin\gdb.exe
     File /r Components\Bin\gdbserver.exe
     File /r Components\Bin\getdate.exe
+    File /r Components\Bin\intl3_svn.dll
     File /r Components\Bin\libapr-1.dll
     File /r Components\Bin\libapriconv-1.dll
     File /r Components\Bin\libaprutil-1.dll
+    File /r Components\Bin\libdb48.dll
     File /r Components\Bin\libeay32.dll
     File /r Components\Bin\libexpat-1.dll
     File /r Components\Bin\libgcc_s_dw2-1.dll
@@ -188,12 +188,16 @@ Section -BaseFiles SEC01
     File /r Components\Bin\libsvnjavahl-1.dll
     File /r Components\Bin\log2lines.exe
     File /r Components\Bin\m4.exe
+    File /r Components\Bin\Microsoft.VC90.CRT.manifest
     File /r Components\Bin\mingw32-make.exe
     File /r Components\Bin\MSVCM90.dll
+    File /r Components\Bin\msvcp60.dll
     File /r Components\Bin\MSVCP90.dll
-    File /r Components\Bin\MSVCR90.dll
     File /r Components\Bin\MSVCP100.dll
+    File /r Components\Bin\MSVCP120.dll
+    File /r Components\Bin\MSVCR90.dll
     File /r Components\Bin\MSVCR100.dll
+    File /r Components\Bin\MSVCR120.dll
     File /r Components\Bin\ninja.exe
     File /r Components\Bin\options.exe
     File /r Components\Bin\patch.exe
