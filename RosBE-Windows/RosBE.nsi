@@ -142,7 +142,6 @@ Section -BaseFiles SEC01
     SetOutPath "$INSTDIR\Bin"
     SetOverwrite try
     File /r Components\Bin\7z.exe
-    File /r Components\Bin\apr_ldap-1.dll
     File /r Components\Bin\bison.exe
     File /r Components\Bin\buildtime.exe
     File /r Components\Bin\ccache.exe
@@ -164,11 +163,9 @@ Section -BaseFiles SEC01
     File /r Components\Bin\gdb.exe
     File /r Components\Bin\gdbserver.exe
     File /r Components\Bin\getdate.exe
-    File /r Components\Bin\intl3_svn.dll
     File /r Components\Bin\libapr-1.dll
     File /r Components\Bin\libapriconv-1.dll
     File /r Components\Bin\libaprutil-1.dll
-    File /r Components\Bin\libdb48.dll
     File /r Components\Bin\libeay32.dll
     File /r Components\Bin\libexpat-1.dll
     File /r Components\Bin\libgcc_s_dw2-1.dll
@@ -193,10 +190,8 @@ Section -BaseFiles SEC01
     File /r Components\Bin\MSVCM90.dll
     File /r Components\Bin\msvcp60.dll
     File /r Components\Bin\MSVCP90.dll
-    File /r Components\Bin\MSVCP100.dll
     File /r Components\Bin\MSVCP120.dll
     File /r Components\Bin\MSVCR90.dll
-    File /r Components\Bin\MSVCR100.dll
     File /r Components\Bin\MSVCR120.dll
     File /r Components\Bin\ninja.exe
     File /r Components\Bin\options.exe
