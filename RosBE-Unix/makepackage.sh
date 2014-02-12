@@ -50,7 +50,12 @@ case "$package_name" in
 esac
 
 # Check if the required directory structure exists
-if ! [ -d "../Tools/.svn" ]; then
+if ! [ -d "../../RosBE/Tools/" ]; then
+	echo "This script needs to be run in a working copy of the whole \"RosBE\" tree!"
+	exit 1
+fi
+
+if ! svn info >& /dev/null; then
 	echo "This script needs to be run in a working copy of the whole \"RosBE\" tree!"
 	exit 1
 fi
@@ -61,7 +66,7 @@ tools=""
 
 case "$package_name" in
 	"Base-i386")
-		sources+="cmake gmp make mingw_runtime_dev mpfr w32api"
+		sources+="cmake gmp make mingw_w64_crt mingw_w64_headers mpc mpfr ninja"
 		tools+="cpucount scut"
 esac
 
@@ -73,7 +78,7 @@ done
 # Check if all required tools exist
 for tool in $tools; do
 	check_file "../Tools/$tool.c"
-done 
+done
 
 # Check if other needed files exist
 check_file "$package_name/README.pdf"
