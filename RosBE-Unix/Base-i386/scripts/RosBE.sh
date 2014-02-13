@@ -28,7 +28,7 @@ export _ROSBE_VERSION=`cat "$_ROSBE_ROSSCRIPTDIR/RosBE-Version"`
 
 # Set the text color
 if [ "$2" != "" ]; then
-	echo -e "\e[$2m"
+	echo -e "\033[$2m"
 fi
 
 # Set the architecture to build for

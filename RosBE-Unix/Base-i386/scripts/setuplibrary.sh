@@ -17,7 +17,7 @@
 #   Parameter 2: Optional additional parameters for "echo"
 rs_boldmsg()
 {
-	echo -e $2 "\e[1m$1\e[0m"
+	echo -e $2 "\033[1m$1\033[0m"
 }
 
 # Check for several requirements, which need to be met in order to run the installation script properly
@@ -192,7 +192,7 @@ rs_extract_module()
 #   Parameter 2: Optional additional parameters for "echo"
 rs_greenmsg()
 {
-	echo -e $2 "\e[32m$1\e[0m"
+	echo -e $2 "\033[32m$1\033[0m"
 }
 
 # Print a message in yellow color
@@ -200,7 +200,7 @@ rs_greenmsg()
 #   Parameter 2: Optional additional parameters for "echo"
 rs_yellowmsg()
 {
-	echo -e $2 "\e[33m$1\e[0m"
+	echo -e $2 "\033[33m$1\033[0m"
 }
 
 # Creates the given directory if it does not exist and cleans it if it does.
@@ -248,7 +248,7 @@ rs_prepare_module()
 #   Parameter 2: Optional additional parameters for "echo"
 rs_redmsg()
 {
-	echo -e $2 "\e[31m$1\e[0m"
+	echo -e $2 "\033[31m$1\033[0m"
 }
 
 # Allow a choice between several options
