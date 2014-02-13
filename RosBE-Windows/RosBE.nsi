@@ -190,8 +190,10 @@ Section -BaseFiles SEC01
     File /r Components\Bin\MSVCM90.dll
     File /r Components\Bin\msvcp60.dll
     File /r Components\Bin\MSVCP90.dll
+    File /r Components\Bin\MSVCP100.dll
     File /r Components\Bin\MSVCP120.dll
     File /r Components\Bin\MSVCR90.dll
+    File /r Components\Bin\MSVCR100.dll
     File /r Components\Bin\MSVCR120.dll
     File /r Components\Bin\ninja.exe
     File /r Components\Bin\options.exe
@@ -335,11 +337,6 @@ Function un.onInit
         "Are you sure you want to remove ReactOS Build Environment and all of its components?" \
         IDYES +2
     Abort
-    IfFileExists "$PROFILE\RosBE\." 0 +5
-        MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 \
-        "Do you want to remove the ReactOS Build Environment configuration file from the Profile Path?" \
-        IDNO +2
-        RMDir /r /REBOOTOK "$PROFILE\RosBE"
     IfFileExists "$APPDATA\RosBE\." 0 +5
         MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 \
         "Do you want to remove the ReactOS Build Environment configuration file from the Application Data Path?" \
