@@ -198,6 +198,7 @@ Section -BaseFiles SEC01
     File /r Components\Bin\ninja.exe
     File /r Components\Bin\options.exe
     File /r Components\Bin\patch.exe
+    File /r Components\Bin\patch.exe.manifest
     File /r Components\Bin\pexports.exe
     File /r Components\Bin\piperead.exe
     File /r Components\Bin\playwav.exe

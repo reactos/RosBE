@@ -1,10 +1,11 @@
-*** Feb XXth, 2014 - RosBE 2.1.1 Released
+*** Feb 14th, 2014 - RosBE 2.1.1 Released
 - Amine Edition #2 -
 
 - Updated make scripts to use mingw32-make if the makefiles for it are there otherwise use ninja from now on. (Daniel Reimer)
-- ROSBE-36 - RosBE patch.exe is a debug build (Thomas Faber)
-- Update to ninja 1.4.0 (Amine Khaldi)
-- Update to cmake 2.8.12.1 (Amine Khaldi)
+- ROSBE-36 added a manifest file for patch.exe (Thomas Faber)
+- Updated Ninja to 1.4.0 (Amine Khaldi)
+- Updated CMake to 2.8.12.1 (Amine Khaldi)
+- Updated SVN to 1.8.5 (Daniel Reimer)
 
 *** Dec 22th, 2012 - RosBE 2.1 Released
 - Amine Edition -
