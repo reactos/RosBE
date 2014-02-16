@@ -91,16 +91,20 @@ rs_check_requirements()
 	fi
 
 	# Check for libs
-	for lib in $rs_needed_libs; do
-		echo -n "Checking for $lib... "
+	# Skip that part on OSX
+	local osname=`uname`
+	if [ "$osname" != "Darwin" ]; then
+		for lib in $rs_needed_libs; do
+			echo -n "Checking for $lib... "
 
-		if ldconfig -p | grep $lib >& /dev/null; then
-			rs_greenmsg "OK"
-		else
-			rs_redmsg "MISSING"
-			toolmissing=true
-		fi
-	done
+			if ldconfig -p | grep $lib >& /dev/null; then
+				rs_greenmsg "OK"
+			else
+				rs_redmsg "MISSING"
+				toolmissing=true
+			fi
+		done
+	fi
 
 	if $toolmissing; then
 		echo "At least one needed tool is missing, aborted!"
