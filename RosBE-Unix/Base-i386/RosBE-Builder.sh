@@ -35,8 +35,8 @@ rs_sourcedir="$rs_scriptdir/sources"
 
 # RosBE-Unix Constants
 DEFAULT_INSTALL_DIR="/usr/local/RosBE"
-KNOWN_ROSBE_VERSIONS="0.3.6 1.1 1.4 1.4.2 1.5 2.0 2.1"
-ROSBE_VERSION="2.1"
+KNOWN_ROSBE_VERSIONS="0.3.6 1.1 1.4 1.4.2 1.5 2.0 2.1 2.1.1"
+ROSBE_VERSION="2.1.1"
 TARGET_ARCH="i386"
 
 source "$rs_scriptdir/scripts/rosbelibrary.sh"
@@ -150,9 +150,15 @@ if [ "$1" = "" ]; then
 
 					case "$choice" in
 						"U"|"u")
+							# We only allow update from 2.1 to 2.1.1
+							# For other releases:
 							# We don't support update in this version due to lots of changes
 							# To reenable updating, change this to "update=true"
-							reinstall=true
+							if [ "$installed_version" = "2.1" ] && [ "$ROSBE_VERSION" = "2.1.1" ]; then
+								update=true
+							else
+								reinstall=true
+							fi
 							;;
 						"R"|"r")
 							reinstall=true
@@ -198,9 +204,9 @@ else
 fi
 
 if $update; then
-	# No update supported for RosBE-Unix 2.0 due to lots of changes.
-	# Add this part back from older versions once we need to update again.
-	exit 1
+	# For 2.1 -> 2.1.1
+	rs_process_cmake=true
+	rs_process_ninja=true
 else
 	rs_process_binutils=true
 	rs_process_buildtime=true
@@ -288,6 +294,12 @@ if rs_prepare_module "binutils"; then
 	fi
 
 	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --target="$rs_target" --disable-multilib --disable-werror --enable-lto --with-zlib=yes
+	# HUGE HACK!!!
+	# It "manually" disable doc generation for binutils
+	# This is required because our binutils are really old and
+	# New distributions come with texinfo 1.5 that cannot handle
+	# Current docs
+	echo "MAKEINFO = :" >> Makefile
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "binutils"
@@ -334,6 +346,12 @@ if rs_prepare_module "gcc"; then
 	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
 
 	rs_do_command ../gcc/configure --target="$rs_target" --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --with-gnu-ld --with-gnu-as
+	# HUGE HACK!!!
+	# It "manually" disable doc generation for gcc
+	# This is required because our gcc is really old and
+	# New distributions come with texinfo 1.5 that cannot handle
+	# Current docs
+	echo "MAKEINFO = :" >> Makefile
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
 	rs_do_command_can_fail $rs_makecmd install-lto-plugin

@@ -1,5 +1,5 @@
                            ReactOS Build Environment
-                 Version 2.1 for Unix-based operating systems
+                 Version 2.1.1 for Unix-based operating systems
                       Base package and i386 build tools
                       by Pierre Schweitzer (pierre@reactos.org)
 
@@ -124,6 +124,8 @@ components:
 
   * GCC, The GNU Compiler Collection v4.7.1
     compiled for mingw32
+    patched with:
+      - http://gcc.gnu.org/viewcvs/gcc/branches/gcc-4_7-branch/gcc/ira-int.h?view=patch&r1=191605&r2=191604&pathrev=191605
 
     NOTE: This GCC version only supports C and C++
 
@@ -131,9 +133,9 @@ components:
     patched with:
       - http://svn.reactos.org/project-tools/trunk/RosBE/Patches/Make-Windows-jobserver-against-3.8.2.patch?p=1321
 
-  * CMake 2.8.9
+  * CMake 2.8.12.1-ReactOS
   * GMP 5.0.5
-  * Ninja 120715
+  * Ninja 1.4.0
   * MinGW-Runtime 3.17
   * MPFR 3.1.1
   * W32api 3.14
