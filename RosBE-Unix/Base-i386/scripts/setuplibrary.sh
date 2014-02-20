@@ -97,7 +97,7 @@ rs_check_requirements()
 		for lib in $rs_needed_libs; do
 			echo -n "Checking for $lib... "
 
-			if ldconfig -p | grep $lib >& /dev/null; then
+			if pkg-config --exists $lib >& /dev/null; then
 				rs_greenmsg "OK"
 			else
 				rs_redmsg "MISSING"

@@ -23,7 +23,7 @@ fi
 # RosBE Setup Variables
 rs_host_cflags="-pipe -O2 -Wl,-S -g0"
 rs_needed_tools="bison flex $CC $CXX grep makeinfo"        # GNU Make has a special check
-rs_needed_libs="libz.so"
+rs_needed_libs="zlib"
 rs_target="i686-w64-mingw32"
 rs_target_cflags="-pipe -O2 -Wl,-S -g0 -march=pentium -mtune=i686"
 
