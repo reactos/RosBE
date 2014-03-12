@@ -6,6 +6,10 @@
 #
 # Released under GNU GPL v2 or any later version.
 
+if [ -z "$BASH_VERSION" ]; then
+    exec bash "$0"
+fi
+
 if [ "x$CC" == "x" ]; then
 	CC=gcc
 fi
