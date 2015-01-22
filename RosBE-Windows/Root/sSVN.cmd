@@ -3,7 +3,7 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/sSVN.cmd
 :: PURPOSE:     Integrated SVN Client.
-:: COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
+:: COPYRIGHT:   Copyright 2015 Daniel Reimer <reimer.daniel@freenet.de>
 ::
 
 @echo off
@@ -14,7 +14,7 @@ if %_ROSBE_DEBUG% == 1 (
 
 setlocal enabledelayedexpansion
 
-set ROS_SVNURL=svn://svn.reactos.org/reactos
+set ROS_SVNURL=http://svn.reactos.org/reactos
 
 if "%ROS_ARCH%" == "amd64" (
     set ROS_SVNURL=%ROS_SVNURL%/branches/ros-amd64-bringup
@@ -61,7 +61,7 @@ if /i "%1" == "update" (
 
 if /i "%1" == "cleanup" (
     title SVN Cleaning...
-    svn.exe cleanup
+    "%_ROSBE_BASEDIR%\bin\svn.exe" cleanup
     goto :EOC
 )
 
@@ -76,9 +76,9 @@ if /i "%1" == "create" (
     dir /b 2>nul | findstr "." >nul
     if errorlevel 1 (
         if not "%2" == "" (
-            svn.exe checkout -r %2 %ROS_SVNURL%%rsubfolder% .
+            "%_ROSBE_BASEDIR%\bin\svn.exe" checkout -r %2 %ROS_SVNURL%%rsubfolder% .
         ) else (
-            svn.exe checkout %ROS_SVNURL%%rsubfolder% .
+            "%_ROSBE_BASEDIR%\bin\svn.exe" checkout %ROS_SVNURL%%rsubfolder% .
         )
     ) else (
         echo ERROR: Folder is not empty. Continuing is dangerous and can cause errors. ABORTED
@@ -96,13 +96,13 @@ if /i "%1" == "rosapps" (
             if exist "modules\rosapps\.svn\." (
                 title SVN RosApps Updating...
                 cd "modules\rosapps"
-                svn.exe update -r %2
+                "%_ROSBE_BASEDIR%\bin\svn.exe" update -r %2
             ) else (
                 title SVN RosApps Creating...
                 cd "modules\rosapps"
                 dir /b 2>nul | findstr "." >nul
                 if errorlevel 1 (
-                    svn.exe checkout -r %2 %ROS_SVNURL%/rosapps .
+                    "%_ROSBE_BASEDIR%\bin\svn.exe" checkout -r %2 %ROS_SVNURL%/rosapps .
                 ) else (
                     echo ERROR: Folder is not empty. Continuing is dangerous and can cause errors. ABORTED
                 )
@@ -114,13 +114,13 @@ if /i "%1" == "rosapps" (
             if exist "modules\rosapps\.svn\." (
                 title SVN RosApps Updating...
                 cd "modules\rosapps"
-                svn.exe update
+                "%_ROSBE_BASEDIR%\bin\svn.exe" update
             ) else (
                 title SVN RosApps Creating...
                 cd "modules\rosapps"
                 dir /b 2>nul | findstr "." >nul
                 if errorlevel 1 (
-                    svn.exe checkout %ROS_SVNURL%/rosapps .
+                    "%_ROSBE_BASEDIR%\bin\svn.exe" checkout %ROS_SVNURL%/rosapps .
                 ) else (
                     echo ERROR: Folder is not empty. Continuing is dangerous and can cause errors. ABORTED
                 )
@@ -143,13 +143,13 @@ if /i "%1" == "rostests" (
             if exist "modules\rostests\.svn\." (
                 title SVN RosTests Updating...
                 cd "modules\rostests"
-                svn.exe update -r %2
+                "%_ROSBE_BASEDIR%\bin\svn.exe" update -r %2
             ) else (
                 title SVN RosTests Creating...
                 cd "modules\rostests"
                 dir /b 2>nul | findstr "." >nul
                 if errorlevel 1 (
-                    svn.exe checkout -r %2 %ROS_SVNURL%/rostests .
+                    "%_ROSBE_BASEDIR%\bin\svn.exe" checkout -r %2 %ROS_SVNURL%/rostests .
                 ) else (
                     echo ERROR: Folder is not empty. Continuing is dangerous and can cause errors. ABORTED
                 )
@@ -161,13 +161,13 @@ if /i "%1" == "rostests" (
             if exist "modules\rostests\.svn\." (
                 title SVN RosTests Updating...
                 cd "modules\rostests"
-                svn.exe update
+                "%_ROSBE_BASEDIR%\bin\svn.exe" update
             ) else (
                 title SVN RosTests Creating...
                 cd "modules\rostests"
                 dir /b 2>nul | findstr "." >nul
                 if errorlevel 1 (
-                    svn.exe checkout %ROS_SVNURL%/rostests .
+                    "%_ROSBE_BASEDIR%\bin\svn.exe" checkout %ROS_SVNURL%/rostests .
                 ) else (
                     echo ERROR: Folder is not empty. Continuing is dangerous and can cause errors. ABORTED
                 )
@@ -196,8 +196,8 @@ if not "%1" == "" (
 goto :EOC
 
 :UP
-    for /f "usebackq tokens=4" %%i in (`"svn.exe info | find "Last Changed Rev:""`) do set OFFSVN=%%i
-    for /f "usebackq tokens=4" %%j in (`"svn.exe info %ROS_SVNURL%%rsubfolder% | find "Last Changed Rev:""`) do set ONSVN=%%j
+    for /f "usebackq tokens=4" %%i in (`""%_ROSBE_BASEDIR%\bin\svn.exe" info | find "Last Changed Rev:""`) do set OFFSVN=%%i
+    for /f "usebackq tokens=4" %%j in (`""%_ROSBE_BASEDIR%\bin\svn.exe" info %ROS_SVNURL%%rsubfolder% | find "Last Changed Rev:""`) do set ONSVN=%%j
 
     echo Local Revision: !OFFSVN!
     echo Online HEAD Revision: !ONSVN!
@@ -227,45 +227,45 @@ goto :EOC
                 echo Updating to %2 ...
             )
             if not "%_BUILDBOT_SVNSKIPMAINTRUNK%" == "1" (
-                svn.exe update -r %2
+                "%_ROSBE_BASEDIR%\bin\svn.exe" update -r %2
             ) else (
                 echo Skipping ReactOS Trunk update.
             )
             if exist "modules\rosapps\." (
                 cd "modules\rosapps"
                 echo Updating RosApps...
-                svn.exe update -r %2
+                "%_ROSBE_BASEDIR%\bin\svn.exe" update -r %2
                 cd "%_ROSBE_SSVNSOURCEDIR%"
             )
             if exist "modules\rostests\." (
                 cd "modules\rostests"
                 echo Updating RosTests...
-                svn.exe update -r %2
+                "%_ROSBE_BASEDIR%\bin\svn.exe" update -r %2
                 cd "%_ROSBE_SSVNSOURCEDIR%"
             )
         ) else (
             if not "%_BUILDBOT_SVNSKIPMAINTRUNK%" == "1" (
-                svn.exe update
+                "%_ROSBE_BASEDIR%\bin\svn.exe" update
             ) else (
                 echo Skipping ReactOS Trunk update.
             )
             if exist "modules\rosapps\." (
                 cd "modules\rosapps"
                 echo Updating RosApps...
-                svn.exe update
+                "%_ROSBE_BASEDIR%\bin\svn.exe" update
                 cd "%_ROSBE_SSVNSOURCEDIR%"
             )
             if exist "modules\rostests\." (
                 cd "modules\rostests"
                 echo Updating RosTests...
-                svn.exe update
+                "%_ROSBE_BASEDIR%\bin\svn.exe" update
                 cd "%_ROSBE_SSVNSOURCEDIR%"
             )
         )
         echo Do you want to see the changelog?
         set /p CL="Please enter 'yes' or 'no': "
         if /i "!CL!"=="yes" (
-            svn.exe log -r !OFFSVN!:!ONSVN!
+            "%_ROSBE_BASEDIR%\bin\svn.exe" log -r !OFFSVN!:!ONSVN!
         )
     )
 

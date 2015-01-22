@@ -3,10 +3,10 @@
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 # FILE:        Root/sSVN.ps1
 # PURPOSE:     Integrated SVN Client.
-# COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2015 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
-$ROS_SVNURL = "svn://svn.reactos.org/reactos"
+$ROS_SVNURL = "http://svn.reactos.org/reactos"
 
 if ("$ENV:ROS_ARCH" -eq "amd64") {
     $ROS_SVNURL = "$ROS_SVNURL/branches/ros-amd64-bringup"
@@ -36,10 +36,10 @@ if ("$_ROSBE_DWERRLVL" -eq "1") {
 $_ROSBE_SSVNSOURCEDIR = "$pwd"
 
 function UP($arg) {
-    $OFFSVN = IEX "& svn.exe info" | select-string "Last Changed Rev:"
+    $OFFSVN = IEX "& $_ROSBE_BASEDIR\bin\svn.exe info" | select-string "Last Changed Rev:"
     $OFFSVN = $OFFSVN -replace "(.*)Last Changed Rev: ",''
     $OFFSVN = [CONVERT]::ToInt32($OFFSVN,10)
-    $ONSVN = IEX "& svn.exe info $ROS_SVNURL$rsubfolder" | select-string "Last Changed Rev:"
+    $ONSVN = IEX "& $_ROSBE_BASEDIR\bin\svn.exe info $ROS_SVNURL$rsubfolder" | select-string "Last Changed Rev:"
     $ONSVN = $ONSVN -replace "(.*)Last Changed Rev: ",''
     $ONSVN = [CONVERT]::ToInt32($ONSVN,10)
     "Local Revision: $OFFSVN"
@@ -72,38 +72,38 @@ function UP($arg) {
                 "Updating to $temparg ..."
             }
             if ("$_BUILDBOT_SVNSKIPMAINTRUNK" -ne "1") {
-                IEX "& svn.exe update -r $temparg"
+                IEX "& $_ROSBE_BASEDIR\bin\svn.exe update -r $temparg"
             } else {
                 "Skipping ReactOS Trunk update."
             }
             if (Test-Path "modules\rosapps\.") {
                 Set-Location "modules\rosapps"
                 "Updating RosApps..."
-                IEX "& svn.exe update -r $temparg"
+                IEX "& $_ROSBE_BASEDIR\bin\svn.exe update -r $temparg"
                 Set-Location "$_ROSBE_SSVNSOURCEDIR"
             }
             if (Test-Path "modules\rostests\.") {
                 Set-Location "modules\rostests"
                 "Updating RosTests..."
-                IEX "& svn.exe update -r $temparg"
+                IEX "& $_ROSBE_BASEDIR\bin\svn.exe update -r $temparg"
                 Set-Location "$_ROSBE_SSVNSOURCEDIR"
             }
         } else {
             if ("$_BUILDBOT_SVNSKIPMAINTRUNK" -ne "1") {
-                IEX "& svn.exe update"
+                IEX "& $_ROSBE_BASEDIR\bin\svn.exe update"
             } else {
                 "Skipping ReactOS Trunk update."
             }
             if (Test-Path "modules\rosapps\.") {
                 Set-Location "modules\rosapps"
                 "Updating RosApps..."
-                IEX "& svn.exe update"
+                IEX "& $_ROSBE_BASEDIR\bin\svn.exe update"
                 Set-Location "$_ROSBE_SSVNSOURCEDIR"
             }
             if (Test-Path "modules\rostests\.") {
                 Set-Location "modules\rostests"
                 "Updating RosTests..."
-                IEX "& svn.exe update"
+                IEX "& $_ROSBE_BASEDIR\bin\svn.exe update"
                 Set-Location "$_ROSBE_SSVNSOURCEDIR"
             }
         }
@@ -111,7 +111,7 @@ function UP($arg) {
         $CL = Read-Host "Please enter 'yes' or 'no': "
         if (("$CL" -eq "yes") -or ("$CL" -eq "y")) {
             $range = "$OFFSVN" + ":" + "$ONSVN"
-            IEX "& svn.exe log -r $range"
+            IEX "& $_ROSBE_BASEDIR\bin\svn.exe log -r $range"
         }
     }
 }
@@ -133,7 +133,7 @@ elseif ("$($args[0])" -eq "cleanup") {
     $host.ui.RawUI.WindowTitle = "SVN Cleaning..."
     "This might take a while, so please be patient."
     ""
-    IEX "& svn.exe cleanup"
+    IEX "& $_ROSBE_BASEDIR\bin\svn.exe cleanup"
 }
 
 # Check if the folder is empty. If not, output an error.
@@ -146,9 +146,9 @@ elseif ("$($args[0])" -eq "create") {
         $dir = get-childitem
         if ("$dir" -eq "") {
             if ("$($args[1])" -ne "") {
-                IEX "& svn.exe -r $($args[1]) checkout $ROS_SVNURL$rsubfolder ."
+                IEX "& $_ROSBE_BASEDIR\bin\svn.exe -r $($args[1]) checkout $ROS_SVNURL$rsubfolder ."
             } else {
-                IEX "& svn.exe checkout $ROS_SVNURL$rsubfolder ."
+                IEX "& $_ROSBE_BASEDIR\bin\svn.exe checkout $ROS_SVNURL$rsubfolder ."
             }
         } else {
             throw {"ERROR: Folder is not empty. Continuing is dangerous and can cause errors. ABORTED"}
@@ -166,13 +166,13 @@ elseif ("$($args[0])" -eq "rosapps") {
             if (Test-Path "modules\rosapps\.svn\.") {
                 $host.ui.RawUI.WindowTitle = "SVN RosApps Updating..."
                 Set-Location "modules\rosapps"
-                IEX "& svn.exe update -r $($args[1])"
+                IEX "& $_ROSBE_BASEDIR\bin\svn.exe update -r $($args[1])"
             } else {
                 $host.ui.RawUI.WindowTitle = "SVN RosApps Creating..."
                 Set-Location "modules\rosapps"
                 $dir = get-childitem
                 if ("$dir" -eq "") {
-                    IEX "& svn.exe checkout -r $($args[1]) $ROS_SVNURL/rosapps ."
+                    IEX "& $_ROSBE_BASEDIR\bin\svn.exe checkout -r $($args[1]) $ROS_SVNURL/rosapps ."
                 } else {
                     throw {"ERROR: Folder is not empty. Continuing is dangerous and can cause errors. ABORTED"}
                 }
@@ -184,13 +184,13 @@ elseif ("$($args[0])" -eq "rosapps") {
             if (Test-Path "modules\rosapps\.svn\.") {
                 $host.ui.RawUI.WindowTitle = "SVN RosApps Updating..."
                 Set-Location "modules\rosapps"
-                IEX "& svn.exe update"
+                IEX "& $_ROSBE_BASEDIR\bin\svn.exe update"
             } else {
                 $host.ui.RawUI.WindowTitle = "SVN RosApps Creating..."
                 Set-Location "modules\rosapps"
                 $dir = get-childitem
                 if ("$dir" -eq "") {
-                    IEX "& svn.exe checkout $ROS_SVNURL/rosapps ."
+                    IEX "& $_ROSBE_BASEDIR\bin\svn.exe checkout $ROS_SVNURL/rosapps ."
                 } else {
                     throw {"ERROR: Folder is not empty. Continuing is dangerous and can cause errors. ABORTED"}
                 }
@@ -212,13 +212,13 @@ elseif ("$($args[0])" -eq "rostests") {
             if (Test-Path "modules\rostests\.svn\.") {
                 $host.ui.RawUI.WindowTitle = "SVN RosTests Updating..."
                 Set-Location "modules\rostests"
-                IEX "& svn.exe update -r $($args[1])"
+                IEX "& $_ROSBE_BASEDIR\bin\svn.exe update -r $($args[1])"
             } else {
                 $host.ui.RawUI.WindowTitle = "SVN RosTests Creating..."
                 Set-Location "modules\rostests"
                 $dir = get-childitem
                 if ("$dir" -eq "") {
-                    IEX "& svn.exe checkout -r $($args[1]) $ROS_SVNURL/rostests ."
+                    IEX "& $_ROSBE_BASEDIR\bin\svn.exe checkout -r $($args[1]) $ROS_SVNURL/rostests ."
                 } else {
                     throw {"ERROR: Folder is not empty. Continuing is dangerous and can cause errors. ABORTED"}
                 }
@@ -230,13 +230,13 @@ elseif ("$($args[0])" -eq "rostests") {
             if (Test-Path "modules\rostests\.svn\.") {
                 $host.ui.RawUI.WindowTitle = "SVN RosTests Updating..."
                 Set-Location "modules\rostests"
-                IEX "& svn.exe update"
+                IEX "& $_ROSBE_BASEDIR\bin\svn.exe update"
             } else {
                 $host.ui.RawUI.WindowTitle = "SVN RosTests Creating..."
                 Set-Location "modules\rostests"
                 $dir = get-childitem
                 if ("$dir" -eq "") {
-                    IEX "& svn.exe checkout $ROS_SVNURL/rostests ."
+                    IEX "& $_ROSBE_BASEDIR\bin\svn.exe checkout $ROS_SVNURL/rostests ."
                 } else {
                     throw {"ERROR: Folder is not empty. Continuing is dangerous and can cause errors. ABORTED"}
                 }

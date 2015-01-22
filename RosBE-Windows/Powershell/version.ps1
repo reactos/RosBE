@@ -3,10 +3,10 @@
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 # FILE:        Root/version.ps1
 # PURPOSE:     Display the current version of GCC, NASM, ld and make.
-# COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2015 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
-$_ROSBE_NINJAVER = (& ninja.exe --version)
+$_ROSBE_NINJAVER = (& "$_ROSBE_BASEDIR\bin\ninja.exe" --version)
 
 (get-WmiObject Win32_OperatingSystem).caption
 
@@ -19,12 +19,12 @@ $_ROSBE_GCC_TARGET_VERSION = $GCCVer.matches($gccversion)[0].value
 "gcc target - $ENV:ROS_ARCH"
 
 # LD
-$run = "$_ROSBE_TARGET_MINGWPATH\bin\$_ROSBE_PREFIX" + "ld"
+$run = "$_ROSBE_TARGET_MINGWPATH\bin\$_ROSBE_PREFIX" + "ld.exe"
 & "$run" -v
 
 # Bison, Flex and Make
-& bison.exe '--version' | select-string "GNU Bison"
-& flex.exe '--version'
-& mingw32-make.exe -v | select-string "GNU Make"
+& "$_ROSBE_BASEDIR\bin\bison.exe" --version | select-string "GNU Bison"
+& "$_ROSBE_BASEDIR\bin\flex.exe" --version
+& "$_ROSBE_BASEDIR\bin\mingw32-make.exe" -v | select-string "GNU Make"
 "Ninja $_ROSBE_NINJAVER"
-cmake.exe --version | select-string "version"
+& "$_ROSBE_BASEDIR\bin\cmake.exe" --version | select-string "version"
