@@ -6,6 +6,8 @@
 # COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
+$_ROSBE_NINJAVER = (& ninja.exe --version)
+
 (get-WmiObject Win32_OperatingSystem).caption
 
 # GCC
@@ -21,8 +23,8 @@ $run = "$_ROSBE_TARGET_MINGWPATH\bin\$_ROSBE_PREFIX" + "ld"
 & "$run" -v
 
 # Bison, Flex and Make
-& bison '--version' | select-string "GNU Bison"
-$fver = (& flex '--version') -replace ".*version ((\d|\.)+).*",'$1'
-"flex $fver"
-& mingw32-make.exe -v | & find "GNU Make"
-cmake.exe --version
+& bison.exe '--version' | select-string "GNU Bison"
+& flex.exe '--version'
+& mingw32-make.exe -v | select-string "GNU Make"
+"Ninja $_ROSBE_NINJAVER"
+cmake.exe --version | select-string "version"

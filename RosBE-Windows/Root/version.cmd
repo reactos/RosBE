@@ -13,6 +13,8 @@ if %_ROSBE_DEBUG% == 1 (
     @echo on
 )
 
+for /f "usebackq" %%i in (`"%_ROSBE_BASEDIR%\bin\ninja.exe" --version`) do set _ROSBE_NINJAVER=%%i
+
 ver
 
 :: GCC
@@ -26,4 +28,5 @@ echo gcc target^: %ROS_ARCH%
 bison --version | find "GNU Bison"
 flex --version
 mingw32-make.exe -v | find "GNU Make"
-cmake.exe --version
+echo Ninja %_ROSBE_NINJAVER%
+cmake.exe --version | find "version"
