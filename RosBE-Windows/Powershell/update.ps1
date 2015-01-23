@@ -159,6 +159,23 @@ if ("$($args[2])" -eq "") {
     } else {
         "RosBE is up to Date."
     }
+} elseif ("$($args[2])" -eq "verstatus") {
+    if (!(test-path "tmp")) {New-Item -name "tmp" -type directory}
+    copy-item *.txt .\tmp\.
+    set-location tmp
+    if (!(Test-Path "ver.txt")) {
+        get-webfile $_ROSBE_URL/ver.txt $PWD\ver.txt
+        if (Test-Path "ver.txt") {
+            $_ROSBE_NEWVER = get-content ver.txt
+        }
+        if ("$_ROSBE_NEWVER" -ne "$_ROSBE_VERSION") {
+            "RosBE is outdated. Installed version: $_ROSBE_VERSION Recent version: $_ROSBE_NEWVER."
+        } else {
+            "RosBE is up to Date."
+        }
+    }
+    set-location ..
+    remove-item "tmp\*.*" -force -EA SilentlyContinue
 } else {
     "Unknown parameter specified. Try 'help update'."
 }

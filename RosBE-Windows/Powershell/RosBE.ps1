@@ -218,6 +218,9 @@ if ($_ROSBE_SHOWVERSION -eq 1) {
     & "$_ROSBE_BASEDIR\version.ps1"
 }
 
+""
+& "$_ROSBE_BASEDIR\update.ps1" verstatus
+
 # Tell how to display the available commands.
 ""
 "For a list of all included commands, type: ""help"""

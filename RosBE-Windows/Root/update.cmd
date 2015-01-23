@@ -3,7 +3,7 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/update.cmd
 :: PURPOSE:     RosBE Updater.
-:: COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
+:: COPYRIGHT:   Copyright 2015 Daniel Reimer <reimer.daniel@freenet.de>
 ::
 
 @echo off
@@ -82,6 +82,22 @@ if "%1" == "" (
     ) else (
         echo RosBE is up to Date.
     )
+)  else if /i "%1" == "verstatus" (
+    if not exist "tmp" mkdir tmp 1> NUL 2> NUL
+    cd tmp
+    if not exist "ver.txt" (
+        wget.exe -N --ignore-length --no-verbose %_ROSBE_URL%/ver.txt 1> NUL 2> NUL
+        if exist "ver.txt" (
+            for /F %%i in (ver.txt) do set _ROSBE_NEWVER=%%i
+        )
+        if not "!_ROSBE_NEWVER!" == "!_ROSBE_VERSION!" (
+            echo RosBE is outdated. Installed version: !_ROSBE_VERSION! Recent version: !_ROSBE_NEWVER!.
+        ) else (
+            echo RosBE is up to Date.
+        )
+    )
+    cd..
+    del /F /Q tmp\*.* 1> NUL 2> NUL
 ) else (
     echo Unknown parameter specified. Try 'help update'.
 )
@@ -165,6 +181,5 @@ goto :EOF
 cd /d "%_ROSBE_OPATH%"
 title ReactOS Build Environment %_ROSBE_VERSION%
 endlocal
-pause
 
 :OUT
