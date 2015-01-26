@@ -6,7 +6,7 @@
 - Updated SVN to 1.8.11 (Daniel Reimer)
 - Updated Diff to new one from CollabNet SVN build and added diff4. (Daniel Reimer)
 - Updated Ninja to 1.5.3 (Daniel Reimer)
-- Updated CMake to 3.1.0 (Daniel Reimer)
+- Updated CMake to 3.1.1 + TLS/SSL support (Amine Khaldi)
 - Added Ninja version output to version header (Daniel Reimer)
 
 *** Feb 14th, 2014 - RosBE 2.1.1 Released
