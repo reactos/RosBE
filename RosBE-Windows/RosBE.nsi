@@ -36,6 +36,7 @@ SetCompressor /FINAL /SOLID lzma
 !include "InstallOptions.nsh"
 !include "RosSourceDir.nsh"
 !include "LogicLib.nsh"
+!include "EnvVarUpdate.nsh"
 
 ;;
 ;; Read our custom page ini, remove previous version and make sure only
@@ -238,7 +239,11 @@ Section -MinGWGCCNASM SEC02
     File /r Components\i386\*.*
 SectionEnd
 
-Section "PowerShell Version" SEC03
+Section /o "Add BIN folder to PATH variable (MSVC users)" SEC03
+    ${EnvVarUpdate} $0 "PATH" "A" "HKCU" "$INSTDIR\bin"
+SectionEnd
+
+Section /o "PowerShell Version" SEC04
     SetShellVarContext current
     SetOutPath "$INSTDIR"
     SetOverwrite try
@@ -268,7 +273,7 @@ Section "PowerShell Version" SEC03
                "A REG-File was generated on your desktop. Please use it with Admin Rights to set Powershell's execution rights correctly if your RosBE Powershell Version fails to run after install. Otherwise, just delete it."
 SectionEnd
 
-Section -StartMenuShortcuts SEC04
+Section -StartMenuShortcuts SEC05
     SetShellVarContext current
 
     ;;
@@ -292,7 +297,7 @@ Section -StartMenuShortcuts SEC04
     !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
-Section /o "Desktop Shortcuts" SEC05
+Section /o "Desktop Shortcuts" SEC06
     SetShellVarContext all
 
     ;;
@@ -306,7 +311,7 @@ Section /o "Desktop Shortcuts" SEC05
             CreateShortCut "$DESKTOP\ReactOS Build Environment - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
 SectionEnd
 
-Section /o "Quick Launch Shortcuts" SEC06
+Section /o "Quick Launch Shortcuts" SEC07
     SetShellVarContext current
 
     ;;
@@ -320,7 +325,7 @@ Section /o "Quick Launch Shortcuts" SEC06
             CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
 SectionEnd
 
-Section -Post SEC07
+Section -Post SEC08
     WriteUninstaller "$INSTDIR\Uninstall.exe"
     WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\RosBE.cmd"
     WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
@@ -356,6 +361,11 @@ FunctionEnd
 Section Uninstall
     !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
     SetShellVarContext current
+
+    ;;
+    ;; Clean up PATH Variable.
+    ;;
+    ${un.EnvVarUpdate} $0 "PATH" "R" "HKCU" "$INSTDIR\bin"
 
     ;;
     ;; Clean up installed files.

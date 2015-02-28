@@ -8,6 +8,7 @@
 - Updated Ninja to 1.5.3 (Daniel Reimer)
 - Updated CMake to 3.1.1 + TLS/SSL support (Amine Khaldi)
 - Added Ninja version output to version header (Daniel Reimer)
+- Installer now can set BIN folder in real path variable for MSVC users (Daniel Reimer)
 
 *** Feb 14th, 2014 - RosBE 2.1.1 Released
 - Amine Edition #2 -
