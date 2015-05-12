@@ -21,6 +21,14 @@ title ReactOS Build Environment %_ROSBE_VERSION%
 :: the options utility.
 if "%1" == "" (
     set ROS_ARCH=i386
+) else if  "%1" == "vsx86" (
+    set ROS_ARCH=
+    set VisualStudioVersion=12.0
+    call "F:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\vcvars32.bat"
+) else if  "%1" == "vsx64" (
+    set ROS_ARCH=
+    set VisualStudioVersion=12.0
+    call "F:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\vcvars64.bat"
 ) else (
     set ROS_ARCH=%1
 )
