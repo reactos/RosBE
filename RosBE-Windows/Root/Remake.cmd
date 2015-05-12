@@ -12,7 +12,11 @@ if %_ROSBE_DEBUG% == 1 (
     @echo on
 )
 
-title 'Remake %*' started: %TIMERAW%   (%ROS_ARCH%)
+if not "%ROS_ARCH%" == "" (
+    title 'Remake %*' started: %TIMERAW%   (%ROS_ARCH%)
+) else (
+    title 'Remake %*' started: %TIMERAW%   (MSVC %_ROSBE_MSVCARCH%)
+)
 
 :WHILE
     if "%1" == "" goto :EOF

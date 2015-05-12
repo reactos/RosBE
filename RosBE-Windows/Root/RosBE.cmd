@@ -17,18 +17,24 @@ if %_ROSBE_DEBUG% == 1 (
 
 title ReactOS Build Environment %_ROSBE_VERSION%
 
+set platform=false
+set _ROSBE_MSVCVER=%2
+set _ROSBE_MSVCARCH=%3
+if /i "%PROCESSOR_ARCHITECTURE%" == "amd64" set platform=true
+if /i "%PROCESSOR_ARCHITEW6432%" == "amd64" set platform=true
+if "%platform%" == "true" (
+    for /f "usebackq skip=2 tokens=2,*" %%A in (`"reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\%_ROSBE_MSVCVER% /v ShellFolder"`) do set VSINSTALLDIR=%%B
+) else (
+    for /f "usebackq skip=2 tokens=2,*" %%A in (`"reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\%_ROSBE_MSVCVER% /v ShellFolder"`) do set VSINSTALLDIR=%%B
+)
+
 :: Set defaults to work with and override them if edited by
 :: the options utility.
 if "%1" == "" (
     set ROS_ARCH=i386
-) else if  "%1" == "vsx86" (
+) else if  "%1" == "vs" (
     set ROS_ARCH=
-    set VisualStudioVersion=12.0
-    call "F:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\vcvars32.bat"
-) else if  "%1" == "vsx64" (
-    set ROS_ARCH=
-    set VisualStudioVersion=12.0
-    call "F:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\vcvars64.bat"
+    call "%VSINSTALLDIR%\VC\vcvarsall.bat" %_ROSBE_MSVCARCH%
 ) else (
     set ROS_ARCH=%1
 )
@@ -80,25 +86,22 @@ if "%ROS_ARCH%" == "amd64" (
     color 0B
 ) else if "%ROS_ARCH%" == "arm" (
     color 0E
-)
-:: Load the user's options if any
-if "%ROS_ARCH%" == "i386" (
-    if exist "%APPDATA%\RosBE\rosbe-options-%_ROSBE_VERSION%.cmd" (
-        call "%APPDATA%\RosBE\rosbe-options-%_ROSBE_VERSION%.cmd"
-    )
-)
-
-if exist "%APPDATA%\RosBE\rosbe-options-%1.cmd" (
-    call "%APPDATA%\RosBE\rosbe-options-%1.cmd"
-)
-
-if exist "%APPDATA%\RosBE\RBUILDFLAGS-%_ROSBE_VERSION%.FLG" (
-    for /f "usebackq tokens=* delims= " %%i in (`"type "%APPDATA%\RosBE\RBUILDFLAGS-%_ROSBE_VERSION%.FLG""`) do set ROS_RBUILDFLAGS=%%i
+) else (
+    color 08
 )
 
 :: Check if RosBE data directory exists, if not, create it.
 if not exist "%APPDATA%\RosBE\." (
     mkdir "%APPDATA%\RosBE" 1> NUL 2> NUL
+)
+
+:: Load the user's options if any
+if exist "%APPDATA%\RosBE\rosbe-options-%_ROSBE_VERSION%.cmd" (
+    call "%APPDATA%\RosBE\rosbe-options-%_ROSBE_VERSION%.cmd"
+)
+
+if exist "%APPDATA%\RosBE\rosbe-options-%1.cmd" (
+    call "%APPDATA%\RosBE\rosbe-options-%1.cmd"
 )
 
 call "%_ROSBE_BASEDIR%\rosbe-gcc-env.cmd"

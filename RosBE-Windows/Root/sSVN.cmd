@@ -16,14 +16,10 @@ setlocal enabledelayedexpansion
 
 set ROS_SVNURL=http://svn.reactos.org/reactos
 
-if "%ROS_ARCH%" == "amd64" (
-    set ROS_SVNURL=%ROS_SVNURL%/branches/ros-amd64-bringup
+if not defined ROS_BRANCH (
+    set ROS_SVNURL=%ROS_SVNURL%/trunk
 ) else (
-    if not defined ROS_BRANCH (
-        set ROS_SVNURL=%ROS_SVNURL%/trunk
-    ) else (
-        set ROS_SVNURL=%ROS_SVNURL%/branches/%ROS_BRANCH%
-    )
+    set ROS_SVNURL=%ROS_SVNURL%/branches/%ROS_BRANCH%
 )
 
 wget --spider --no-verbose %ROS_SVNURL%/reactos 1> NUL 2> NUL

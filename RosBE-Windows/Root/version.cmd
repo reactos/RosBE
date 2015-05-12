@@ -17,16 +17,21 @@ for /f "usebackq" %%i in (`"%_ROSBE_BASEDIR%\bin\ninja.exe" --version`) do set _
 
 ver
 
-:: GCC
-"%_ROSBE_TARGET_MINGWPATH%\bin\%_ROSBE_PREFIX%gcc.exe" -v 2>&1 | find "gcc version"
-echo gcc target^: %ROS_ARCH%
-
-:: LD
-"%_ROSBE_TARGET_MINGWPATH%\bin\%_ROSBE_PREFIX%ld.exe" -v
+if not "%ROS_ARCH%" == "" (
+    echo gcc target^: %ROS_ARCH%
+    "%_ROSBE_TARGET_MINGWPATH%\bin\%_ROSBE_PREFIX%gcc.exe" -v 2>&1 | find "gcc version"
+    "%_ROSBE_TARGET_MINGWPATH%\bin\%_ROSBE_PREFIX%ld.exe" -v
+    "%_ROSBE_BASEDIR%\bin\mingw32-make.exe" -v | find "GNU Make"
+) else (
+    echo MSVC target^: %_ROSBE_MSVCARCH%
+    cl.exe 2>&1 | find "Version"
+    mc.exe 2>&1 | find "Version"
+    rc.exe 2>&1 | find "Version"
+    ml.exe 2>&1 | find "Version"
+)
 
 :: Bison, Flex and Make
-%_ROSBE_BASEDIR%\bin\bison.exe --version | find "GNU Bison"
-%_ROSBE_BASEDIR%\bin\flex.exe --version
-%_ROSBE_BASEDIR%\bin\mingw32-make.exe -v | find "GNU Make"
+"%_ROSBE_BASEDIR%\bin\bison.exe" --version | find "GNU Bison"
+"%_ROSBE_BASEDIR%\bin\flex.exe" --version
 echo Ninja %_ROSBE_NINJAVER%
-%_ROSBE_BASEDIR%\bin\cmake.exe --version | find "version"
+"%_ROSBE_BASEDIR%\bin\cmake.exe" --version | find "version"
