@@ -29,9 +29,13 @@ set TARGET_CC=%_ROSBE_CCACHE%%_ROSBE_PREFIX%gcc
 set TARGET_CPP=%_ROSBE_CCACHE%%_ROSBE_PREFIX%g++
 
 if not exist "%_ROSBE_ROSSOURCEDIR%\output-MinGW-i386\*" (
-    if not exist "%_ROSBE_ROSSOURCEDIR%\output-VS-i386\*" (
-        echo No Build Files found. You may want to use "configure" first.
-        goto :EOF
+    if not exist "%_ROSBE_ROSSOURCEDIR%\output-MinGW-amd64\*" (
+        if not exist "%_ROSBE_ROSSOURCEDIR%\output-VS-i386\*" (
+            if not exist "%_ROSBE_ROSSOURCEDIR%\output-VS-amd64\*" (
+                echo No Build Files found. You may want to use "configure" first.
+                goto :EOF
+            )
+        )
     )
 )
 
@@ -45,9 +49,9 @@ if exist "*.ninja" (
 call "%_ROSBE_BASEDIR%\TimeDate.cmd"
 
 if not "%ROS_ARCH%" == "" (
-    title '%TITLE_COMMAND%' build started: %TIMERAW%   (%ROS_ARCH%)
+    title '%TITLE_COMMAND%' build started: %TIMERAW%   [%ROS_ARCH%]
 ) else (
-    title '%TITLE_COMMAND%' build started: %TIMERAW%   (MSVC %_ROSBE_MSVCARCH%)
+    title '%TITLE_COMMAND%' build started: %TIMERAW%   [MSVC %_ROSBE_MSVCARCH%]
 )
 
 :: Do the actual building
