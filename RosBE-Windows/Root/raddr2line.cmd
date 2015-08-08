@@ -54,8 +54,10 @@ if errorlevel 2 (
     for /f "usebackq" %%i in (`"dir /a:-d /s /b "%FILEPATH%" 2>NUL | findstr "%FILEPATH%""`) do set FILEPATH=%%i
 )
 
-if not "%ROS_OUTPUT%" == "" (
-    log2lines.exe -d "%ROS_OUTPUT%" "%FILEPATH%" "%ADDRESS%"
+set OUTPUT="output-%BUILD_ENVIRONMENT%-%ROS_ARCH%"
+
+if not "%OUTPUT%" == "" (
+    log2lines.exe -d "%OUTPUT%" "%FILEPATH%" "%ADDRESS%"
 ) else (
     log2lines.exe "%FILEPATH%" "%ADDRESS%"
 )

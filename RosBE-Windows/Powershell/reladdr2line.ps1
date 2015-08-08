@@ -33,8 +33,10 @@ if ("$ADDRESS" -eq "") {
     throw {"ERROR: You must specify a address to analyze."}
 }
 
-if ("$ENV:ROS_OUTPUT" -ne "") {
-    IEX "& log2lines.exe -d '$ENV:ROS_OUTPUT' '$FILEPATH' '$ADDRESS'"
+$output = "output-$global:BUILD_ENVIRONMENT-$ENV:ROS_ARCH"
+
+if ("$output" -ne "") {
+    IEX "& log2lines.exe -d '$output' '$FILEPATH' '$ADDRESS'"
 } else {
     IEX "& log2lines.exe '$FILEPATH' '$ADDRESS'"
 }
