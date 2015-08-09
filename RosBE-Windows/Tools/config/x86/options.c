@@ -138,8 +138,8 @@ INT
 WriteSettings(POPTIONS_DLG infoPtr)
 {
     INT foreground, background;
-    BOOL showtime, writelog, useccache, strip, nostrip, objstate, outstate, showversion;
-    WCHAR logdir[MAX_PATH], objdir[MAX_PATH], outdir[MAX_PATH], mingwpath[MAX_PATH], checkmgw[MAX_PATH];
+    BOOL showtime, writelog, useccache, strip, nostrip, showversion;
+    WCHAR logdir[MAX_PATH], mingwpath[MAX_PATH], checkmgw[MAX_PATH];
     WCHAR msgerror[256];
     HANDLE hFile;
     FILE *pFilecmd, *pFileps1;
@@ -149,35 +149,15 @@ WriteSettings(POPTIONS_DLG infoPtr)
     useccache = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_USECCACHE, BM_GETCHECK, 0, 0) == BST_CHECKED);
     strip = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_STRIP, BM_GETCHECK, 0, 0) == BST_CHECKED);
     nostrip = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_NOSTRIP, BM_GETCHECK, 0, 0) == BST_CHECKED);
-    objstate = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_OTHEROBJ, BM_GETCHECK, 0, 0) == BST_CHECKED);
-    outstate = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_OTHEROUT, BM_GETCHECK, 0, 0) == BST_CHECKED);
     showversion = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_SHOWVERSION, BM_GETCHECK, 0, 0) == BST_CHECKED);
     foreground = (INT) SendDlgItemMessageW(infoPtr->hwndDlg, IDC_FONT, CB_GETCURSEL, 0, 0);
     background = (INT) SendDlgItemMessageW(infoPtr->hwndDlg, IDC_BACK, CB_GETCURSEL, 0, 0);
     GetDlgItemTextW(infoPtr->hwndDlg, ID_LOGDIR, logdir, MAX_PATH);
     GetDlgItemTextW(infoPtr->hwndDlg, ID_MGWDIR, mingwpath, MAX_PATH);
-    GetDlgItemTextW(infoPtr->hwndDlg, ID_OBJDIR, objdir, MAX_PATH);
-    GetDlgItemTextW(infoPtr->hwndDlg, ID_OUTDIR, outdir, MAX_PATH);
-
+ 
     if (writelog && (logdir[0] != 0))
     {
         if (!CreateDir(infoPtr->hwndDlg, logdir))
-        {
-            return FALSE;
-        }
-    }
-
-    if (objstate && (objdir[0] != 0))
-    {
-        if (!CreateDir(infoPtr->hwndDlg, objdir))
-        {
-            return FALSE;
-        }
-    }
-
-    if (outstate && (outdir[0] != 0))
-    {
-        if (!CreateDir(infoPtr->hwndDlg, outdir))
         {
             return FALSE;
         }
@@ -249,15 +229,6 @@ WriteSettings(POPTIONS_DLG infoPtr)
                 fwprintf(pFilecmd, L"set _ROSBE_TARGET_MINGWPATH=%s\n", mingwpath);
             }
         }
-        if ((objdir[0] != 0) && objstate)
-        {
-            fwprintf(pFilecmd, L"set ROS_INTERMEDIATE=%s\n", objdir);
-            fwprintf(pFilecmd, L"set ROS_TEMPORARY=%s\n", objdir);
-        }
-        if ((outdir[0] != 0) && outstate)
-        {
-            fwprintf(pFilecmd, L"set ROS_OUTPUT=%s\n", outdir);
-        }
     }
 
     if (pFileps1)
@@ -293,15 +264,6 @@ WriteSettings(POPTIONS_DLG infoPtr)
                 fwprintf(pFileps1, L"$global:_ROSBE_HOST_MINGWPATH = \"%s\"\n", mingwpath);
                 fwprintf(pFileps1, L"$global:_ROSBE_TARGET_MINGWPATH = \"%s\"\n", mingwpath);
             }
-        }
-        if ((objdir[0] != 0) && objstate)
-        {
-            fwprintf(pFileps1, L"$ENV:ROS_INTERMEDIATE = \"%s\"\n", objdir);
-            fwprintf(pFileps1, L"$ENV:ROS_TEMPORARY = \"%s\"\n", objdir);
-        }
-        if ((outdir[0] != 0) && outstate)
-        {
-            fwprintf(pFileps1, L"$ENV:ROS_OUTPUT = \"%s\"\n", outdir);
         }
     }
 
@@ -391,14 +353,6 @@ VOID LoadSettings(POPTIONS_DLG infoPtr)
                 {
                     wcsncpy(LoadedSettings->mingwpath, ptr2, wcslen(ptr2)-1);
                 }
-                else if (wcscmp(ptr, L"ROS_INTERMEDIATE") == 0)
-                {
-                    wcsncpy(LoadedSettings->objdir, ptr2, wcslen(ptr2)-1);
-                }
-                else if (wcscmp(ptr, L"ROS_OUTPUT") == 0)
-                {
-                    wcsncpy(LoadedSettings->outdir, ptr2, wcslen(ptr2)-1);
-                }
             }
         }
         fclose(pFile);
@@ -481,30 +435,14 @@ VOID LoadSettings(POPTIONS_DLG infoPtr)
     SendDlgItemMessageW(infoPtr->hwndDlg, ID_NOSTRIP, BM_SETCHECK, LoadedSettings->nostrip, 0);
     SetDlgItemTextW(infoPtr->hwndDlg, ID_MGWDIR, LoadedSettings->mingwpath);
     SetDlgItemTextW(infoPtr->hwndDlg, ID_LOGDIR, LoadedSettings->logdir);
-    if (LoadedSettings->objdir[0] != 0)
-    {
-        LoadedSettings->objstate = 1;
-        SetDlgItemTextW(infoPtr->hwndDlg, ID_OBJDIR, LoadedSettings->objdir);
-        SendDlgItemMessageW(infoPtr->hwndDlg, ID_OTHEROBJ, BM_SETCHECK, BST_CHECKED, 0);
-        EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_BROWSEOBJ), TRUE);
-        EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_OBJDIR), TRUE);
-    }
-    if (LoadedSettings->outdir[0] != 0)
-    {
-        LoadedSettings->outstate = 1;
-        SetDlgItemTextW(infoPtr->hwndDlg, ID_OUTDIR, LoadedSettings->outdir);
-        SendDlgItemMessageW(infoPtr->hwndDlg, ID_OTHEROUT, BM_SETCHECK, BST_CHECKED, 0);
-        EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_BROWSEOUT), TRUE);
-        EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_OUTDIR), TRUE);
-    }
 }
 
 VOID SetSaveState(POPTIONS_DLG infoPtr)
 {
     INT foreground, background;
-    BOOL showtime, writelog, useccache, strip, nostrip, objstate, outstate, showversion;
-    WCHAR logdir[MAX_PATH], objdir[MAX_PATH], outdir[MAX_PATH], mingwpath[MAX_PATH];
-    BOOL StateObj = TRUE, StateOut = TRUE, StateLog = TRUE, State = TRUE;
+    BOOL showtime, writelog, useccache, strip, nostrip, showversion;
+    WCHAR logdir[MAX_PATH], mingwpath[MAX_PATH];
+    BOOL StateLog = TRUE, State = TRUE;
     PSETTINGS DefaultSettings = &infoPtr->Settings;
 
     if (!wcscmp(DefaultSettings->lstrip, L"yes"))
@@ -529,30 +467,12 @@ VOID SetSaveState(POPTIONS_DLG infoPtr)
     useccache = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_USECCACHE, BM_GETCHECK, 0, 0) == BST_CHECKED);
     strip = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_STRIP, BM_GETCHECK, 0, 0) == BST_CHECKED);
     nostrip = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_NOSTRIP, BM_GETCHECK, 0, 0) == BST_CHECKED);
-    objstate = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_OTHEROBJ, BM_GETCHECK, 0, 0) == BST_CHECKED);
-    outstate = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_OTHEROUT, BM_GETCHECK, 0, 0) == BST_CHECKED);
     showversion = (SendDlgItemMessageW(infoPtr->hwndDlg, ID_SHOWVERSION, BM_GETCHECK, 0, 0) == BST_CHECKED);
     foreground = (INT) SendDlgItemMessageW(infoPtr->hwndDlg, IDC_FONT, CB_GETCURSEL, 0, 0);
     background = (INT) SendDlgItemMessageW(infoPtr->hwndDlg, IDC_BACK, CB_GETCURSEL, 0, 0);
     GetDlgItemTextW(infoPtr->hwndDlg, ID_LOGDIR, logdir, MAX_PATH);
     GetDlgItemTextW(infoPtr->hwndDlg, ID_MGWDIR, mingwpath, MAX_PATH);
-    GetDlgItemTextW(infoPtr->hwndDlg, ID_OBJDIR, objdir, MAX_PATH);
-    GetDlgItemTextW(infoPtr->hwndDlg, ID_OUTDIR, outdir, MAX_PATH);
 
-    if (objstate)
-    {
-        if ((wcscmp(objdir, DefaultSettings->objdir) != 0) && (wcslen(objdir) > 0))
-        {
-            StateObj = FALSE;
-        }
-    }
-    if (outstate)
-    {
-        if ((wcscmp(outdir, DefaultSettings->outdir) != 0) && (wcslen(outdir) > 0))
-        {
-            StateOut = FALSE;
-        }
-    }
     if (writelog)
     {
         if ((wcscmp(logdir, DefaultSettings->logdir) != 0) && (wcslen(logdir) > 0))
@@ -564,9 +484,8 @@ VOID SetSaveState(POPTIONS_DLG infoPtr)
     State ^= ((foreground == DefaultSettings->foreground) && (background == DefaultSettings->background) &&
             (showtime == DefaultSettings->showtime) && (writelog == DefaultSettings->writelog) &&
             (useccache == DefaultSettings->useccache) && (strip == DefaultSettings->strip) &&
-            (objstate == DefaultSettings->objstate) && (outstate == DefaultSettings->outstate) &&
             (StateLog) && (wcscmp(mingwpath, DefaultSettings->mingwpath) == 0) &&
-            (StateObj) && (StateOut) && (nostrip == DefaultSettings->nostrip) && (showversion == DefaultSettings->showversion));
+            (nostrip == DefaultSettings->nostrip) && (showversion == DefaultSettings->showversion));
 
     EnableWindow(GetDlgItem(infoPtr->hwndDlg, ID_OK), State);
 }
@@ -671,13 +590,7 @@ DlgProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
                 {ID_LOGDIR, HLP_FINDLOGDIR},
                 {ID_BROWSE, HLP_FINDLOGDIR},
                 {ID_SAVELOGS, HLP_FINDLOGDIR},
-                {ID_OBJDIR, HLP_FINDOBJDIR},
-                {ID_BROWSEOBJ, HLP_FINDOBJDIR},
-                {ID_OTHEROBJ, HLP_FINDOBJDIR},
-                {ID_OUTDIR, HLP_FINDOUTDIR},
                 {ID_SHOWVERSION, HLP_VERSION},
-                {ID_BROWSEOUT, HLP_FINDOUTDIR},
-                {ID_OTHEROUT, HLP_FINDOUTDIR},
                 {ID_OK, HLP_SAVEBUTTON},
                 {ID_CANCEL, HLP_QUITBUTTON},
             };
@@ -770,8 +683,6 @@ DlgProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
                     }
                     case ID_BROWSE:
                     case ID_BROWSEMGW:
-                    case ID_BROWSEOBJ:
-                    case ID_BROWSEOUT:
                     {
                         BROWSEINFO PathInfo;
                         LPITEMIDLIST pidl;
@@ -789,20 +700,10 @@ DlgProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
                             PathInfo.lpfn = (BFFCALLBACK)BrowseProc;
                             PathInfo.lParam = ID_LOGDIR;
                             PathInfo.pidlRoot = NULL;
-                            if ((wParam == ID_BROWSEMGW) || (wParam == ID_BROWSEOBJ) || (wParam == ID_BROWSEOUT))
+                            if (wParam == ID_BROWSEMGW)
                             {
                                 Control = ID_MGWDIR;
                                 IDText = MSG_FINDMGWDIR;
-                                if (wParam == ID_BROWSEOBJ)
-                                {
-                                    Control = ID_OBJDIR;
-                                    IDText = MSG_FINDOBJDIR;
-                                }
-                                else if (wParam == ID_BROWSEOUT)
-                                {
-                                    Control = ID_OUTDIR;
-                                    IDText = MSG_FINDOUTDIR;
-                                }
                                 PathInfo.lParam = Control;
                             }
                             LoadStringW(hInstance, IDText, Text, 512);
@@ -819,24 +720,12 @@ DlgProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
                         }
                         break;
                     }
-                    case ID_OTHEROBJ:
-                    case ID_OTHEROUT:
                     case ID_SAVELOGS:
                     {
                         BOOL WriteLogSet;
                         INT Dialog1 = ID_BROWSE;
                         INT Dialog2 = ID_LOGDIR;
                         WriteLogSet = (SendDlgItemMessageW(Dlg, (INT)wParam, BM_GETCHECK, 0, 0) == BST_CHECKED);
-                        if (wParam == ID_OTHEROBJ)
-                        {
-                            Dialog1 = ID_BROWSEOBJ;
-                            Dialog2 = ID_OBJDIR;
-                        }
-                        else if (wParam == ID_OTHEROUT)
-                        {
-                            Dialog1 = ID_BROWSEOUT;
-                            Dialog2 = ID_OUTDIR;
-                        }
                         EnableWindow(GetDlgItem(Dlg, Dialog1), WriteLogSet);
                         EnableWindow(GetDlgItem(Dlg, Dialog2), WriteLogSet);
                         break;

@@ -35,16 +35,10 @@
 #define ID_SHOWBUILDTIME 0x14
 #define ID_USECCACHE 0x15
 #define ID_STRIP 0x16
-#define ID_OTHEROBJ 0x17
-#define ID_OTHEROUT 0x18
 #define ID_LOGDIR 0x19
 #define ID_MGWDIR 0x1a
-#define ID_OBJDIR 0x1b
-#define ID_OUTDIR 0x1c
 #define ID_BROWSE 0x1d
 #define ID_BROWSEMGW 0x1e
-#define ID_BROWSEOBJ 0x1f
-#define ID_BROWSEOUT 0x20
 #define ID_DIALOG 0x21
 #define ID_DIALOG64 0x22
 #define ID_DIALOGARM 0x23
@@ -63,8 +57,6 @@
 #define MSG_SETLOADSUC 0x2e
 #define MSG_FINDLOGDIR 0x2f
 #define MSG_FINDMGWDIR 0x30
-#define MSG_FINDOBJDIR 0x31
-#define MSG_FINDOUTDIR 0x32
 #define MSG_WARNINGBOX 0x33
 #define MSG_EXITCHANGE 0x34
 #define MSG_INVALIDDIR 0x35
@@ -77,8 +69,6 @@
 #define HLP_STRIPEDEXE 0x3a
 #define HLP_FINDMGWDIR 0x3b
 #define HLP_FINDLOGDIR 0x3c
-#define HLP_FINDOBJDIR 0x3d
-#define HLP_FINDOUTDIR 0x3e
 #define HLP_SAVEBUTTON 0x3f
 #define HLP_QUITBUTTON 0x40
 #define HLP_DEFAULTMSG 0x41

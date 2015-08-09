@@ -2,7 +2,7 @@
 
 LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 
-ID_DIALOG DIALOGEX DISCARDABLE  0, 0, 255, 290
+ID_DIALOG DIALOGEX DISCARDABLE  0, 0, 255, 220
 STYLE DS_SHELLFONT | DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Установки переменных компилятора ReactOS"
 FONT 8,"MS Shell Dlg"
@@ -23,18 +23,12 @@ BEGIN
   CONTROL "Вести логи", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
   EDITTEXT ID_LOGDIR, 10, 156, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSE, 215, 156, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Путь к каталогу объектов", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
-  EDITTEXT ID_OBJDIR, 10, 192, 200, 13, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "...", ID_BROWSEOBJ, 215, 192, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Путь к каталогу вывода", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
-  EDITTEXT ID_OUTDIR, 10, 228, 200, 13, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "Сохранить", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "Отмена", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
+  PUSHBUTTON "Сохранить", ID_OK, 63, 180, 59, 16, WS_TABSTOP | WS_DISABLED
+  PUSHBUTTON "Отмена", ID_CANCEL, 133, 180, 59, 16, WS_TABSTOP
   CONTROL "Введение", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
 END
 
-ID_DIALOG64 DIALOGEX DISCARDABLE  0, 0, 255, 290
+ID_DIALOG64 DIALOGEX DISCARDABLE  0, 0, 255, 220
 STYLE DS_SHELLFONT | DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Установки переменных компилятора ReactOS - AMD64"
 FONT 8,"MS Shell Dlg"
@@ -55,18 +49,12 @@ BEGIN
   CONTROL "Вести логи", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
   EDITTEXT ID_LOGDIR, 10, 156, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSE, 215, 156, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Путь к каталогу объектов", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
-  EDITTEXT ID_OBJDIR, 10, 192, 200, 13, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "...", ID_BROWSEOBJ, 215, 192, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Путь к каталогу вывода", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
-  EDITTEXT ID_OUTDIR, 10, 228, 200, 13, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "Сохранить", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "Отмена", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
+  PUSHBUTTON "Сохранить", ID_OK, 63, 180, 59, 16, WS_TABSTOP | WS_DISABLED
+  PUSHBUTTON "Отмена", ID_CANCEL, 133, 180, 59, 16, WS_TABSTOP
   CONTROL "Введение", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
 END
 
-ID_DIALOGARM DIALOGEX DISCARDABLE  0, 0, 255, 290
+ID_DIALOGARM DIALOGEX DISCARDABLE  0, 0, 255, 220
 STYLE DS_SHELLFONT | DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Установки переменных компилятора ReactOS - ARM"
 FONT 8,"MS Shell Dlg"
@@ -87,14 +75,8 @@ BEGIN
   CONTROL "Вести логи", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
   EDITTEXT ID_LOGDIR, 10, 156, 200, 13, WS_TABSTOP | WS_DISABLED
   PUSHBUTTON "...", ID_BROWSE, 215, 156, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Путь к каталогу объектов", ID_OTHEROBJ, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 178, 100, 12
-  EDITTEXT ID_OBJDIR, 10, 192, 200, 13, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "...", ID_BROWSEOBJ, 215, 192, 30, 13, WS_TABSTOP | WS_DISABLED
-  CONTROL "Путь к каталогу вывода", ID_OTHEROUT, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 215, 100, 12
-  EDITTEXT ID_OUTDIR, 10, 228, 200, 13, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "...", ID_BROWSEOUT, 215, 228, 30, 13, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "Сохранить", ID_OK, 63, 250, 59, 16, WS_TABSTOP | WS_DISABLED
-  PUSHBUTTON "Отмена", ID_CANCEL, 133, 250, 59, 16, WS_TABSTOP
+  PUSHBUTTON "Сохранить", ID_OK, 63, 180, 59, 16, WS_TABSTOP | WS_DISABLED
+  PUSHBUTTON "Отмена", ID_CANCEL, 133, 180, 59, 16, WS_TABSTOP
   CONTROL "Введение", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
 END
 
@@ -123,8 +105,6 @@ BEGIN
   MSG_SETLOADSUC, "Ранее сохраненные настройки загружены."
   MSG_FINDLOGDIR, "Укажите каталог сохранения лог-файлов:"
   MSG_FINDMGWDIR, "Укажите каталог расположения компилятора MinGW:"
-  MSG_FINDOBJDIR, "Укажите каталог сохранения объектных файлов:"
-  MSG_FINDOUTDIR, "Укажите каталог сохранения компилированных файлов:"
   MSG_WARNINGBOX, "Внимание!"
   MSG_EXITCHANGE, "Вы закрываете программу не сохранив настройки?"
   MSG_INVALIDDIR, "Указанная директория не существует. Создать ее?"
@@ -136,8 +116,6 @@ BEGIN
   HLP_STRIPEDEXE, "Отметьте если вы хотите удалить неиспользуемый код из исполняемых файлов"
   HLP_FINDMGWDIR, "Этот параметр определяет расположение MinGW"
   HLP_FINDLOGDIR, "Этот параметр определяет место сохранения логов"
-  HLP_FINDOBJDIR, "Этот параметр определяет место для хранения файлов объектных модулей"
-  HLP_FINDOUTDIR, "Этот параметр определяет место для сохранения откомпилированных исполняемых файлов"
   HLP_SAVEBUTTON, "Активное состояние кнопки указывает на возможность сохранения измененных настроек"
   HLP_QUITBUTTON, "Это клавиша позволяет выйти без сохранения изменений"
   HLP_DEFAULTMSG, "Помощь по изначальным параметрам"
