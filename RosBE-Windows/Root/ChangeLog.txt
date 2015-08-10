@@ -1,14 +1,15 @@
-*** Feb xxth, 2015 - RosBE 2.1.2 Released
-- Updated WGet to 1.16.1 (Daniel Reimer)
-- Updated 7Zip to 9.38 (Daniel Reimer)
+*** Aug xxth, 2015 - RosBE 2.1.2 Released
+- Updated WGet to 1.16.3 (Daniel Reimer)
+- Updated 7Zip to 15.06 (Daniel Reimer)
 - Updated Bison to 3.0 (Daniel Reimer)
 - Updated Flex to 2.5.37 (Daniel Reimer)
-- Updated SVN to 1.8.11 (Daniel Reimer)
+- Updated SVN to 1.8.13 (Daniel Reimer)
 - Updated Diff to new one from CollabNet SVN build and added diff4. (Daniel Reimer)
-- Updated Ninja to 1.5.3 (Daniel Reimer)
-- Updated CMake to 3.1.1 + TLS/SSL support (Amine Khaldi)
+- Updated Ninja to 1.6.0 (Daniel Reimer)
+- Updated CMake to 3.2.1 + TLS/SSL support (Amine Khaldi)
+- Fix raddr2line wrong folder bug (Christoph von Wittich)
 - Added Ninja version output to version header (Daniel Reimer)
-- Installer now can set BIN folder in real path variable for MSVC users (Daniel Reimer)
+- Installer now sets BIN folder in real path variable for MSVC users (Daniel Reimer)
 
 *** Feb 14th, 2014 - RosBE 2.1.1 Released
 - Amine Edition #2 -
