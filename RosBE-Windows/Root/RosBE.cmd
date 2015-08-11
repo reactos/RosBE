@@ -84,10 +84,9 @@ set LIBRARY_PATH=
 
 if "%ROS_ARCH%" == "amd64" (
     color 0B
-) else if "%ROS_ARCH%" == "arm" (
+)
+if "%ROS_ARCH%" == "arm" (
     color 0E
-) else (
-    color 08
 )
 
 :: Check if RosBE data directory exists, if not, create it.
