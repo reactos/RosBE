@@ -10,6 +10,9 @@
 - Fix raddr2line wrong folder bug (Christoph von Wittich)
 - Added Ninja version output to version header (Daniel Reimer)
 - Installer now sets BIN folder in real path variable for MSVC users (Daniel Reimer)
+- Removed useless settings from options tool (Daniel Reimer)
+- Fixed default colors in RosBE (Daniel Reimer)
+- Added version to shortcut names due to popular demand (Daniel Reimer)
 
 *** Feb 14th, 2014 - RosBE 2.1.1 Released
 - Amine Edition #2 -
