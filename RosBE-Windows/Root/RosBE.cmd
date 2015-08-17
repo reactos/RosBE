@@ -18,10 +18,37 @@ if %_ROSBE_DEBUG% == 1 (
 title ReactOS Build Environment %_ROSBE_VERSION%
 
 set platform=false
-set _ROSBE_MSVCVER=%2
-set _ROSBE_MSVCARCH=%3
+set _ROSBE_MSVCARCH=%2
 if /i "%PROCESSOR_ARCHITECTURE%" == "amd64" set platform=true
 if /i "%PROCESSOR_ARCHITEW6432%" == "amd64" set platform=true
+if defined VS90COMNTOOLS (
+    if exist "%VS90COMNTOOLS%\..\..\VC\vcvarsall.bat" (
+        set _ROSBE_MSVCVERS=%_ROSBE_MSVCVERS% 9.0
+    )
+)
+if defined VS100COMNTOOLS (
+    if exist "%VS100COMNTOOLS%\..\..\VC\vcvarsall.bat" (
+        set _ROSBE_MSVCVERS=%_ROSBE_MSVCVERS% 10.0
+    )
+)
+if defined VS110COMNTOOLS (
+    if exist "%VS110COMNTOOLS%\..\..\VC\vcvarsall.bat" (
+        set _ROSBE_MSVCVERS=%_ROSBE_MSVCVERS% 11.0
+    )
+)
+if defined VS120COMNTOOLS (
+    if exist "%VS120COMNTOOLS%\..\..\VC\vcvarsall.bat" (
+        set _ROSBE_MSVCVERS=%_ROSBE_MSVCVERS% 12.0
+    )
+)
+if defined VS140COMNTOOLS (
+    if exist "%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" (
+        set _ROSBE_MSVCVERS=%_ROSBE_MSVCVERS% 14.0
+    )
+)
+
+for %%A in (%_ROSBE_MSVCVERS%) do set _ROSBE_MSVCVER=%%A
+
 if "%1" == "vs" (
     if "%platform%" == "true" (
         for /f "usebackq skip=2 tokens=2,*" %%A in (`"reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\%_ROSBE_MSVCVER% /v ShellFolder"`) do set VSINSTALLDIR=%%B
