@@ -22,17 +22,19 @@ set _ROSBE_MSVCVER=%2
 set _ROSBE_MSVCARCH=%3
 if /i "%PROCESSOR_ARCHITECTURE%" == "amd64" set platform=true
 if /i "%PROCESSOR_ARCHITEW6432%" == "amd64" set platform=true
-if "%platform%" == "true" (
-    for /f "usebackq skip=2 tokens=2,*" %%A in (`"reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\%_ROSBE_MSVCVER% /v ShellFolder"`) do set VSINSTALLDIR=%%B
-) else (
-    for /f "usebackq skip=2 tokens=2,*" %%A in (`"reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\%_ROSBE_MSVCVER% /v ShellFolder"`) do set VSINSTALLDIR=%%B
+if "%1" == "vs" (
+    if "%platform%" == "true" (
+        for /f "usebackq skip=2 tokens=2,*" %%A in (`"reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\%_ROSBE_MSVCVER% /v ShellFolder"`) do set VSINSTALLDIR=%%B
+    ) else (
+        for /f "usebackq skip=2 tokens=2,*" %%A in (`"reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\%_ROSBE_MSVCVER% /v ShellFolder"`) do set VSINSTALLDIR=%%B
+    )
 )
 
 :: Set defaults to work with and override them if edited by
 :: the options utility.
 if "%1" == "" (
     set ROS_ARCH=i386
-) else if  "%1" == "vs" (
+) else if "%1" == "vs" (
     set ROS_ARCH=
     call "%VSINSTALLDIR%\VC\vcvarsall.bat" %_ROSBE_MSVCARCH%
 ) else (

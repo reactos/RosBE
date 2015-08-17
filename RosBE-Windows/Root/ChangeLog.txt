@@ -1,4 +1,4 @@
-*** Aug xxth, 2015 - RosBE 2.1.2 Released
+*** Aug 17th, 2015 - RosBE 2.1.2 Released
 - Updated WGet to 1.16.3 (Daniel Reimer)
 - Updated 7Zip to 15.06 (Daniel Reimer)
 - Updated Bison to 3.0 (Daniel Reimer)
