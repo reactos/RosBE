@@ -167,7 +167,9 @@ function LoadAliases {
     if (Test-Path "$_ROSBE_BASEDIR\sSVN.ps1") {
         set-alias SSVN "$_ROSBE_BASEDIR\sSVN.ps1" -scope Global
     }
-    function global:UPDATE {IEX "&'$_ROSBE_BASEDIR\bin\Elevate.exe' '$pshome\powershell.exe' -noexit {&'$_ROSBE_BASEDIR\update.ps1' $_ROSBE_VERSION '$_ROSBE_BASEDIR' $args}"}
+    if (Test-Path "$_ROSBE_BASEDIR\update.ps1") {
+        set-alias UPDATE "$_ROSBE_BASEDIR\update.ps1" -scope Global
+    }
 
     set-alias VERSION "$_ROSBE_BASEDIR\version.ps1" -scope Global
 

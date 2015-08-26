@@ -8,14 +8,10 @@
 
 $ROS_SVNURL = "http://svn.reactos.org/reactos"
 
-if ("$ENV:ROS_ARCH" -eq "amd64") {
-    $ROS_SVNURL = "$ROS_SVNURL/branches/ros-amd64-bringup"
+if ("$ENV:ROS_BRANCH" -eq "") {
+    $ROS_SVNURL = "$ROS_SVNURL/trunk"
 } else {
-    if ("$ENV:ROS_BRANCH" -eq "") {
-        $ROS_SVNURL = "$ROS_SVNURL/trunk"
-    } else {
-        $ROS_SVNURL = "$ROS_SVNURL/branches/$ENV:ROS_BRANCH"
-    }
+    $ROS_SVNURL = "$ROS_SVNURL/branches/$ENV:ROS_BRANCH"
 }
 
 get-webfile $ROS_SVNURL/reactos "$ENV:TEMP\tmp"
@@ -53,10 +49,6 @@ function UP($arg) {
                 $_ROSBE_SSVN_JOB = "update"
             }
         }
-    }
-    if ($OFFSVN -eq $ONSVN) {
-        "Your tree is up to date."
-        exit
     }
     if ("$_ROSBE_SSVN_JOB" -eq "update") {
         if ("$($arg[1])" -ne "") {
@@ -113,6 +105,10 @@ function UP($arg) {
             $range = "$OFFSVN" + ":" + "$ONSVN"
             IEX "& $_ROSBE_BASEDIR\bin\svn.exe log -r $range"
         }
+    }
+    if ($OFFSVN -eq $ONSVN) {
+        "Your tree is up to date."
+        exit
     }
 }
 
@@ -198,7 +194,7 @@ elseif ("$($args[0])" -eq "rosapps") {
         }
         Set-Location "$_ROSBE_SSVNSOURCEDIR"
     } else {
-        "Rosapps and Rostests disabled."
+        "ROSApps is disabled."
     }
 }
 
@@ -244,7 +240,7 @@ elseif ("$($args[0])" -eq "rostests") {
         }
         Set-Location "$_ROSBE_SSVNSOURCEDIR"
     } else {
-        "Rosapps and Rostests disabled."
+        "ROSTests is disabled."
     }
 }
 
