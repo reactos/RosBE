@@ -111,22 +111,22 @@ Section -BaseFiles SEC01
     SetOutPath "$INSTDIR"
     SetOverwrite try
     File /r Icons\rosbe.ico
-    File /r Root\README.pdf
-    File /r Root\changelog.txt
-    File /r Root\LICENSE.txt
     File /r Root\Basedir.cmd
     File /r Root\Build-Shared.cmd
+    File /r Root\changelog.txt
     File /r Root\charch.cmd
     File /r Root\chdefdir.cmd
     File /r Root\chdefgcc.cmd
     File /r Root\Clean.cmd
     File /r Root\Help.cmd
     File /r Root\kdbg.cmd
+    File /r Root\LICENSE.txt
     File /r Root\Make.cmd
     File /r Root\Makex.cmd
     File /r Root\options.cmd
     File /r Root\raddr2line.cmd
     File /r Root\raddr2lineNW.cmd
+    File /r Root\README.pdf
     File /r Root\Remake.cmd
     File /r Root\Remakex.cmd
     File /r Root\Renv.cmd
@@ -142,7 +142,9 @@ Section -BaseFiles SEC01
     File /r Root\share\*.*
     SetOutPath "$INSTDIR\Bin"
     SetOverwrite try
+    File /r Components\Bin\7z.dll
     File /r Components\Bin\7z.exe
+    File /r Components\Bin\apr_ldap-1.dll
     File /r Components\Bin\bison.exe
     File /r Components\Bin\buildtime.exe
     File /r Components\Bin\ccache.exe
@@ -389,7 +391,6 @@ Section Uninstall
     Delete /REBOOTOK "$INSTDIR\chdefgcc.ps1"
     Delete /REBOOTOK "$INSTDIR\Clean.cmd"
     Delete /REBOOTOK "$INSTDIR\Clean.ps1"
-    Delete /REBOOTOK "$INSTDIR\convert.ps1"
     Delete /REBOOTOK "$INSTDIR\Help.cmd"
     Delete /REBOOTOK "$INSTDIR\Help.ps1"
     Delete /REBOOTOK "$INSTDIR\kdbg.cmd"
