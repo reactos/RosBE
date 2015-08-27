@@ -14,8 +14,8 @@ BEGIN
   CONTROL "Użyj CCache", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
   CONTROL "Usuń dane debugowania", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
   CONTROL "Utwórz pliki nostrip dla debugowania", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
-  CONTROL "Show Versions Header", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
-  LTEXT "cieżka do MinGW/GCC", -1, 10, 107, 100, 15
+  CONTROL "Pokaż wersje Headera", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
+  LTEXT "Ścieżka do MinGW/GCC", -1, 10, 107, 100, 15
   EDITTEXT ID_MGWDIR, 10, 120, 200, 13, WS_TABSTOP
   PUSHBUTTON "...", ID_BROWSEMGW, 215, 120, 30, 13, WS_TABSTOP
   CONTROL "Zapisuj logi", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
@@ -40,8 +40,8 @@ BEGIN
   CONTROL "Użyj CCache", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
   CONTROL "Usuń dane debugowania", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
   CONTROL "Utwórz pliki nostrip dla debugowania", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
-  CONTROL "Show Versions Header", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
-  LTEXT "cieżka do MinGW/GCC", -1, 10, 107, 100, 15
+  CONTROL "Pokaż wersje Headera", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
+  LTEXT "Ścieżka do MinGW/GCC", -1, 10, 107, 100, 15
   EDITTEXT ID_MGWDIR, 10, 120, 200, 13, WS_TABSTOP
   PUSHBUTTON "...", ID_BROWSEMGW, 215, 120, 30, 13, WS_TABSTOP
   CONTROL "Zapisuj logi", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
@@ -66,8 +66,8 @@ BEGIN
   CONTROL "Użyj CCache", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
   CONTROL "Usuń dane debugowania", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
   CONTROL "Utwórz pliki nostrip dla debugowania", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
-  CONTROL "Show Versions Header", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
-  LTEXT "cieżka do MinGW/GCC", -1, 10, 107, 100, 15
+  CONTROL "Pokaż wersje Headera", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
+  LTEXT "Ścieżka do MinGW/GCC", -1, 10, 107, 100, 15
   EDITTEXT ID_MGWDIR, 10, 120, 200, 13, WS_TABSTOP
   PUSHBUTTON "...", ID_BROWSEMGW, 215, 120, 30, 13, WS_TABSTOP
   CONTROL "Zapisuj logi", ID_SAVELOGS, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 143, 100, 12
@@ -96,27 +96,27 @@ BEGIN
   CLR13, "Jasnofioletowy"
   CLR14, "Jasnożółty"
   CLR15, "Biały"
-  MSG_NOGCCFOUND, "Nie znaleziono MinGW/GCC! Sprawd nazwę folderu."
+  MSG_NOGCCFOUND, "Nie znaleziono MinGW/GCC! Sprawdź nazwę folderu."
   MSG_CMDFFAILED, "Nie udało się stworzyć pliku rosbe-options.cmd!"
   MSG_PS1FFAILED, "Nie udało się stworzyć pliku rosbe-options.ps1!"
   MSG_DIREFAILED, "Nie powiodło się stworzenie folderu!"
   MSG_SETLOADSUC, "Załadowano ostatnio zapisane ustawienia."
-  MSG_FINDLOGDIR, "Proszę wybrać folder, gdzie zostanš zapisane dzienniki budowania:"
+  MSG_FINDLOGDIR, "Proszę wybrać folder, gdzie zostaną zapisane dzienniki budowania:"
   MSG_FINDMGWDIR, "Proszę wskazać folder, w którym znajduje się MinGW/GCC:"
   MSG_WARNINGBOX, "Ostrzeżenie"
-  MSG_EXITCHANGE, "Czy chcesz opucić program bez zapisania zmian?"
+  MSG_EXITCHANGE, "Czy chcesz opuścić program bez zapisania zmian?"
   MSG_INVALIDDIR, "Podany folder nie istnieje. Czy chcesz go utworzyć?"
   /* Help Strings */
   HLP_BACKCOLORC, "Wybierz kolor tła dla RosBE DOS windows."
   HLP_FONTCOLORC, "Wybierz kolor czcionki dla RosBE DOS windows."
-  HLP_SBUILDTIME, "Wywietla całkowity czas budowania po jego zakończeniu."
-  HLP_CCACHEUSED, "Zaznacz jeli chcesz używać ccache (compiler cache)."
-  HLP_STRIPEDEXE, "Zaznacz jeli chcesz uzyskać mniejsze pliki wynikowe."
-  HLP_FINDMGWDIR, "Tutaj możesz okrelić położenie MinGW/GCC."
-  HLP_FINDLOGDIR, "Tutaj możesz okrelić miejsce, gdzie zostanš zapisane dzienniki budowania."
+  HLP_SBUILDTIME, "Wyświetla całkowity czas budowania po jego zakończeniu."
+  HLP_CCACHEUSED, "Zaznacz jeśli chcesz używać ccache (compiler cache)."
+  HLP_STRIPEDEXE, "Zaznacz jeśli chcesz uzyskać mniejsze pliki wynikowe."
+  HLP_FINDMGWDIR, "Tutaj możesz określić położenie MinGW/GCC."
+  HLP_FINDLOGDIR, "Tutaj możesz określić miejsce, gdzie zostaną zapisane dzienniki budowania."
   HLP_SAVEBUTTON, "Przycisk aktywowany po zmianie ustawień, kończy działanie programu i zapisuje nowe ustawienia."
-  HLP_QUITBUTTON, "Przycisk pozwala na wyjcie bez zapisania ustawień."
-  HLP_DEFAULTMSG, "Najed na element, aby uzyskać pomoc."
+  HLP_QUITBUTTON, "Przycisk pozwala na wyjście bez zapisania ustawień."
+  HLP_DEFAULTMSG, "Najedź na element, aby uzyskać pomoc."
   HLP_NOSTRIP,    "Utwórz informacje debugowania dla Debuggera ReactOS."
-  HLP_VERSION,    "Show the Versions of the RosBE Components."
+  HLP_VERSION,    "Pokaż wersje komponentów RosBE."
 END
