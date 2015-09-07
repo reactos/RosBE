@@ -297,7 +297,7 @@ if rs_prepare_module "binutils"; then
 		export CFLAGS="$rs_host_cflags"
 	fi
 
-	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --target="$rs_target" --disable-multilib --disable-werror --enable-lto --with-zlib=yes
+	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --target="$rs_target" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes
 	# HUGE HACK!!!
 	# It "manually" disable doc generation for binutils
 	# This is required because our binutils are really old and
@@ -349,7 +349,7 @@ if rs_prepare_module "gcc"; then
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
 
-	rs_do_command ../gcc/configure --target="$rs_target" --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --with-gnu-ld --with-gnu-as
+	rs_do_command ../gcc/configure --target="$rs_target" --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --enable-plugins --disable-shared --disable-multilib --disable-nls --disable-werror --with-gnu-ld --with-gnu-as
 	# HUGE HACK!!!
 	# It "manually" disable doc generation for gcc
 	# This is required because our gcc is really old and
