@@ -192,6 +192,7 @@ Section -BaseFiles SEC01
     File /r Components\Bin\m4.exe
     File /r Components\Bin\Microsoft.VC90.CRT.manifest
     File /r Components\Bin\mingw32-make.exe
+    File /r Components\Bin\msys-1.0.dll
     File /r Components\Bin\MSVCM90.dll
     File /r Components\Bin\msvcp60.dll
     File /r Components\Bin\MSVCP90.dll
