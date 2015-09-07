@@ -7,7 +7,10 @@
 # Released under GNU GPL v2 or any later version.
 
 # Constants
-DEFAULT_SHORTCUT_DIR="$HOME/Desktop"
+DEFAULT_SHORTCUT_DIR=$(xdg-user-dir DESKTOP 2>/dev/null)
+if [ "x$DEFAULT_SHORTCUT_DIR" == "x" ]; then
+	DEFAULT_SHORTCUT_DIR="$HOME/Desktop"
+fi
 
 # Get the absolute path to the script directory
 cd `dirname $0`
