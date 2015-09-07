@@ -1,8 +1,10 @@
-*** Aug 25th, 2015 - RosBE 2.1.3 Released
+*** Sep 08th, 2015 - RosBE 2.1.3 Released
 - Fix BISON regression... (Daniel Reimer)
 - Fix 7z missing dll... (Daniel Reimer)
 - If no MSVC is used, don't try to read the registry key to get the install dir of it. (Daniel Reimer)
 - First try to auto detect MSVC if you use params like "vs x86" in a shortcut (Daniel Reimer)
+- Updated SVN to 1.8.14 (Daniel Reimer)
+- Updated WGet to 1.16.3 + OpenSSL 1.0.2d (Daniel Reimer)
 
 *** Aug 17th, 2015 - RosBE 2.1.2 Released
 - Updated WGet to 1.16.3 (Daniel Reimer)
