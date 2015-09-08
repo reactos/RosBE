@@ -29,7 +29,7 @@ rs_check_requirements()
 		"i686")
 			rs_abi=32
 			;;
-		"x86_64")
+		"x86_64" | "amd64")
 			rs_abi=64
 			;;
 		*)
