@@ -39,8 +39,8 @@ rs_sourcedir="$rs_scriptdir/sources"
 
 # RosBE-Unix Constants
 DEFAULT_INSTALL_DIR="/usr/local/RosBE"
-KNOWN_ROSBE_VERSIONS="0.3.6 1.1 1.4 1.4.2 1.5 2.0 2.1 2.1.1"
-ROSBE_VERSION="2.1.1"
+KNOWN_ROSBE_VERSIONS="0.3.6 1.1 1.4 1.4.2 1.5 2.0 2.1 2.1.1 2.1.2"
+ROSBE_VERSION="2.1.2"
 TARGET_ARCH="i386"
 
 source "$rs_scriptdir/scripts/rosbelibrary.sh"
@@ -52,7 +52,7 @@ echo "*         ReactOS Build Environment for Unix-based Operating Systems      
 echo "*                      Builder Tool for the Base package                      *"
 echo "*                      by Colin Finck <colin@reactos.org>                     *"
 echo "*                                                                             *"
-echo "*                                 Version $ROSBE_VERSION                                 *"
+echo "*                                 Version $ROSBE_VERSION                               *"
 echo "*******************************************************************************"
 
 echo
@@ -154,11 +154,13 @@ if [ "$1" = "" ]; then
 
 					case "$choice" in
 						"U"|"u")
-							# We only allow update from 2.1 to 2.1.1
+							# We only allow update from 2.1 to 2.1.1 or 2.1.2
 							# For other releases:
 							# We don't support update in this version due to lots of changes
 							# To reenable updating, change this to "update=true"
-							if [ "$installed_version" = "2.1" ] && [ "$ROSBE_VERSION" = "2.1.1" ]; then
+							if [ "$installed_version" = "2.1" ] && [ "$ROSBE_VERSION" = "2.1.2" ]; then
+								update=true
+							elif [ "$installed_version" = "2.1.1" ] && [ "$ROSBE_VERSION" = "2.1.2" ]; then
 								update=true
 							else
 								reinstall=true
@@ -208,9 +210,10 @@ else
 fi
 
 if $update; then
-	# For 2.1 -> 2.1.1
+	# For 2.1 -> 2.1.1 or 2.1.1 -> 2.1.2
 	rs_process_cmake=true
 	rs_process_ninja=true
+	# We don't force GCC update for 2.1.1 -> 2.1.2, changes are too minor
 else
 	rs_process_binutils=true
 	rs_process_buildtime=true
@@ -410,7 +413,9 @@ if rs_prepare_module "ninja"; then
 	if [ $use_cflags -eq 0 ]; then
 		export CFLAGS="$rs_host_cflags"
 	fi
-	rs_do_command ../ninja/bootstrap.py
+	rs_do_command cd ../ninja
+	rs_do_command ./configure.py --bootstrap
+	rs_do_command cd ../ninja-build
 	rs_do_command install ../ninja/ninja $rs_prefixdir/bin/ninja
 	rs_clean_module "ninja"
 
