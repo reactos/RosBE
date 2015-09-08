@@ -431,26 +431,30 @@ cd "$rs_archprefixdir"
 rm -rf $rs_target/doc $rs_target/share include info man share
 rm -f lib/* >& /dev/null
 
-echo "Removing debugging symbols..."
-cd "$rs_prefixdir"
-for exe in `find -executable -type f -print`; do
-	objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
-	objcopy --strip-debug $exe 2>/dev/null
-	objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
-done
+# See: https://jira.reactos.org/browse/ROSBE-35
+osname=`uname`
+if [ "$osname" != "Darwin" ]; then
+	echo "Removing debugging symbols..."
+	cd "$rs_prefixdir"
+	for exe in `find -executable -type f -print`; do
+		objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
+		objcopy --strip-debug $exe 2>/dev/null
+		objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
+	done
 
-# Executables are created for the host system while most libraries are linked to target components
-for exe in `find -name "*.a" -type f -print`; do
-	$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
-	$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --strip-debug $exe 2>/dev/null
-	$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
-done
+	# Executables are created for the host system while most libraries are linked to target components
+	for exe in `find -name "*.a" -type f -print`; do
+		$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
+		$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --strip-debug $exe 2>/dev/null
+		$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
+	done
 
-for exe in `find -name "*.o" -type f -print`; do
-	$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
-	$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --strip-debug $exe 2>/dev/null
-	$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
-done
+	for exe in `find -name "*.o" -type f -print`; do
+		$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
+		$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --strip-debug $exe 2>/dev/null
+		$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
+	done
+fi
 ##### END almost shared buildtoolchain/RosBE-Unix building part ###############
 
 
