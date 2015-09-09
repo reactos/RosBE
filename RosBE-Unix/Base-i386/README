@@ -127,6 +127,7 @@ components:
     patched with:
       - http://gcc.gnu.org/viewcvs/gcc/branches/gcc-4_7-branch/gcc/ira-int.h?view=patch&r1=191605&r2=191604&pathrev=191605
       - https://github.com/DragonFlyBSD/DPorts/commit/a680cc6ef758e2f15be8bf8209da51658e02d710
+      - https://gcc.gnu.org/ml/gcc-patches/2014-05/msg01401.html
 
     NOTE: This GCC version only supports C and C++
 
