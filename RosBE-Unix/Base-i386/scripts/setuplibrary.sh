@@ -94,6 +94,16 @@ rs_check_requirements()
 	# Skip that part on OSX
 	local osname=`uname`
 	if [ "$osname" != "Darwin" ]; then
+		# pkg-config needs to be installed to check for libs
+		echo -n "Checking for pkg-config... "
+
+		if which pkg-config >& /dev/null; then
+			rs_greenmsg "OK"
+		else
+			rs_redmsg "MISSING"
+			toolmissing=true
+		fi
+
 		for lib in $rs_needed_libs; do
 			echo -n "Checking for $lib... "
 
