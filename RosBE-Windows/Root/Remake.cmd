@@ -3,7 +3,7 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/Remake.cmd
 :: PURPOSE:     Fully re-make one or several modules.
-:: COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
+:: COPYRIGHT:   Copyright 2016 Daniel Reimer <reimer.daniel@freenet.de>
 ::
 
 @echo off

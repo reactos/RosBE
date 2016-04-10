@@ -3,7 +3,7 @@
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 # FILE:        Root/sSVN.ps1
 # PURPOSE:     Integrated SVN Client.
-# COPYRIGHT:   Copyright 2015 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2016 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
 $ROS_SVNURL = "http://svn.reactos.org/reactos"

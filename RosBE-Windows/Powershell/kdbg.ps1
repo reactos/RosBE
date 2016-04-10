@@ -3,7 +3,7 @@
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 # FILE:        Root/kdbg.ps1
 # PURPOSE:     Displays a KDBG Session Interactively.
-# COPYRIGHT:   Copyright 2011 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2016 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
 $DATENAME = get-date -f dyMMyyyy

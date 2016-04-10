@@ -5,7 +5,7 @@
  * PURPOSE:     Configuring RosBE
  * COPYRIGHT:   Copyright 2007 Maarten Bosma
  *              Copyright 2007 Pierre Schweitzer
- *              Copyright 2011 Daniel Reimer
+ *              Copyright 2016 Daniel Reimer
  *
  */
 

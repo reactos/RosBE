@@ -4,7 +4,7 @@
 # FILE:        Root/RosBE.ps1
 # PURPOSE:     This script provides/sets up various build environments for
 #              ReactOS. Currently it provides a GCC 4.7.2 build environment.
-# COPYRIGHT:   Copyright 2015 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2016 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
 $host.ui.RawUI.WindowTitle = "ReactOS Build Environment $_ROSBE_VERSION"
@@ -53,7 +53,7 @@ $global:BUILD_ENVIRONMENT = "MinGW"
 $global:0 = $myInvocation.MyCommand.Definition
 $global:_ROSBE_BASEDIR = [System.IO.Path]::GetDirectoryName($0)
 $global:_ROSBE_PREFIX = $null
-$global:_ROSBE_VERSION = "2.1.3"
+$global:_ROSBE_VERSION = "2.1.4"
 $global:_ROSBE_ROSSOURCEDIR = "$pwd"
 $global:_ROSBE_SHOWTIME = 1
 $global:_ROSBE_WRITELOG = 1

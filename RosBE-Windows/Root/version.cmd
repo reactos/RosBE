@@ -3,7 +3,7 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/version.cmd
 :: PURPOSE:     Display the current version of GCC, NASM, ld and make.
-:: COPYRIGHT:   Copyright 2015 Daniel Reimer <reimer.daniel@freenet.de>
+:: COPYRIGHT:   Copyright 2016 Daniel Reimer <reimer.daniel@freenet.de>
 ::                             Colin Finck <colin@reactos.org>
 ::
 

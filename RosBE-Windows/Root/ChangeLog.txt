@@ -1,3 +1,10 @@
+*** Apr 10th, 2016 - RosBE 2.1.4 Released
+
+- Updated SVN to 1.9.3 (Daniel Reimer)
+- Updated 7Zip to 15.14 (Daniel Reimer)
+- Updated WGet to 1.17.1 (Daniel Reimer)
+- Updated NSIS to 3.0 RC1 (Daniel Reimer)
+
 *** Sep 08th, 2015 - RosBE 2.1.3 Released
 - Fix BISON regression... (Daniel Reimer)
 - Fix 7z missing dll... (Daniel Reimer)
