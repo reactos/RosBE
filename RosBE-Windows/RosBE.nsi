@@ -1,4 +1,4 @@
-Unicode true
+﻿Unicode true
 !define PRODUCT_NAME "ReactOS Build Environment Amine Edition"
 !define PRODUCT_VERSION "2.1.4"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RosBE.cmd"
@@ -273,19 +273,19 @@ Section /o "Update for GlobalSign Certificates (XP users NEED THAT)" SEC04
     Call AddCertificateToStore
     Pop $0
     ${If} $0 != success
-    MessageBox MB_OK "Import of R1 GlobalSign Root Certificate failed: $0"
+        MessageBox MB_OK "Import of R1 GlobalSign Root Certificate failed: $0"
     ${EndIf}
     Push "$INSTDIR\certs\Root-R2.crt"
     Call AddCertificateToStore
     Pop $0
     ${If} $0 != success
-    MessageBox MB_OK "Import of R1 GlobalSign Root Certificate failed: $0"
+        MessageBox MB_OK "Import of R1 GlobalSign Root Certificate failed: $0"
     ${EndIf}
     Push "$INSTDIR\certs\Root-R3.crt"
     Call AddCertificateToStore
     Pop $0
     ${If} $0 != success
-    MessageBox MB_OK "Import of R1 GlobalSign Root Certificate failed: $0"
+        MessageBox MB_OK "Import of R1 GlobalSign Root Certificate failed: $0"
     ${EndIf}
 SectionEnd
 
