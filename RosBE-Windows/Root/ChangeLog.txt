@@ -1,9 +1,16 @@
-*** Apr 10th, 2016 - RosBE 2.1.4 Released
+*** Aug XXth, 2016 - RosBE 2.1.4 Released
 
-- Updated SVN to 1.9.3 (Daniel Reimer)
-- Updated 7Zip to 15.14 (Daniel Reimer)
-- Updated WGet to 1.17.1 (Daniel Reimer)
+- Updated SVN to 1.9.4 (Daniel Reimer)
+- Updated 7Zip to 16.02 (Daniel Reimer)
+- Updated WGet to 1.18 (Daniel Reimer)
 - Updated NSIS to 3.0 RC1 (Daniel Reimer)
+- Updated Ninja to 1.7.1 (Daniel Reimer)
+- Added experimental GlobalSign Root CA updating to installer for XP users (Daniel Reimer)
+- Fixed Bugs:
+  ROSBE-84: SSVN STATUS command reports "branch does not exist" by middings
+  ROSBE-88: ssvn create fail by leha-bot
+  ROSBE-89: RosBE Updater is not worked properly by leha-bot
+  ROSBE-96: Correct SSVN when RosBE installation directory includes a space by Roel Messiant
 
 *** Sep 08th, 2015 - RosBE 2.1.3 Released
 - Fix BISON regression... (Daniel Reimer)
