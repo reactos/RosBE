@@ -35,11 +35,6 @@ if ("$($args[0])" -eq "multi") {
     $TITLE_COMMAND = "make $($args)"
 }
 
-if (!(Test-Path "$_ROSBE_ROSSOURCEDIR\output-MinGW-i386\*")) {
-    write-host "No Build Files found. You may want to use ""configure"" first."
-    exit
-}
-
 if (Test-Path "*.ninja") {
     $MAKE_INT = "ninja.exe"
 } else {
