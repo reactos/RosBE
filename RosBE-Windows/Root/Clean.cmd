@@ -3,7 +3,7 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/Clean.cmd
 :: PURPOSE:     Clean the ReactOS source directory.
-:: COPYRIGHT:   Copyright 2016 Daniel Reimer <reimer.daniel@freenet.de>
+:: COPYRIGHT:   Copyright 2017 Daniel Reimer <reimer.daniel@freenet.de>
 ::                             Peter Ward <dralnix@gmail.com>
 ::                             Colin Finck <colin@reactos.org>
 ::
@@ -17,8 +17,7 @@ if %_ROSBE_DEBUG% == 1 (
 setlocal enabledelayedexpansion
 title Cleaning...
 
-set ROS_CMAKE_HOST=output-%BUILD_ENVIRONMENT%-%ROS_ARCH%\host-tools
-set ROS_CMAKE_BUILD=output-%BUILD_ENVIRONMENT%-%ROS_ARCH%\reactos
+set ROS_CMAKE_BUILD=output-%BUILD_ENVIRONMENT%-%ROS_ARCH%
 
 if "%1" == "" (
     call :BIN
@@ -26,9 +25,6 @@ if "%1" == "" (
     call :LOG
 ) else if /i "%1" == "all" (
     call :BIN
-    call :LOG
-) else if /i "%1" == "host-tools" (
-    call :HOST
 ) else (
     call :MODULE %*
 )
@@ -43,9 +39,9 @@ goto :EOC
 
 :: Check if we have any logs to clean, if so, clean them.
 :LOG
-if exist "%_ROSBE_LOGDIR%\*.txt" (
+if exist "%ROS_CMAKE_BUILD%\%_ROSBE_LOGDIR%\*.txt" (
     echo Cleaning build logs...
-    del /f "%_ROSBE_LOGDIR%\*.txt" 1> NUL 2> NUL
+    del /f "%ROS_CMAKE_BUILD%\%_ROSBE_LOGDIR%\*.txt" 1> NUL 2> NUL
     echo Done cleaning build logs.
 ) else (
     echo ERROR: There are no logs to clean.
@@ -60,16 +56,11 @@ goto :EOF
 
 if exist "CMakeLists.txt" (
     echo Cleaning ReactOS %ROS_ARCH% source directory...
-    rd /s /q "%ROS_CMAKE_HOST%" 1>NUL 2>NUL
     rd /s /q "%ROS_CMAKE_BUILD%" 1>NUL 2>NUL
     echo Done cleaning ReactOS %ROS_ARCH% source directory.
 ) else (
     echo ERROR: This directory contains no %ROS_ARCH% compiler output to clean.
 )
-goto :EOF
-
-:HOST
-rd /s /q "%ROS_CMAKE_HOST%" 1>NUL 2>NUL
 goto :EOF
 
 :EOC
