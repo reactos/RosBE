@@ -37,6 +37,7 @@ typedef struct _SETTINGS
     BOOL objstate;
     BOOL outstate;
     BOOL showversion;
+    BOOL syspath;
 }
 SETTINGS, *PSETTINGS;
 

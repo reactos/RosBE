@@ -2,7 +2,7 @@
 
 LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 
-ID_DIALOG DIALOGEX DISCARDABLE  0, 0, 255, 220
+ID_DIALOG DIALOGEX DISCARDABLE  0, 0, 260, 220
 STYLE DS_SHELLFONT | DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Установки переменных компилятора ReactOS"
 FONT 8,"MS Shell Dlg"
@@ -16,7 +16,8 @@ BEGIN
   CONTROL "Использовать кеширование", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
   CONTROL "Вырезать пустой код при компил.", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
   CONTROL "Оставлять в файлах информацию для возможности работы дебагера", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
-  CONTROL "Show Versions Header", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
+  CONTROL "Показыать Версии", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 105, 12
+  CONTROL "Use System PATH Variable", ID_SYSPATH, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 105, 105, 12
   LTEXT "Путь к компилятору GCC", -1, 10, 107, 100, 15
   EDITTEXT ID_MGWDIR, 10, 120, 200, 13, WS_TABSTOP
   PUSHBUTTON "...", ID_BROWSEMGW, 215, 120, 30, 13, WS_TABSTOP
@@ -28,7 +29,7 @@ BEGIN
   CONTROL "Введение", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
 END
 
-ID_DIALOG64 DIALOGEX DISCARDABLE  0, 0, 255, 220
+ID_DIALOG64 DIALOGEX DISCARDABLE  0, 0, 260, 220
 STYLE DS_SHELLFONT | DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Установки переменных компилятора ReactOS - AMD64"
 FONT 8,"MS Shell Dlg"
@@ -42,7 +43,8 @@ BEGIN
   CONTROL "Использовать кеширование", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
   CONTROL "Вырезать пустой код при компил.", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
   CONTROL "Оставлять в файлах информацию для возможности работы дебагера", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
-  CONTROL "Показыать Версии", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
+  CONTROL "Показыать Версии", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 105, 12
+  CONTROL "Use System PATH Variable", ID_SYSPATH, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 105, 105, 12
   LTEXT "Путь к компилятору GCC", -1, 10, 107, 100, 15
   EDITTEXT ID_MGWDIR, 10, 120, 200, 13, WS_TABSTOP
   PUSHBUTTON "...", ID_BROWSEMGW, 215, 120, 30, 13, WS_TABSTOP
@@ -54,7 +56,7 @@ BEGIN
   CONTROL "Введение", ID_STATUSBAR, "msctls_statusbar32", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 275, 255, 15
 END
 
-ID_DIALOGARM DIALOGEX DISCARDABLE  0, 0, 255, 220
+ID_DIALOGARM DIALOGEX DISCARDABLE  0, 0, 260, 220
 STYLE DS_SHELLFONT | DS_MODALFRAME | DS_CENTER | WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Установки переменных компилятора ReactOS - ARM"
 FONT 8,"MS Shell Dlg"
@@ -68,7 +70,8 @@ BEGIN
   CONTROL "Использовать кеширование", ID_USECCACHE, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 60, 100, 12
   CONTROL "Вырезать пустой код при компил.", ID_STRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 75, 100, 12
   CONTROL "Оставлять в файлах информацию для возможности работы дебагера", ID_NOSTRIP, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 90, 145, 12
-  CONTROL "Показывать Версии компонентов при старте.", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 100, 12
+  CONTROL "Показывать Версии компонентов при старте.", ID_SHOWVERSION, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 90, 105, 12
+  CONTROL "Use System PATH Variable", ID_SYSPATH, "button", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 155, 105, 105, 12
   LTEXT "Путь к компилятору GCC", -1, 10, 107, 100, 15
   EDITTEXT ID_MGWDIR, 10, 120, 200, 13, WS_TABSTOP
   PUSHBUTTON "...", ID_BROWSEMGW, 215, 120, 30, 13, WS_TABSTOP
@@ -121,4 +124,5 @@ BEGIN
   HLP_DEFAULTMSG, "Помощь по изначальным параметрам"
   HLP_NOSTRIP,    "Компиляция файлов ReactOS'а с созданием информации для дебагера."
   HLP_VERSION,    "Показать версию компонентов RosBE."
+  HLP_SYSPATH,    "Disable if you use another GCC on your system."
 END

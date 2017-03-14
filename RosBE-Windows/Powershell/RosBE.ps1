@@ -59,6 +59,7 @@ $global:_ROSBE_SHOWTIME = 1
 $global:_ROSBE_WRITELOG = 1
 $global:_ROSBE_USECCACHE = 0
 $global:_ROSBE_SHOWVERSION = 0
+$global:_ROSBE_SYSPATH = 1
 $global:_ROSBE_NOSOUND = 0
 $global:_ROSBE_NOSYSPATH = 1
 $global:_ROSBE_LOGDIR = "RosBE-Logs"
@@ -66,12 +67,6 @@ $global:_ROSBE_HOST_MINGWPATH = "$_ROSBE_BASEDIR\i386"
 $global:_ROSBE_TARGET_MINGWPATH = "$_ROSBE_BASEDIR\$ENV:ROS_ARCH"
 $global:_BUILDBOT_SVNSKIPMAINTRUNK = "0"
 $ENV:CCACHE_SLOPPINESS = "time_macros"
-
-$global:_ROSBE_ORIGINALPATH = "$_ROSBE_BASEDIR;$_ROSBE_BASEDIR\bin;$_ROSBE_BASEDIR\samples;$ENV:PATH"
-
-if ("$ENV:_ROSBE_COMPAT_MODE" -eq "1") {
-    $global:_ROSBE_ORIGINALPATH = "$_ROSBE_BASEDIR;$_ROSBE_BASEDIR\bin;$ENV:SystemRoot\system32;$ENV:SystemRoot;$ENV:SystemRoot\System32\Wbem;$ENV:SYSTEMROOT\System32\WindowsPowerShell\v1.0"
-}
 
 # Fix Bison package path (just in case RosBE is installed in a path which contains spaces)
 $ENV:BISON_PKGDATADIR = ((New-Object -ComObject Scripting.FileSystemObject).GetFolder("$_ROSBE_HOST_MINGWPATH\share\bison")).ShortPath
@@ -196,6 +191,12 @@ if (Test-Path "$ENV:APPDATA\RosBE\rosbe-options-$ENV:ROS_ARCH.ps1") {
 
 if (Test-Path "$ENV:APPDATA\RosBE\RBUILDFLAGS-$_ROSBE_VERSION.FLG") {
     $ENV:ROS_RBUILDFLAGS = get-content "$ENV:APPDATA\RosBE\RBUILDFLAGS-$_ROSBE_VERSION.FLG"
+}
+
+$global:_ROSBE_ORIGINALPATH = "$_ROSBE_BASEDIR;$_ROSBE_BASEDIR\bin;$_ROSBE_BASEDIR\samples;$ENV:PATH"
+
+if ("$_ROSBE_SYSPATH" -eq "0") {
+    $global:_ROSBE_ORIGINALPATH = "$_ROSBE_BASEDIR;$_ROSBE_BASEDIR\bin;$ENV:SystemRoot\system32;$ENV:SystemRoot;$ENV:SystemRoot\System32\Wbem;$ENV:SYSTEMROOT\System32\WindowsPowerShell\v1.0"
 }
 
 # Load the doskey macros that serve as our commands.
