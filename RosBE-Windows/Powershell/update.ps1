@@ -81,7 +81,7 @@ $_ROSBE_URL = "http://svn.reactos.org/downloads/rosbe"
 # Save the recent dir to cd back there at the end.
 $_ROSBE_OPATH = "$pwd"
 
-set-location $_ROSBE_BASEDIR
+set-location "$_ROSBE_BASEDIR"
 
 # First check for a new Updater.
 rename-item update.ps1 update2.ps1

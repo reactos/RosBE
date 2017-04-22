@@ -22,7 +22,7 @@ set _ROSBE_URL=http://svn.reactos.org/downloads/rosbe
 :: Save the recent dir to cd back there at the end.
 set _ROSBE_OPATH=%CD%
 
-cd /d %_ROSBE_BASEDIR%
+cd /d "%_ROSBE_BASEDIR%"
 
 :: First check for a new Updater
 for %%F in (update.cmd) do set _ROSBE_UPDDATE=%%~tF

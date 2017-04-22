@@ -1,5 +1,5 @@
 ﻿Unicode true
-!define PRODUCT_NAME "ReactOS Build Environment Amine Edition"
+!define PRODUCT_NAME "ReactOS Build Environment"
 !define PRODUCT_VERSION "2.1.5"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RosBE.cmd"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -53,7 +53,7 @@ Function .onInit
     StrCmp $R0 0 +3
         MessageBox MB_OK|MB_ICONEXCLAMATION "The ${PRODUCT_NAME} v${PRODUCT_VERSION} installer is already running."
         Abort
-    StrCpy $INSTDIR "C:\RosBE"
+    StrCpy $INSTDIR "$PROGRAMFILES\RosBE"
     Call UninstallPrevious
     !insertmacro INSTALLOPTIONS_EXTRACT "RosSourceDir.ini"
 FunctionEnd
@@ -484,12 +484,13 @@ Section Uninstall
     SetAutoClose true
 SectionEnd
 
+;; HACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACK
 Function UninstallPrevious
     ReadRegStr $R0 HKCU \
-               "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+               "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME} Amine Edition" \
                "UninstallString"
     ReadRegStr $R1 HKCU \
-               "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+               "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME} Amine Edition" \
                "DisplayVersion"
     ${If} $R1 == "${PRODUCT_VERSION}"
         messageBox MB_OK|MB_ICONEXCLAMATION \
@@ -497,10 +498,10 @@ Function UninstallPrevious
     ${EndIf}
     ${If} $R0 == ""
         ReadRegStr $R0 HKLM \
-                   "Software\Microsoft\Windows\CurrentVersion\Uninstall\ReactOS Build Environment" \
+                   "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME} Amine Edition" \
                    "UninstallString"
         ReadRegStr $R1 HKLM \
-                   "Software\Microsoft\Windows\CurrentVersion\Uninstall\ReactOS Build Environment" \
+                   "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME} Amine Edition" \
                    "DisplayVersion"
         ${If} $R0 == ""
             Return

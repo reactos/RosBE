@@ -132,7 +132,7 @@ if exist "%APPDATA%\RosBE\rosbe-options-%1.cmd" (
 set _ROSBE_ORIGINALPATH=%_ROSBE_BASEDIR%;%_ROSBE_BASEDIR%\bin;%_ROSBE_BASEDIR%\samples;%PATH%
 
 if "%_ROSBE_SYSPATH%" == "0" (
-    set _ROSBE_ORIGINALPATH=%_ROSBE_BASEDIR%;%_ROSBE_BASEDIR%\bin;%_ROSBE_BASEDIR%\samples;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem
+    set "_ROSBE_ORIGINALPATH=%_ROSBE_BASEDIR%;%_ROSBE_BASEDIR%\bin;%_ROSBE_BASEDIR%\samples;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem"
 )
 
 call "%_ROSBE_BASEDIR%\rosbe-gcc-env.cmd"
