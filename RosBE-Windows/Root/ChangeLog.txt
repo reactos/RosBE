@@ -1,3 +1,11 @@
+*** Apr 22nd, 2017 - RosBE 2.1.5 Released
+
+- Changed ninja to Win32 build (Daniel Reimer)
+- Updated options to give the user a way to select how to handle the system path var (Daniel Reimer)
+- Fixed Bugs:
+  ROSBE-97: RosBE.cmd should not use %PATH% (DopefishJustin)
+  ROSBE-112: RosBE 2.1.4 i386 contains x64 executable for ninja (breaks compatibility to x86 hostOSes) (reactosfanboy)
+
 *** Mar 13th, 2017 - RosBE 2.1.4 Released
 
 - Updated SVN to 1.9.5 (Daniel Reimer)

@@ -1,7 +1,6 @@
-﻿RequestExecutionLevel user
-Unicode true
+﻿Unicode true
 !define PRODUCT_NAME "ReactOS Build Environment Amine Edition"
-!define PRODUCT_VERSION "2.1.4"
+!define PRODUCT_VERSION "2.1.5"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RosBE.cmd"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKCU"
@@ -19,15 +18,15 @@ ShowUnInstDetails show
 ;;
 ;; Add version/product information metadata to the installation file.
 ;;
-VIAddVersionKey /LANG=1033 "FileVersion" "2.1.4.0"
+VIAddVersionKey /LANG=1033 "FileVersion" "2.1.5.0"
 VIAddVersionKey /LANG=1033 "ProductVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey /LANG=1033 "ProductName" "${PRODUCT_NAME}"
 VIAddVersionKey /LANG=1033 "Comments" "This installer was written by Peter Ward and Daniel Reimer using Nullsoft Scriptable Install System"
 VIAddVersionKey /LANG=1033 "CompanyName" "ReactOS Foundation"
-VIAddVersionKey /LANG=1033 "LegalTrademarks" "Copyright © 2015 ReactOS Foundation"
-VIAddVersionKey /LANG=1033 "LegalCopyright" "Copyright © 2015 ReactOS Foundation"
+VIAddVersionKey /LANG=1033 "LegalTrademarks" "Copyright © 2017 ReactOS Foundation"
+VIAddVersionKey /LANG=1033 "LegalCopyright" "Copyright © 2017 ReactOS Foundation"
 VIAddVersionKey /LANG=1033 "FileDescription" "${PRODUCT_NAME} Setup"
-VIProductVersion "2.1.4.0"
+VIProductVersion "2.1.5.0"
 
 CRCCheck force
 SetDatablockOptimize on
