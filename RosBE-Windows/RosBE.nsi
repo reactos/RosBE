@@ -1,4 +1,5 @@
-﻿Unicode true
+﻿RequestExecutionLevel user
+Unicode true
 !define PRODUCT_NAME "ReactOS Build Environment Amine Edition"
 !define PRODUCT_VERSION "2.1.4"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RosBE.cmd"
