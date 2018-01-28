@@ -3,7 +3,7 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/update.cmd
 :: PURPOSE:     RosBE Updater.
-:: COPYRIGHT:   Copyright 2016 Daniel Reimer <reimer.daniel@freenet.de>
+:: COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
 ::
 
 @echo off
@@ -17,7 +17,7 @@ setlocal enabledelayedexpansion
 title Updating...
 
 :: The Update Server.
-set _ROSBE_URL=http://svn.reactos.org/downloads/rosbe
+set _ROSBE_URL=https://svn.reactos.org/downloads/rosbe
 
 :: Save the recent dir to cd back there at the end.
 set _ROSBE_OPATH=%CD%

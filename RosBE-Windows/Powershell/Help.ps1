@@ -3,7 +3,7 @@
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 # FILE:        Root/Help.ps1
 # PURPOSE:     Display help for the commands included with the ReactOS Build Environment.
-# COPYRIGHT:   Copyright 2016 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
 # Check if we are displaying help on all commands, if so, display it.
@@ -65,12 +65,6 @@ if ("$args" -eq "") {
     if (Test-Path "$_ROSBE_BASEDIR\scut.ps1") {
         "    scut [OPTIONS]       - List, add, edit, remove, switch and default to"
         "                           shortcutted ReactOS source directories."
-    }
-
-    if (Test-Path "$_ROSBE_BASEDIR\sSVN.ps1") {
-        "    ssvn [OPTIONS]       - Create, update or clean-up your ReactOS source"
-        "                           tree or show the revision number of the local"
-        "                           and online trees."
     }
 
     if (Test-Path "$_ROSBE_BASEDIR\options.ps1") {
@@ -208,20 +202,6 @@ if ("$args" -eq "") {
 } elseif  ("$args" -eq "scut") {
     if (Test-Path "$_ROSBE_BASEDIR\scut.ps1") {
         IEX "& scut.exe --help"
-    }
-} elseif  ("$args" -eq "ssvn") {
-    if (Test-Path "$_ROSBE_BASEDIR\sSVN.ps1") {
-        " Usage: ssvn [OPTIONS]"
-        " Creates, updates or cleans up your ReactOS source tree or shows the revision"
-        " number of the local and online trees."
-        ""
-        "    update    - Updates to HEAD revision or to a specific one when the second"
-        "                parameter specifies one."
-        "    create    - Creates a new ReactOS source tree."
-        "    rosapps   - Creates / Updates a ReactOS RosApps source tree."
-        "    rostests  - Creates / Updates a ReactOS RosTests source tree."
-        "    cleanup   - Cleans up and fixes errors in the source tree."
-        "    status    - Show the current local and online revision numbers."
     }
 } elseif ("$args" -eq "options") {
     if (Test-Path "$_ROSBE_BASEDIR\options.ps1") {

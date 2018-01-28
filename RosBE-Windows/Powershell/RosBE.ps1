@@ -4,7 +4,7 @@
 # FILE:        Root/RosBE.ps1
 # PURPOSE:     This script provides/sets up various build environments for
 #              ReactOS. Currently it provides a GCC 4.7.2 build environment.
-# COPYRIGHT:   Copyright 2016 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
 $host.ui.RawUI.WindowTitle = "ReactOS Build Environment $_ROSBE_VERSION"
@@ -53,7 +53,7 @@ $global:BUILD_ENVIRONMENT = "MinGW"
 $global:0 = $myInvocation.MyCommand.Definition
 $global:_ROSBE_BASEDIR = [System.IO.Path]::GetDirectoryName($0)
 $global:_ROSBE_PREFIX = $null
-$global:_ROSBE_VERSION = "2.1.5"
+$global:_ROSBE_VERSION = "2.1.6"
 $global:_ROSBE_ROSSOURCEDIR = "$pwd"
 $global:_ROSBE_SHOWTIME = 1
 $global:_ROSBE_WRITELOG = 1
@@ -230,10 +230,7 @@ if ($_ROSBE_SHOWVERSION -eq 1) {
 "-------------------------------------------------"
 ""
 
-# Look if the ReactOS source directory is empty. If so,
-# inform the user and mention 'ssvn create' (only if ssvn is installed).
-if (!(Test-Path "$_ROSBE_BASEDIR\sSVN.ps1")) {
-    if ((get-childitem $_ROSBE_ROSSOURCEDIR).Count -le 0) {
-        "No ReactOS source detected. Please use ""ssvn create"" to download it."
-    }
+# Look if the ReactOS source directory is empty.
+if ((get-childitem $_ROSBE_ROSSOURCEDIR).Count -le 0) {
+    "No ReactOS source detected. Please check https://reactos.org/wiki/ReactOS_Git_For_Dummies to download it."
 }

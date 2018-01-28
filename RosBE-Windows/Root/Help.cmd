@@ -3,7 +3,7 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/Help.cmd
 :: PURPOSE:     Display help for the commands included with the ReactOS Build Environment.
-:: COPYRIGHT:   Copyright 2016 Daniel Reimer <reimer.daniel@freenet.de>
+:: COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
 ::                             Peter Ward <dralnix@gmail.com>
 ::                             Colin Finck <colin@reactos.org>
 ::
@@ -73,12 +73,6 @@ if "%1" == "" (
     if exist "%_ROSBE_BASEDIR%\scut.cmd" (
         echo    scut [OPTIONS]       - List, add, edit, remove, switch and default to
         echo                           shortcutted ReactOS source directories.
-    )
-
-    if exist "%_ROSBE_BASEDIR%\sSVN.cmd" (
-        echo    ssvn [OPTIONS]       - Create, update or clean-up your ReactOS source
-        echo                           tree or show the revision number of the local
-        echo                           and online trees.
     )
 
     if exist "%_ROSBE_BASEDIR%\options.cmd" (
@@ -214,20 +208,6 @@ if "%1" == "" (
 ) else if /i "%1" == "scut" (
     if exist "%_ROSBE_BASEDIR%\scut.cmd" (
         scut.exe --help
-    )
-) else if /i "%1" == "ssvn" (
-    if exist "%_ROSBE_BASEDIR%\sSVN.cmd" (
-        echo Usage: ssvn [OPTIONS]
-        echo Creates, updates or cleans up your ReactOS source tree or shows the revision
-        echo number of the local and online trees.
-        echo.
-        echo    update    - Updates to HEAD revision or to a specific one when the second
-        echo                 parameter specifies one.
-        echo    create    - Creates a new ReactOS source tree.
-        echo    rosapps   - Creates / Updates a ReactOS RosApps source tree.
-        echo    rostests  - Creates / Updates a ReactOS RosTests source tree.
-        echo    cleanup   - Cleans up and fixes errors in the source tree.
-        echo    status    - Show the current local and online revision numbers.
     )
 ) else if /i "%1" == "options" (
     if exist "%_ROSBE_BASEDIR%\options.cmd" (

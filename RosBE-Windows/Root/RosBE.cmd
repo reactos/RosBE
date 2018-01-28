@@ -4,7 +4,7 @@
 :: FILE:        Root/RosBE.cmd
 :: PURPOSE:     This script provides/sets up various build environments for
 ::              ReactOS. Currently it provides a GCC 4.7.2 build environment.
-:: COPYRIGHT:   Copyright 2016 Daniel Reimer <reimer.daniel@freenet.de>
+:: COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
 ::                             Peter Ward <dralnix@gmail.com>
 ::                             Colin Finck <colin@reactos.org>
 ::
@@ -75,7 +75,7 @@ if defined _ROSBE_CMAKE_DIFF (
 set BUILD_ENVIRONMENT=MinGW
 set _ROSBE_BASEDIR=%~dp0
 set _ROSBE_BASEDIR=%_ROSBE_BASEDIR:~0,-1%
-set _ROSBE_VERSION=2.1.5
+set _ROSBE_VERSION=2.1.6
 set _ROSBE_ROSSOURCEDIR=%CD%
 set _ROSBE_SHOWTIME=1
 set _ROSBE_WRITELOG=1
@@ -166,13 +166,10 @@ echo For a list of all included commands, type: "help"
 echo -------------------------------------------------
 echo.
 
-:: Look if the ReactOS source directory is empty. If so,
-:: inform the user and mention 'ssvn create' (only if ssvn is installed).
+:: Look if the ReactOS source directory is empty.
 setlocal enabledelayedexpansion
-if exist "%_ROSBE_BASEDIR%\sSVN.cmd" (
-    dir /b "%_ROSBE_ROSSOURCEDIR%" 2>nul | findstr "." >nul
-    if !errorlevel! == 1 (
-        echo No ReactOS source detected. Please use "ssvn create" to download it.
-    )
+dir /b "%_ROSBE_ROSSOURCEDIR%" 2>nul | findstr "." >nul
+if !errorlevel! == 1 (
+    echo No ReactOS source detected. Please check https://reactos.org/wiki/ReactOS_Git_For_Dummies to download it.
 )
 endlocal

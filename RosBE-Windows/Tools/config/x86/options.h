@@ -3,9 +3,9 @@
  * LICENSE:     GNU General Public License v2. (see LICENSE.txt)
  * FILE:        Tools/config/options.h
  * PURPOSE:     Configuring RosBE
- * COPYRIGHT:   Copyright 2007 Maarten Bosma
- *              Copyright 2007 Pierre Schweitzer
- *              Copyright 2016 Daniel Reimer
+ * COPYRIGHT:   Copyright 2018 Maarten Bosma
+ *                             Pierre Schweitzer
+ *                             Daniel Reimer
  *
  */
 

@@ -3,7 +3,7 @@
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 # FILE:        Root/reladdr2line.ps1
 # PURPOSE:     Converts a value to hex and displays it.
-# COPYRIGHT:   Copyright 2016 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
 $host.ui.RawUI.WindowTitle = "reladdr2line..."

@@ -3,7 +3,7 @@
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 # FILE:        Root/Clean.ps1
 # PURPOSE:     Clean the ReactOS source directory.
-# COPYRIGHT:   Copyright 2017 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
 $host.ui.RawUI.WindowTitle = "Cleaning..."

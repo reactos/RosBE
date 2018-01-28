@@ -3,9 +3,9 @@
  * LICENSE:     GNU General Public License v2. (see LICENSE.txt)
  * FILE:        Tools/buildtime.c
  * PURPOSE:     Buildtime Counter
- * COPYRIGHT:   Copyright 2007 KJK::Hyperion
- *              Copyright 2007 Peter Ward <dralnix@gmail.com>
- *              Copyright 2010 Colin Finck <colin@reactos.org>
+ * COPYRIGHT:   Copyright 2018 KJK::Hyperion
+ *                             Peter Ward <dralnix@gmail.com>
+ *                             Colin Finck <colin@reactos.org>
  *
  */
 
