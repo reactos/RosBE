@@ -53,7 +53,7 @@ $global:BUILD_ENVIRONMENT = "MinGW"
 $global:0 = $myInvocation.MyCommand.Definition
 $global:_ROSBE_BASEDIR = [System.IO.Path]::GetDirectoryName($0)
 $global:_ROSBE_PREFIX = $null
-$global:_ROSBE_VERSION = "2.1.5"
+$global:_ROSBE_VERSION = "2.1.6"
 $global:_ROSBE_ROSSOURCEDIR = "$pwd"
 $global:_ROSBE_SHOWTIME = 1
 $global:_ROSBE_WRITELOG = 1
@@ -232,5 +232,5 @@ if ($_ROSBE_SHOWVERSION -eq 1) {
 
 # Look if the ReactOS source directory is empty.
 if ((get-childitem $_ROSBE_ROSSOURCEDIR).Count -le 0) {
-    "No ReactOS source detected. Please use ""ssvn create"" to download it."
+    "No ReactOS source detected. Please check https://reactos.org/wiki/ReactOS_Git_For_Dummies to download it."
 }
