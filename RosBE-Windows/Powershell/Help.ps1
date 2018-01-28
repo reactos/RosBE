@@ -67,12 +67,6 @@ if ("$args" -eq "") {
         "                           shortcutted ReactOS source directories."
     }
 
-    if (Test-Path "$_ROSBE_BASEDIR\sSVN.ps1") {
-        "    ssvn [OPTIONS]       - Create, update or clean-up your ReactOS source"
-        "                           tree or show the revision number of the local"
-        "                           and online trees."
-    }
-
     if (Test-Path "$_ROSBE_BASEDIR\options.ps1") {
         "    options              - Starts the RosBE configurator and sets the."
         "                           changes active immediately."
@@ -208,20 +202,6 @@ if ("$args" -eq "") {
 } elseif  ("$args" -eq "scut") {
     if (Test-Path "$_ROSBE_BASEDIR\scut.ps1") {
         IEX "& scut.exe --help"
-    }
-} elseif  ("$args" -eq "ssvn") {
-    if (Test-Path "$_ROSBE_BASEDIR\sSVN.ps1") {
-        " Usage: ssvn [OPTIONS]"
-        " Creates, updates or cleans up your ReactOS source tree or shows the revision"
-        " number of the local and online trees."
-        ""
-        "    update    - Updates to HEAD revision or to a specific one when the second"
-        "                parameter specifies one."
-        "    create    - Creates a new ReactOS source tree."
-        "    rosapps   - Creates / Updates a ReactOS RosApps source tree."
-        "    rostests  - Creates / Updates a ReactOS RosTests source tree."
-        "    cleanup   - Cleans up and fixes errors in the source tree."
-        "    status    - Show the current local and online revision numbers."
     }
 } elseif ("$args" -eq "options") {
     if (Test-Path "$_ROSBE_BASEDIR\options.ps1") {

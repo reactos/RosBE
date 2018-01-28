@@ -166,13 +166,10 @@ echo For a list of all included commands, type: "help"
 echo -------------------------------------------------
 echo.
 
-:: Look if the ReactOS source directory is empty. If so,
-:: inform the user and mention 'ssvn create' (only if ssvn is installed).
+:: Look if the ReactOS source directory is empty.
 setlocal enabledelayedexpansion
-if exist "%_ROSBE_BASEDIR%\sSVN.cmd" (
-    dir /b "%_ROSBE_ROSSOURCEDIR%" 2>nul | findstr "." >nul
-    if !errorlevel! == 1 (
-        echo No ReactOS source detected. Please use "ssvn create" to download it.
-    )
+dir /b "%_ROSBE_ROSSOURCEDIR%" 2>nul | findstr "." >nul
+if !errorlevel! == 1 (
+    echo No ReactOS source detected. Please check https://reactos.org/wiki/ReactOS_Git_For_Dummies to download it.
 )
 endlocal

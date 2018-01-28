@@ -230,10 +230,7 @@ if ($_ROSBE_SHOWVERSION -eq 1) {
 "-------------------------------------------------"
 ""
 
-# Look if the ReactOS source directory is empty. If so,
-# inform the user and mention 'ssvn create' (only if ssvn is installed).
-if (!(Test-Path "$_ROSBE_BASEDIR\sSVN.ps1")) {
-    if ((get-childitem $_ROSBE_ROSSOURCEDIR).Count -le 0) {
-        "No ReactOS source detected. Please use ""ssvn create"" to download it."
-    }
+# Look if the ReactOS source directory is empty.
+if ((get-childitem $_ROSBE_ROSSOURCEDIR).Count -le 0) {
+    "No ReactOS source detected. Please use ""ssvn create"" to download it."
 }
