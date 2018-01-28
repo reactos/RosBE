@@ -109,6 +109,10 @@ ReserveFile /plugin InstallOptions.dll
 !insertmacro MUI_LANGUAGE "English"
 
 Section -BaseFiles SEC01
+
+    ;; Make the directory "$INSTDIR" read write accessible by all users
+    AccessControl::GrantOnFile "$INSTDIR" "(BU)" "GenericRead + GenericWrite"
+
     SetShellVarContext current
     SetOutPath "$INSTDIR"
     SetOverwrite try

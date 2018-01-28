@@ -17,7 +17,7 @@ setlocal enabledelayedexpansion
 title Updating...
 
 :: The Update Server.
-set _ROSBE_URL=http://svn.reactos.org/downloads/rosbe
+set _ROSBE_URL=https://svn.reactos.org/downloads/rosbe
 
 :: Save the recent dir to cd back there at the end.
 set _ROSBE_OPATH=%CD%
