@@ -135,7 +135,6 @@ Section -BaseFiles SEC01
     File /r Root\RosBE.cmd
     File /r Root\rosbe-gcc-env.cmd
     File /r Root\scut.cmd
-    File /r Root\sSVN.cmd
     File /r Root\TimeDate.cmd
     File /r Root\update.cmd
     File /r Root\version.cmd
@@ -146,7 +145,6 @@ Section -BaseFiles SEC01
     SetOverwrite try
     File /r Components\Bin\7z.dll
     File /r Components\Bin\7z.exe
-    File /r Components\Bin\apr_ldap-1.dll
     File /r Components\Bin\bison.exe
     File /r Components\Bin\buildtime.exe
     File /r Components\Bin\ccache.exe
@@ -160,8 +158,6 @@ Section -BaseFiles SEC01
     File /r Components\Bin\cpucount.exe
     File /r Components\Bin\ctest.exe
     File /r Components\Bin\diff.exe
-    File /r Components\Bin\diff3.exe
-    File /r Components\Bin\diff4.exe
     File /r Components\Bin\echoh.exe
     File /r Components\Bin\elevate.exe
     File /r Components\Bin\flash.exe
@@ -169,26 +165,12 @@ Section -BaseFiles SEC01
     File /r Components\Bin\gdb.exe
     File /r Components\Bin\gdbserver.exe
     File /r Components\Bin\getdate.exe
-    File /r Components\Bin\libapr-1.dll
-    File /r Components\Bin\libapriconv-1.dll
-    File /r Components\Bin\libaprutil-1.dll
-    File /r Components\Bin\libeay32.dll
     File /r Components\Bin\libexpat-1.dll
     File /r Components\Bin\libgcc_s_dw2-1.dll
     File /r Components\Bin\libiconv2.dll
     File /r Components\Bin\libiconv-2.dll
     File /r Components\Bin\libintl3.dll
     File /r Components\Bin\libintl-8.dll
-    File /r Components\Bin\libsasl.dll
-    File /r Components\Bin\libsvn_client-1.dll
-    File /r Components\Bin\libsvn_delta-1.dll
-    File /r Components\Bin\libsvn_diff-1.dll
-    File /r Components\Bin\libsvn_fs-1.dll
-    File /r Components\Bin\libsvn_ra-1.dll
-    File /r Components\Bin\libsvn_repos-1.dll
-    File /r Components\Bin\libsvn_subr-1.dll
-    File /r Components\Bin\libsvn_wc-1.dll
-    File /r Components\Bin\libsvnjavahl-1.dll
     File /r Components\Bin\log2lines.exe
     File /r Components\Bin\m4.exe
     File /r Components\Bin\Microsoft.VC90.CRT.manifest
@@ -211,37 +193,10 @@ Section -BaseFiles SEC01
     File /r Components\Bin\playwav.exe
     File /r Components\Bin\regex2.dll
     File /r Components\Bin\rquote.exe
-    File /r Components\Bin\saslANONYMOUS.dll
-    File /r Components\Bin\saslCRAMMD5.dll
-    File /r Components\Bin\saslDIGESTMD5.dll
-    File /r Components\Bin\saslLOGIN.dll
-    File /r Components\Bin\saslNTLM.dll
-    File /r Components\Bin\saslPLAIN.dll
     File /r Components\Bin\scut.exe
     File /r Components\Bin\sdiff.exe
-    File /r Components\Bin\ssleay32.dll
-    File /r Components\Bin\svn.exe
-    File /r Components\Bin\svnadmin.exe
-    File /r Components\Bin\svnauthz.exe
-    File /r Components\Bin\svnauthz-validate.exe
-    File /r Components\Bin\svndumpfilter.exe
-    File /r Components\Bin\svnlook.exe
-    File /r Components\Bin\svnmucc.exe
-    File /r Components\Bin\svn-populate-node-origins-index.exe
-    File /r Components\Bin\svnraisetreeconflict.exe
-    File /r Components\Bin\svnrdump.exe
-    File /r Components\Bin\svnserve.exe
-    File /r Components\Bin\svnsync.exe
-    File /r Components\Bin\svnversion.exe
     File /r Components\Bin\tee.exe
     File /r Components\Bin\wget.exe
-    File /r Components\Bin\zlib1.dll
-    SetOutPath "$INSTDIR\Bin\iconv"
-    SetOverwrite try
-    File /r Components\Bin\iconv\*.*
-    SetOutPath "$INSTDIR\Bin\license"
-    SetOverwrite try
-    File /r Components\Bin\license\*.*
     SetOutPath "$INSTDIR\Bin\data"
     SetOverwrite try
     File /r Components\Bin\data\*.*
@@ -309,7 +264,6 @@ Section /o "PowerShell Version" SEC05
     File /r Components\Powershell\RosBE.ps1
     File /r Components\Powershell\rosbe-gcc-env.ps1
     File /r Components\Powershell\scut.ps1
-    File /r Components\Powershell\sSVN.ps1
     File /r Components\Powershell\update.ps1
     File /r Components\Powershell\version.ps1
     SetOutPath "$DESKTOP"
@@ -464,8 +418,6 @@ Section Uninstall
     Delete /REBOOTOK "$INSTDIR\rosbe-gcc-env.ps1"
     Delete /REBOOTOK "$INSTDIR\scut.cmd"
     Delete /REBOOTOK "$INSTDIR\scut.ps1"
-    Delete /REBOOTOK "$INSTDIR\sSVN.cmd"
-    Delete /REBOOTOK "$INSTDIR\sSVN.ps1"
     Delete /REBOOTOK "$INSTDIR\TimeDate.cmd"
     Delete /REBOOTOK "$INSTDIR\uninstall.ico"
     Delete /REBOOTOK "$INSTDIR\update.cmd"
