@@ -169,6 +169,7 @@ Section -BaseFiles SEC01
     File /r Components\Bin\gdb.exe
     File /r Components\Bin\gdbserver.exe
     File /r Components\Bin\getdate.exe
+	File /r Components\Bin\libeay32.dll
     File /r Components\Bin\libexpat-1.dll
     File /r Components\Bin\libgcc_s_dw2-1.dll
     File /r Components\Bin\libiconv2.dll
@@ -183,8 +184,10 @@ Section -BaseFiles SEC01
     File /r Components\Bin\MSVCM90.dll
     File /r Components\Bin\msvcp60.dll
     File /r Components\Bin\MSVCP90.dll
+	File /r Components\Bin\MSVCP100.dll
     File /r Components\Bin\MSVCP120.dll
     File /r Components\Bin\MSVCR90.dll
+	File /r Components\Bin\MSVCR100.dll
     File /r Components\Bin\MSVCR120.dll
     File /r Components\Bin\ninja.exe
     File /r Components\Bin\options.exe
@@ -197,8 +200,10 @@ Section -BaseFiles SEC01
     File /r Components\Bin\rquote.exe
     File /r Components\Bin\scut.exe
     File /r Components\Bin\sdiff.exe
+	File /r Components\Bin\ssleay32.dll
     File /r Components\Bin\tee.exe
     File /r Components\Bin\wget.exe
+	File /r Components\Bin\zlib1.dll
     SetOutPath "$INSTDIR\Bin\data"
     SetOverwrite try
     File /r Components\Bin\data\*.*
@@ -438,13 +443,12 @@ Section Uninstall
     SetAutoClose true
 SectionEnd
 
-;; HACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACK
 Function UninstallPrevious
     ReadRegStr $R0 HKCU \
-               "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME} Amine Edition" \
+               "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                "UninstallString"
     ReadRegStr $R1 HKCU \
-               "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME} Amine Edition" \
+               "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                "DisplayVersion"
     ${If} $R1 == "${PRODUCT_VERSION}"
         messageBox MB_OK|MB_ICONEXCLAMATION \
@@ -452,10 +456,10 @@ Function UninstallPrevious
     ${EndIf}
     ${If} $R0 == ""
         ReadRegStr $R0 HKLM \
-                   "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME} Amine Edition" \
+                   "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                    "UninstallString"
         ReadRegStr $R1 HKLM \
-                   "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME} Amine Edition" \
+                   "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                    "DisplayVersion"
         ${If} $R0 == ""
             Return
