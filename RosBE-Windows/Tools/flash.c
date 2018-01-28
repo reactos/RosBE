@@ -3,7 +3,7 @@
  * LICENSE:     GNU General Public License v2. (see LICENSE.txt)
  * FILE:        Tools/flash.c
  * PURPOSE:     Taskbar Flasher
- * COPYRIGHT:   Copyright 2008 Ged Murphy <gedmurphy@reactos.org>
+ * COPYRIGHT:   Copyright 2018 Ged Murphy <gedmurphy@reactos.org>
  *
  */
 

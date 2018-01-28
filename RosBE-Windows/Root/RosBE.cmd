@@ -4,7 +4,7 @@
 :: FILE:        Root/RosBE.cmd
 :: PURPOSE:     This script provides/sets up various build environments for
 ::              ReactOS. Currently it provides a GCC 4.7.2 build environment.
-:: COPYRIGHT:   Copyright 2016 Daniel Reimer <reimer.daniel@freenet.de>
+:: COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
 ::                             Peter Ward <dralnix@gmail.com>
 ::                             Colin Finck <colin@reactos.org>
 ::

@@ -26,7 +26,7 @@ BEGIN
             VALUE "FileDescription", "Config Tool for RosBE\0"
             VALUE "FileVersion", "2.1.6.0\0"
             VALUE "InternalName", "options\0"
-            VALUE "LegalCopyright", "Copyright © Marteen Bosma / Daniel Reimer / Pierre Schweitzer 2016\0"
+            VALUE "LegalCopyright", "Copyright © Marteen Bosma / Daniel Reimer / Pierre Schweitzer 2018\0"
             VALUE "OriginalFilename", "options.exe\0"
             VALUE "ProductName", "Config Tool for RosBE\0"
             VALUE "ProductVersion", "2.1.6.0\0"
