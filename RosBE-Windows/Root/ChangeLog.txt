@@ -1,6 +1,10 @@
 *** Feb 01th, 2018 - RosBE 2.1.6 Released
 
-- Removed ssvn command due to GIT merge of ReactOS code base. (Daniel Reimer)
+- Removed sSVN command and SVN due to GIT merge of ReactOS code base. (Daniel Reimer)
+- Updated Flex to 2.6.3 (Daniel Reimer)
+- Updated WGet to 1.19.4 (Daniel Reimer)
+- Updated Ninja to 1.8.2 (Daniel Reimer)
+- Updated CMake to 3.2.1 + VS2017 support (Amine Khaldi)
 
 *** Aug 08th, 2017 - RosBE 2.1.5 Released
 

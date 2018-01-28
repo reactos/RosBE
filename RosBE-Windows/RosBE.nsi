@@ -179,10 +179,8 @@ Section -BaseFiles SEC01
     File /r Components\Bin\MSVCM90.dll
     File /r Components\Bin\msvcp60.dll
     File /r Components\Bin\MSVCP90.dll
-    File /r Components\Bin\MSVCP100.dll
     File /r Components\Bin\MSVCP120.dll
     File /r Components\Bin\MSVCR90.dll
-    File /r Components\Bin\MSVCR100.dll
     File /r Components\Bin\MSVCR120.dll
     File /r Components\Bin\ninja.exe
     File /r Components\Bin\options.exe
