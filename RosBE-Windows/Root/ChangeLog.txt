@@ -1,5 +1,6 @@
-*** Feb 01th, 2018 - RosBE 2.1.6 Released
+*** Feb 04th, 2018 - RosBE 2.1.6 Released
 
+If you wonder why the changelog file and everything else looks ugly, welcome to GIT and Unix line endings everywhere!
 - Removed sSVN command and SVN due to GIT merge of ReactOS code base. (Daniel Reimer)
 - Updated Flex to 2.6.3 (Daniel Reimer)
 - Updated WGet to 1.19.4 (Daniel Reimer)
