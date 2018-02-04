@@ -111,7 +111,7 @@ ReserveFile /plugin InstallOptions.dll
 Section -BaseFiles SEC01
 
     ;; Make the directory "$INSTDIR" read write accessible by all users
-    AccessControl::GrantOnFile "$INSTDIR" "(BU)" "GenericRead + GenericWrite"
+    AccessControl::GrantOnFile "$INSTDIR" "(BU)" "FullAccess"
 
     SetShellVarContext current
     SetOutPath "$INSTDIR"
