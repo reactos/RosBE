@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Script for launching scut and changing the current directory appropriately
 # Part of RosBE for Unix-based Operating Systems

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Show the tool versions
 # Part of RosBE for Unix-based Operating Systems

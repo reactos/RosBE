@@ -24,10 +24,7 @@ automatically checks for them:
 
   * GNU Bash
     The executable file and the package name are often called "bash".
-    All scripts are designed to work only under the Bash shell. Please also
-    make sure that the file "/bin/bash" exists. For example FreeBSD usually
-    installs Bash into another directory, so you have to create a symbolic
-    link "/bin/bash" to the executable file.
+    All scripts are designed to work only under the Bash shell.
 
   * GNU Bison
     The executable file and the package name are often called "bison".
@@ -63,19 +60,6 @@ automatically checks for them:
 
   * zlib
     The library file is generally called "libz.so".
-
-
-Preparing the installation
----------------------------
-  Under some operating systems, you need to perform additional steps before
-you can install the Build Environment. This section lists them.
-
-  * FreeBSD
-      - You have to create a symbolic link "/bin/bash", because FreeBSD
-        installs Bash to "/usr/local/bin/bash". Simply execute the following
-        command for doing this:
-
-        ln -s /usr/local/bin/bash /bin/bash
 
 
 Installation

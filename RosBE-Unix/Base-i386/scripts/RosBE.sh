@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Script for initializing RosBE
 # Part of RosBE for Unix-based Operating Systems

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Change the current target build tools to an architecture to build for
 # Part of RosBE for Unix-based Operating Systems

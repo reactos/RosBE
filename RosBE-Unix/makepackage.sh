@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # ReactOS Build Environment for Unix-based Operating Systems - Packaging tool for the Base package
 # Copyright 2009 Colin Finck <colin@reactos.org>

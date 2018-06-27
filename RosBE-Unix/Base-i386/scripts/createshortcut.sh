@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Script for creating shortcuts
 # Part of RosBE for Unix-based Operating Systems

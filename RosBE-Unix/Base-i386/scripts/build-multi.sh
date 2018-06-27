@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Detects the CPU cores in your system and builds ReactOS with this number of threads
 # Part of RosBE for Unix-based Operating Systems

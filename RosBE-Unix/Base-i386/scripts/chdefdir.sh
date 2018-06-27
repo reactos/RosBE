@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Change the ReactOS source directory for the current session
 # Part of RosBE for Unix-based Operating Systems
