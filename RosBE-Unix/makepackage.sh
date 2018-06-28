@@ -55,11 +55,9 @@ if ! [ -d "../../RosBE/Tools/" ]; then
 	exit 1
 fi
 
-if ! svn info >& /dev/null; then
-	if ! git status >& /dev/null; then
-		echo "This script needs to be run in a working copy of the whole \"RosBE\" tree!"
-		exit 1
-	fi
+if ! git status >& /dev/null; then
+	echo "This script needs to be run in a working copy of the whole \"RosBE\" tree!"
+	exit 1
 fi
 
 # Build the source file list
