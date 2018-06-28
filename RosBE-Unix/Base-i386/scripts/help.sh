@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Script for displaying the help
 # Part of RosBE for Unix-based Operating Systems

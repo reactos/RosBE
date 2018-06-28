@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Pre-build hook script to force CMake rehandle
 # reactos.dff (in then, handle optional components)

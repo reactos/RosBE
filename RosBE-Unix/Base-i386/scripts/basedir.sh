@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Script for changing the current directory to $_ROSBE_ROSSOURCEDIR
 # Part of RosBE for Unix-based Operating Systems

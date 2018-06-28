@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Builds ReactOS with one thread
 # Part of RosBE for Unix-based Operating Systems

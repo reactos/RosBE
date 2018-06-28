@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Script for cleaning the ReactOS source directory
 # Part of RosBE for Unix-based Operating Systems
