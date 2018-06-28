@@ -56,8 +56,10 @@ if ! [ -d "../../RosBE/Tools/" ]; then
 fi
 
 if ! svn info >& /dev/null; then
-	echo "This script needs to be run in a working copy of the whole \"RosBE\" tree!"
-	exit 1
+	if ! git status >& /dev/null; then
+		echo "This script needs to be run in a working copy of the whole \"RosBE\" tree!"
+		exit 1
+	fi
 fi
 
 # Build the source file list
@@ -92,7 +94,7 @@ echo "Copying the \"$package_name\" directory..."
 rm -rf "$full_package_name"
 cp -R "$package_name" "$full_package_name"
 
-find "$full_package_name" -type d -name ".svn" -exec rm -rf {} ";" >& /dev/null
+find "$full_package_name" -type d -name ".git" -exec rm -rf {} ";" >& /dev/null
 find "$full_package_name" -type f -name "SVN-Readme.txt" -exec rm {} ";"
 rm "$full_package_name/README.odt"
 
