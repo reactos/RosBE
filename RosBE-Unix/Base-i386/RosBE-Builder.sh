@@ -394,21 +394,6 @@ if rs_prepare_module "gcc"; then
 	unset old_path
 fi
 
-if rs_prepare_module "make"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
-
-	rs_do_command ../make/configure --prefix="$rs_prefixdir" --disable-nls --disable-werror
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
-	rs_clean_module "make"
-
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
-fi
-
 if rs_prepare_module "ninja"; then
 	if [ $use_cflags -eq 0 ]; then
 		export CFLAGS="$rs_host_cflags"

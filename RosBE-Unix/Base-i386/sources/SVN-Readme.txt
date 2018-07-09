@@ -13,10 +13,6 @@ The arrows tell you what these files contain (if you want to package them yourse
     --> Contains the GMP source tree in a subdirectory "gmp".
         Source is available here: http://gmplib.org
 
-- make.tar.bz2
-    --> Contains the GNU Make source tree in a subdirectory "make".
-        Source is available here: http://savannah.gnu.org/cvs/?group=make
-
 - mingw_runtime_dev.tar.bz2
     --> Created by RosBE-Windows' "buildtoolchain.sh" script from its mingw_runtime.tar.bz2 package.
         That mingw_runtime.tar.bz2 package contains the MinGW Runtime source tree in a subdirectory "mingw_runtime".
