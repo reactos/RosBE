@@ -66,7 +66,7 @@ tools=""
 
 case "$package_name" in
 	"Base-i386")
-		sources+="cmake gmp make mingw_w64_crt mingw_w64_headers mpc mpfr ninja"
+		sources+="cmake gmp mingw_w64_crt mingw_w64_headers mpc mpfr ninja"
 		tools+="cpucount scut"
 esac
 

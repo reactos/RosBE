@@ -70,11 +70,11 @@ fi
 # We don't want too less parameters
 if [ "$2" == "" ]; then
 	echo -n "Syntax: ./buildtoolchain.sh <sources> <workdir> [make_dev]"
-	
+
 	for module in $MODULES; do
 		echo -n " [$module]"
 	done
-	
+
 	echo
 	echo
 	echo " sources  - Path to the directory containing RosBE-Unix toolchain packages (.tar.bz2 files)"
@@ -158,7 +158,7 @@ else
 		else
 			eval "rs_process_$module=true"
 		fi
-		
+
 		shift
 	done
 
@@ -183,12 +183,12 @@ rs_cpucount=`$rs_prefixdir/bin/cpucount.exe -x1`
 if rs_prepare_module "mingw_runtime"; then
 	export CFLAGS="$rs_target_cflags"
 	export C_INCLUDE_PATH="$rs_archprefixdir/$rs_target/include"
-	
+
 	rs_do_command ../mingw_runtime/configure --prefix="$mingw_runtime_prefix" --host="$rs_target" --build="$rs_target" --disable-werror
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "mingw_runtime"
-	
+
 	unset CFLAGS
 	unset C_INCLUDE_PATH
 fi
@@ -231,12 +231,12 @@ fi
 
 if rs_prepare_module "binutils"; then
 	export CFLAGS="$rs_host_cflags"
-	
+
 	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --host="$rs_target" --build="$rs_target" --target="$rs_target" --disable-nls --disable-werror
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "binutils"
-	
+
 	unset CFLAGS
 fi
 
@@ -247,29 +247,18 @@ if rs_prepare_module "gcc"; then
 	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
 	export C_INCLUDE_PATH="$rs_archprefixdir/$rs_target/include"
 	export LIBRARY_PATH="$rs_archprefixdir/$rs_target/lib"
-	
+
 	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --host="$rs_target" --build="$rs_target" --target="$rs_target" --with-gmp="$rs_supportprefixdir" --with-mpfr="$rs_supportprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-checking=release --enable-version-specific-runtime-libs --disable-win32-registry --disable-shared --disable-nls --disable-werror
 	rs_do_command $rs_makecmd profiledbootstrap
 	rs_do_command $rs_makecmd install
 	rs_clean_module "gcc"
-	
+
 	unset STAGE1_CFLAGS
 	unset BOOT_CFLAGS
 	unset CFLAGS_FOR_TARGET
 	unset CXXFLAGS_FOR_TARGET
 	unset C_INCLUDE_PATH
 	unset LIBRARY_PATH
-fi
-
-if rs_prepare_module "make"; then
-	export CFLAGS="$rs_host_cflags"
-
-	rs_do_command ../make/configure --prefix="$rs_prefixdir" --program-prefix="mingw32-" --disable-nls --disable-werror
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
-	rs_clean_module "make"
-
-	unset CFLAGS
 fi
 
 # Final actions
