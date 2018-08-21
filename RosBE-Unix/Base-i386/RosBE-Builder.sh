@@ -221,7 +221,6 @@ else
 	rs_process_cpucount=true
 	rs_process_gcc=true
 	rs_process_gmp=true
-	rs_process_make=true
 	rs_process_ninja=true
 	rs_process_mingw_w64_headers=true
 	rs_process_mingw_w64_crt=true
