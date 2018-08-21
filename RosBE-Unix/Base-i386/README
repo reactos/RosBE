@@ -115,10 +115,6 @@ components:
 
     NOTE: This GCC version only supports C and C++
 
-  * Make 3.82
-    patched with:
-      - http://svn.reactos.org/project-tools/trunk/RosBE/Patches/Make-Windows-jobserver-against-3.8.2.patch?p=1321
-
   * CMake 3.2.1-ReactOS
   * GMP 5.0.5
   * Ninja 1.6.0
@@ -133,7 +129,7 @@ Tested Operating Systems
   The Build Environment was designed to work on all Unix-based operating
 systems. Nevertheless, it is impossible to test it on all possible systems out
 there.
-  The current primary development and test system is Ubuntu 14.04. But users
+  The current primary development and test system is Ubuntu 18.04. But users
 also reported that it works well under other Linux systems such as Fedora or
 openSUSE and Unix derivates like FreeBSD or Mac OS X.
   You should be able to compile the build tools on both i386 (32-bit) and
@@ -156,9 +152,6 @@ https://gcc.gnu.org
 
 GMP, the GNU MP Bignum library
 https://gmplib.org
-
-Make, the Makefile processor
-https://www.gnu.org/software/make
 
 The GNU MPFR library
 http://www.mpfr.org
