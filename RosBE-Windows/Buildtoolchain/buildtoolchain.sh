@@ -248,7 +248,7 @@ if rs_prepare_module "gcc"; then
 	export C_INCLUDE_PATH="$rs_archprefixdir/$rs_target/include"
 	export LIBRARY_PATH="$rs_archprefixdir/$rs_target/lib"
 
-	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --host="$rs_target" --build="$rs_target" --target="$rs_target" --with-gmp="$rs_supportprefixdir" --with-mpfr="$rs_supportprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-checking=release --enable-version-specific-runtime-libs --disable-win32-registry --disable-shared --disable-nls --disable-werror
+	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --host="$rs_target" --build="$rs_target" --target="$rs_target" --with-gmp="$rs_supportprefixdir" --with-mpfr="$rs_supportprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-checking=release --enable-version-specific-runtime-libs --disable-win32-registry --disable-shared --disable-nls --disable-werror --disable-libstdcxx-verbose
 	rs_do_command $rs_makecmd profiledbootstrap
 	rs_do_command $rs_makecmd install
 	rs_clean_module "gcc"
