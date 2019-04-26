@@ -1,6 +1,6 @@
 ﻿Unicode true
 !define PRODUCT_NAME "ReactOS Build Environment"
-!define PRODUCT_VERSION "2.1.6"
+!define PRODUCT_VERSION "2.2.0"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RosBE.cmd"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKCU"
@@ -18,15 +18,15 @@ ShowUnInstDetails show
 ;;
 ;; Add version/product information metadata to the installation file.
 ;;
-VIAddVersionKey /LANG=1033 "FileVersion" "2.1.6.0"
+VIAddVersionKey /LANG=1033 "FileVersion" "2.2.0.0"
 VIAddVersionKey /LANG=1033 "ProductVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey /LANG=1033 "ProductName" "${PRODUCT_NAME}"
 VIAddVersionKey /LANG=1033 "Comments" "This installer was written by Peter Ward and Daniel Reimer using Nullsoft Scriptable Install System"
 VIAddVersionKey /LANG=1033 "CompanyName" "ReactOS Foundation"
-VIAddVersionKey /LANG=1033 "LegalTrademarks" "Copyright © 2018 ReactOS Foundation"
-VIAddVersionKey /LANG=1033 "LegalCopyright" "Copyright © 2018 ReactOS Foundation"
+VIAddVersionKey /LANG=1033 "LegalTrademarks" "Copyright © 2019 ReactOS Foundation"
+VIAddVersionKey /LANG=1033 "LegalCopyright" "Copyright © 2019 ReactOS Foundation"
 VIAddVersionKey /LANG=1033 "FileDescription" "${PRODUCT_NAME} Setup"
-VIProductVersion "2.1.6.0"
+VIProductVersion "2.2.0.0"
 
 CRCCheck force
 SetDatablockOptimize on
@@ -212,32 +212,36 @@ Section -BaseFiles SEC01
     File /r Components\samples\*.*
 SectionEnd
 
-Section -MinGWGCCNASM SEC02
+Section -MinGWGCC SEC02
     SetShellVarContext current
     SetOutPath "$INSTDIR\i386"
     SetOverwrite try
     File /r Components\i386\*.*
 SectionEnd
 
-Section /o "Add BIN folder to PATH variable (MSVC users)" SEC03
+Section /o "AMD64 Compiler" SEC03
+    SetShellVarContext current
+    SetOutPath "$INSTDIR\amd64"
+    SetOverwrite try
+    File /r Components\amd64\*.*
+SectionEnd
+
+Section /o "Add BIN folder to PATH variable (MSVC users)" SEC04
     ${EnvVarUpdate} $0 "PATH" "A" "HKCU" "$INSTDIR\bin"
 SectionEnd
 
-Section /o "Update for GlobalSign Certificates (XP users NEED THAT)" SEC04
+Section /o "Update for GlobalSign Certificates (XP users NEED THAT)" SEC05
     SetShellVarContext current
     SetOutPath "$INSTDIR\certs"
     SetOverwrite try
+	File /r Components\certs\Root-E46.crt
     File /r Components\certs\Root-R1.crt
-    File /r Components\certs\Root-R2.crt
     File /r Components\certs\Root-R3.crt
+    File /r Components\certs\Root-R5.crt
+	File /r Components\certs\Root-R6.crt
+	File /r Components\certs\Root-R46.crt
     
     Push "$INSTDIR\certs\Root-R1.crt"
-    Call AddCertificateToStore
-    Pop $0
-    ${If} $0 != success
-        MessageBox MB_OK "Import of R1 GlobalSign Root Certificate failed: $0"
-    ${EndIf}
-    Push "$INSTDIR\certs\Root-R2.crt"
     Call AddCertificateToStore
     Pop $0
     ${If} $0 != success
@@ -247,11 +251,35 @@ Section /o "Update for GlobalSign Certificates (XP users NEED THAT)" SEC04
     Call AddCertificateToStore
     Pop $0
     ${If} $0 != success
-        MessageBox MB_OK "Import of R1 GlobalSign Root Certificate failed: $0"
+        MessageBox MB_OK "Import of R3 GlobalSign Root Certificate failed: $0"
+    ${EndIf}
+    Push "$INSTDIR\certs\Root-R5.crt"
+    Call AddCertificateToStore
+    Pop $0
+    ${If} $0 != success
+        MessageBox MB_OK "Import of R5 GlobalSign Root Certificate failed: $0"
+    ${EndIf}
+	    Push "$INSTDIR\certs\Root-R6.crt"
+    Call AddCertificateToStore
+    Pop $0
+    ${If} $0 != success
+        MessageBox MB_OK "Import of R6 GlobalSign Root Certificate failed: $0"
+    ${EndIf}
+	    Push "$INSTDIR\certs\Root-E46.crt"
+    Call AddCertificateToStore
+    Pop $0
+    ${If} $0 != success
+        MessageBox MB_OK "Import of E46 GlobalSign Root Certificate failed: $0"
+    ${EndIf}
+	    Push "$INSTDIR\certs\Root-R46.crt"
+    Call AddCertificateToStore
+    Pop $0
+    ${If} $0 != success
+        MessageBox MB_OK "Import of R46 GlobalSign Root Certificate failed: $0"
     ${EndIf}
 SectionEnd
 
-Section /o "PowerShell Version" SEC05
+Section /o "PowerShell Version" SEC06
     SetShellVarContext current
     SetOutPath "$INSTDIR"
     SetOverwrite try
@@ -280,13 +308,13 @@ Section /o "PowerShell Version" SEC05
                "A REG-File was generated on your desktop. Please use it with Admin Rights to set Powershell's execution rights correctly if your RosBE Powershell Version fails to run after install. Otherwise, just delete it."
 SectionEnd
 
-Section -StartMenuShortcuts SEC06
+Section -StartMenuShortcuts SEC07
     SetShellVarContext current
 
     ;;
     ;; Add our start menu shortcuts.
     ;;
-    IfFileExists "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +13 0
+    IfFileExists "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +18 0
         !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
             CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
             SetOutPath $REACTOS_SOURCE_DIRECTORY
@@ -294,6 +322,11 @@ Section -StartMenuShortcuts SEC06
                 CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
             IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
                 CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
+			IfFileExists "$INSTDIR\amd64\*" 0 +6
+		        IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
+                    CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
+                IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
+                    CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
             SetOutPath $INSTDIR
             CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Uninstall RosBE.lnk" \
                            "$INSTDIR\Uninstall.exe"
@@ -304,35 +337,45 @@ Section -StartMenuShortcuts SEC06
     !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
-Section /o "Desktop Shortcuts" SEC07
+Section /o "Desktop Shortcuts" SEC08
     SetShellVarContext all
 
     ;;
     ;; Add our desktop shortcuts.
     ;;
-    IfFileExists "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +6 0
+    IfFileExists "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +12 0
         SetOutPath $REACTOS_SOURCE_DIRECTORY
         IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
             CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
         IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
             CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
+		IfFileExists "$INSTDIR\amd64\*" 0 +6
+		    IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
+                CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
+            IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
+                CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
 SectionEnd
 
-Section /o "Quick Launch Shortcuts" SEC08
+Section /o "Quick Launch Shortcuts" SEC09
     SetShellVarContext current
 
     ;;
     ;; Add our quick launch shortcuts.
     ;;
-    IfFileExists "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +6 0
+    IfFileExists "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +12 0
         SetOutPath $REACTOS_SOURCE_DIRECTORY
         IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
             CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
         IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
             CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
+		IfFileExists "$INSTDIR\amd64\*" 0 +6
+		    IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
+                CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
+            IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
+                CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
 SectionEnd
 
-Section -Post SEC09
+Section -Post SEC10
     WriteUninstaller "$INSTDIR\Uninstall.exe"
     WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\RosBE.cmd"
     WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
@@ -363,6 +406,10 @@ Function un.onInit
         Delete /REBOOTOK "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk"
         Delete /REBOOTOK "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk"
         Delete /REBOOTOK "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk"
+		Delete /REBOOTOK "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk"
+        Delete /REBOOTOK "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk"
+        Delete /REBOOTOK "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk"
+        Delete /REBOOTOK "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk"
 FunctionEnd
 
 Section Uninstall
@@ -378,6 +425,7 @@ Section Uninstall
     ;; Clean up installed files.
     ;;
     RMDir /r /REBOOTOK "$INSTDIR\i386"
+	RMDir /r /REBOOTOK "$INSTDIR\amd64"
     RMDir /r /REBOOTOK "$INSTDIR\Bin"
     RMDir /r /REBOOTOK "$INSTDIR\certs"
     RMDir /r /REBOOTOK "$INSTDIR\samples"

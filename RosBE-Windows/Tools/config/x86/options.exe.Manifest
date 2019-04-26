@@ -3,7 +3,7 @@
 <assemblyIdentity
     name="ReactOS.options"
     processorArchitecture="x86"
-    version="2.1.6.0"
+    version="2.2.0.0"
     type="win32"/>
 <description>Config Tool</description>
 <dependency>
