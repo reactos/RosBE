@@ -113,7 +113,6 @@ Section -BaseFiles SEC01
     ;; Make the directory "$INSTDIR" read write accessible by all users
     AccessControl::GrantOnFile "$INSTDIR" "(BU)" "FullAccess"
 
-    SetShellVarContext current
     SetOutPath "$INSTDIR"
     SetOverwrite try
     File /r Icons\rosbe.ico
@@ -213,14 +212,12 @@ Section -BaseFiles SEC01
 SectionEnd
 
 Section -MinGWGCC SEC02
-    SetShellVarContext current
     SetOutPath "$INSTDIR\i386"
     SetOverwrite try
     File /r Components\i386\*.*
 SectionEnd
 
 Section /o "AMD64 Compiler" SEC03
-    SetShellVarContext current
     SetOutPath "$INSTDIR\amd64"
     SetOverwrite try
     File /r Components\amd64\*.*
@@ -231,7 +228,6 @@ Section /o "Add BIN folder to PATH variable (MSVC users)" SEC04
 SectionEnd
 
 Section /o "Update for GlobalSign Certificates (XP users NEED THAT)" SEC05
-    SetShellVarContext current
     SetOutPath "$INSTDIR\certs"
     SetOverwrite try
     File /r Components\certs\Root-E46.crt
@@ -280,7 +276,6 @@ Section /o "Update for GlobalSign Certificates (XP users NEED THAT)" SEC05
 SectionEnd
 
 Section /o "PowerShell Version" SEC06
-    SetShellVarContext current
     SetOutPath "$INSTDIR"
     SetOverwrite try
     File /r Components\Powershell\Build.ps1
@@ -309,7 +304,6 @@ Section /o "PowerShell Version" SEC06
 SectionEnd
 
 Section -StartMenuShortcuts SEC07
-    SetShellVarContext current
 
     ;;
     ;; Add our start menu shortcuts.
@@ -322,7 +316,7 @@ Section -StartMenuShortcuts SEC07
                 CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
             IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
                 CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
-            IfFileExists "$INSTDIR\amd64\*" 0 +6
+            IfFileExists "$INSTDIR\amd64\*" 0 +5
                 IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
                     CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
                 IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
@@ -338,18 +332,17 @@ Section -StartMenuShortcuts SEC07
 SectionEnd
 
 Section /o "Desktop Shortcuts" SEC08
-    SetShellVarContext all
 
     ;;
     ;; Add our desktop shortcuts.
     ;;
-    IfFileExists "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +12 0
+    IfFileExists "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +11 0
         SetOutPath $REACTOS_SOURCE_DIRECTORY
         IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
             CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
         IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
             CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
-        IfFileExists "$INSTDIR\amd64\*" 0 +6
+        IfFileExists "$INSTDIR\amd64\*" 0 +5
             IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
                 CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
             IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
@@ -357,18 +350,17 @@ Section /o "Desktop Shortcuts" SEC08
 SectionEnd
 
 Section /o "Quick Launch Shortcuts" SEC09
-    SetShellVarContext current
 
     ;;
     ;; Add our quick launch shortcuts.
     ;;
-    IfFileExists "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +12 0
+    IfFileExists "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +11 0
         SetOutPath $REACTOS_SOURCE_DIRECTORY
         IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
             CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
         IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
             CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
-        IfFileExists "$INSTDIR\amd64\*" 0 +6
+        IfFileExists "$INSTDIR\amd64\*" 0 +5
             IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
                 CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
             IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
@@ -394,14 +386,14 @@ Function un.onInit
         "Are you sure you want to remove ReactOS Build Environment and all of its components?" \
         IDYES +2
     Abort
-    IfFileExists "$APPDATA\RosBE\." 0 +5
+    IfFileExists "$APPDATA\RosBE\." 0 +3
         MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 \
         "Do you want to remove the ReactOS Build Environment configuration file from the Application Data Path?" \
         IDNO +2
         RMDir /r /REBOOTOK "$APPDATA\RosBE"
     MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 \
     "Do you want to remove the Shortcuts? If you just want to Update to a new Version of RosBE, keep them. This keeps your previous settings." \
-    IDNO +5
+    IDNO +9
         Delete /REBOOTOK "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk"
         Delete /REBOOTOK "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk"
         Delete /REBOOTOK "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk"
@@ -414,7 +406,6 @@ FunctionEnd
 
 Section Uninstall
     !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
-    SetShellVarContext current
 
     ;;
     ;; Clean up PATH Variable.
