@@ -162,7 +162,7 @@ if [ "$1" = "" ]; then
 								update=true
 							else
 								reinstall=true
-							#fi
+							fi
 							;;
 						"R"|"r")
 							reinstall=true
