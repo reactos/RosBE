@@ -1,5 +1,5 @@
                            ReactOS Build Environment
-                 Version 2.1.2 for Unix-based operating systems
+                 Version 2.2 for Unix-based operating systems
                       Base package and i386 build tools
                       by Pierre Schweitzer (pierre@reactos.org)
 
@@ -99,29 +99,21 @@ Version Information
   This version of RosBE for Unix-based operating systems uses the following
 components:
 
-  * GNU Binutils v2.23
+  * GNU Binutils v2.31.1
     compiled for mingw32
-    patched with:
-      - http://svn.reactos.org/project-tools/trunk/RosBE/Patches/binutils-changes-against-2.22.patch?p=1352
-      - http://sourceware.org/ml/binutils/2012-10/msg00061.html
-      - http://sourceware.org/ml/binutils/2012-10/msg00062.html
 
-  * GCC, The GNU Compiler Collection v4.7.1
+  * GCC, The GNU Compiler Collection v8.2.0
     compiled for mingw32
-    patched with:
-      - http://gcc.gnu.org/viewcvs/gcc/branches/gcc-4_7-branch/gcc/ira-int.h?view=patch&r1=191605&r2=191604&pathrev=191605
-      - https://github.com/DragonFlyBSD/DPorts/commit/a680cc6ef758e2f15be8bf8209da51658e02d710
-      - https://gcc.gnu.org/ml/gcc-patches/2014-05/msg01401.html
 
     NOTE: This GCC version only supports C and C++
 
   * CMake 3.2.1-ReactOS
-  * GMP 5.0.5
-  * Ninja 1.6.0
-  * MinGW-Runtime 3.17
-  * MPFR 3.1.1
-  * W32api 3.14
-  * MPC 1.0.1
+  * GMP 6.1.2
+  * Ninja 1.7.2
+  * MinGW-Runtime 5.0.4
+  * MPFR 4.0.2
+  * W32api 5.0.4
+  * MPC 1.1.0
 
 
 Tested Operating Systems

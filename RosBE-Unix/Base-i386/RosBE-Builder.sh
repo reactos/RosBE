@@ -39,8 +39,8 @@ rs_sourcedir="$rs_scriptdir/sources"
 
 # RosBE-Unix Constants
 DEFAULT_INSTALL_DIR="/usr/local/RosBE"
-KNOWN_ROSBE_VERSIONS="0.3.6 1.1 1.4 1.4.2 1.5 2.0 2.1 2.1.1 2.1.2"
-ROSBE_VERSION="2.1.2"
+KNOWN_ROSBE_VERSIONS="0.3.6 1.1 1.4 1.4.2 1.5 2.0 2.1 2.1.1 2.1.2 2.2"
+ROSBE_VERSION="2.2"
 TARGET_ARCH="i386"
 
 source "$rs_scriptdir/scripts/rosbelibrary.sh"
@@ -154,17 +154,15 @@ if [ "$1" = "" ]; then
 
 					case "$choice" in
 						"U"|"u")
-							# We only allow update from 2.1 to 2.1.1 or 2.1.2
+							# We only allow update from 2.1.2 to 2.2
 							# For other releases:
 							# We don't support update in this version due to lots of changes
 							# To reenable updating, change this to "update=true"
-							if [ "$installed_version" = "2.1" ] && [ "$ROSBE_VERSION" = "2.1.2" ]; then
-								update=true
-							elif [ "$installed_version" = "2.1.1" ] && [ "$ROSBE_VERSION" = "2.1.2" ]; then
+							if [ "$installed_version" = "2.1.2" ] && [ "$ROSBE_VERSION" = "2.2" ]; then
 								update=true
 							else
 								reinstall=true
-							fi
+							#fi
 							;;
 						"R"|"r")
 							reinstall=true
@@ -210,10 +208,14 @@ else
 fi
 
 if $update; then
-	# For 2.1 -> 2.1.1 or 2.1.1 -> 2.1.2
-	rs_process_cmake=true
+	# For 2.1.2 -> 2.2
+	rs_process_gcc=true
+	rs_process_gmp=true
 	rs_process_ninja=true
-	# We don't force GCC update for 2.1.1 -> 2.1.2, changes are too minor
+	rs_process_mingw_w64_headers=true
+	rs_process_mingw_w64_crt=true
+	rs_process_mpfr=true
+	rs_process_mpc=true
 else
 	rs_process_binutils=true
 	rs_process_buildtime=true
@@ -299,13 +301,7 @@ if rs_prepare_module "binutils"; then
 		export CFLAGS="$rs_host_cflags"
 	fi
 
-	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --target="$rs_target" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes
-	# HUGE HACK!!!
-	# It "manually" disable doc generation for binutils
-	# This is required because our binutils are really old and
-	# New distributions come with texinfo 1.5 that cannot handle
-	# Current docs
-	echo "MAKEINFO = :" >> Makefile
+	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --target="$rs_target" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "binutils"
@@ -351,13 +347,7 @@ if rs_prepare_module "gcc"; then
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
 
-	rs_do_command ../gcc/configure --target="$rs_target" --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --enable-plugins --disable-shared --disable-multilib --disable-nls --disable-werror --with-gnu-ld --with-gnu-as
-	# HUGE HACK!!!
-	# It "manually" disable doc generation for gcc
-	# This is required because our gcc is really old and
-	# New distributions come with texinfo 1.5 that cannot handle
-	# Current docs
-	echo "MAKEINFO = :" >> Makefile
+	rs_do_command ../gcc/configure --target="$rs_target" --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --enable-plugins --disable-shared --disable-multilib --disable-nls --disable-werror --disable-sjlj-exceptions --with-gnu-ld --with-gnu-as
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
 	rs_do_command_can_fail $rs_makecmd install-lto-plugin
