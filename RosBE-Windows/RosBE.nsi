@@ -161,6 +161,7 @@ Section -BaseFiles SEC01
     File /r Components\Bin\cpucount.exe
     File /r Components\Bin\ctest.exe
     File /r Components\Bin\diff.exe
+    File /r Components\Bin\diff3.exe
     File /r Components\Bin\echoh.exe
     File /r Components\Bin\elevate.exe
     File /r Components\Bin\flash.exe
@@ -169,17 +170,10 @@ Section -BaseFiles SEC01
     File /r Components\Bin\gdbserver.exe
     File /r Components\Bin\getdate.exe
     File /r Components\Bin\libeay32.dll
-    File /r Components\Bin\libexpat-1.dll
-    File /r Components\Bin\libgcc_s_dw2-1.dll
-    File /r Components\Bin\libiconv2.dll
-    File /r Components\Bin\libiconv-2.dll
-    File /r Components\Bin\libintl3.dll
-    File /r Components\Bin\libintl-8.dll
     File /r Components\Bin\log2lines.exe
     File /r Components\Bin\m4.exe
     File /r Components\Bin\Microsoft.VC90.CRT.manifest
     File /r Components\Bin\mingw32-make.exe
-    File /r Components\Bin\msys-1.0.dll
     File /r Components\Bin\MSVCM90.dll
     File /r Components\Bin\msvcp60.dll
     File /r Components\Bin\MSVCP90.dll
@@ -188,6 +182,10 @@ Section -BaseFiles SEC01
     File /r Components\Bin\MSVCR90.dll
     File /r Components\Bin\MSVCR100.dll
     File /r Components\Bin\MSVCR120.dll
+    File /r Components\Bin\msys-2.0.dll
+    File /r Components\Bin\msys-gcc_s-1.dll
+    File /r Components\Bin\msys-iconv-2.dll
+    File /r Components\Bin\msys-intl-8.dll
     File /r Components\Bin\ninja.exe
     File /r Components\Bin\options.exe
     File /r Components\Bin\patch.exe
