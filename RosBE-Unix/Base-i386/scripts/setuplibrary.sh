@@ -110,7 +110,11 @@ rs_check_requirements()
 			if pkg-config --exists $lib >& /dev/null; then
 				rs_greenmsg "OK"
 			else
-				rs_redmsg "MISSING"
+				if which pkg-config >& /dev/null; then
+					rs_redmsg "MISSING"
+				else
+					rs_redmsg "UNABLE TO DETERMINE"
+				fi
 				toolmissing=true
 			fi
 		done
