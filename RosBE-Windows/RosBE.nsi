@@ -169,7 +169,7 @@ Section -BaseFiles SEC01
     File /r Components\Bin\gdb.exe
     File /r Components\Bin\gdbserver.exe
     File /r Components\Bin\getdate.exe
-	File /r Components\Bin\libeay32.dll
+    File /r Components\Bin\libeay32.dll
     File /r Components\Bin\libexpat-1.dll
     File /r Components\Bin\libgcc_s_dw2-1.dll
     File /r Components\Bin\libiconv2.dll
@@ -184,10 +184,10 @@ Section -BaseFiles SEC01
     File /r Components\Bin\MSVCM90.dll
     File /r Components\Bin\msvcp60.dll
     File /r Components\Bin\MSVCP90.dll
-	File /r Components\Bin\MSVCP100.dll
+    File /r Components\Bin\MSVCP100.dll
     File /r Components\Bin\MSVCP120.dll
     File /r Components\Bin\MSVCR90.dll
-	File /r Components\Bin\MSVCR100.dll
+    File /r Components\Bin\MSVCR100.dll
     File /r Components\Bin\MSVCR120.dll
     File /r Components\Bin\ninja.exe
     File /r Components\Bin\options.exe
@@ -200,10 +200,10 @@ Section -BaseFiles SEC01
     File /r Components\Bin\rquote.exe
     File /r Components\Bin\scut.exe
     File /r Components\Bin\sdiff.exe
-	File /r Components\Bin\ssleay32.dll
+    File /r Components\Bin\ssleay32.dll
     File /r Components\Bin\tee.exe
     File /r Components\Bin\wget.exe
-	File /r Components\Bin\zlib1.dll
+    File /r Components\Bin\zlib1.dll
     SetOutPath "$INSTDIR\Bin\data"
     SetOverwrite try
     File /r Components\Bin\data\*.*
@@ -234,13 +234,13 @@ Section /o "Update for GlobalSign Certificates (XP users NEED THAT)" SEC05
     SetShellVarContext current
     SetOutPath "$INSTDIR\certs"
     SetOverwrite try
-	File /r Components\certs\Root-E46.crt
+    File /r Components\certs\Root-E46.crt
     File /r Components\certs\Root-R1.crt
     File /r Components\certs\Root-R3.crt
     File /r Components\certs\Root-R5.crt
-	File /r Components\certs\Root-R6.crt
-	File /r Components\certs\Root-R46.crt
-    
+    File /r Components\certs\Root-R6.crt
+    File /r Components\certs\Root-R46.crt
+
     Push "$INSTDIR\certs\Root-R1.crt"
     Call AddCertificateToStore
     Pop $0
@@ -259,19 +259,19 @@ Section /o "Update for GlobalSign Certificates (XP users NEED THAT)" SEC05
     ${If} $0 != success
         MessageBox MB_OK "Import of R5 GlobalSign Root Certificate failed: $0"
     ${EndIf}
-	    Push "$INSTDIR\certs\Root-R6.crt"
+        Push "$INSTDIR\certs\Root-R6.crt"
     Call AddCertificateToStore
     Pop $0
     ${If} $0 != success
         MessageBox MB_OK "Import of R6 GlobalSign Root Certificate failed: $0"
     ${EndIf}
-	    Push "$INSTDIR\certs\Root-E46.crt"
+        Push "$INSTDIR\certs\Root-E46.crt"
     Call AddCertificateToStore
     Pop $0
     ${If} $0 != success
         MessageBox MB_OK "Import of E46 GlobalSign Root Certificate failed: $0"
     ${EndIf}
-	    Push "$INSTDIR\certs\Root-R46.crt"
+        Push "$INSTDIR\certs\Root-R46.crt"
     Call AddCertificateToStore
     Pop $0
     ${If} $0 != success
@@ -322,8 +322,8 @@ Section -StartMenuShortcuts SEC07
                 CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
             IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
                 CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
-			IfFileExists "$INSTDIR\amd64\*" 0 +6
-		        IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
+            IfFileExists "$INSTDIR\amd64\*" 0 +6
+                IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
                     CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
                 IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
                     CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
@@ -349,8 +349,8 @@ Section /o "Desktop Shortcuts" SEC08
             CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
         IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
             CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
-		IfFileExists "$INSTDIR\amd64\*" 0 +6
-		    IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
+        IfFileExists "$INSTDIR\amd64\*" 0 +6
+            IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
                 CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
             IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
                 CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
@@ -368,8 +368,8 @@ Section /o "Quick Launch Shortcuts" SEC09
             CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
         IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
             CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
-		IfFileExists "$INSTDIR\amd64\*" 0 +6
-		    IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
+        IfFileExists "$INSTDIR\amd64\*" 0 +6
+            IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
                 CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
             IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
                 CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
@@ -406,7 +406,7 @@ Function un.onInit
         Delete /REBOOTOK "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk"
         Delete /REBOOTOK "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk"
         Delete /REBOOTOK "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk"
-		Delete /REBOOTOK "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk"
+        Delete /REBOOTOK "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk"
         Delete /REBOOTOK "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk"
         Delete /REBOOTOK "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk"
         Delete /REBOOTOK "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk"
@@ -425,7 +425,7 @@ Section Uninstall
     ;; Clean up installed files.
     ;;
     RMDir /r /REBOOTOK "$INSTDIR\i386"
-	RMDir /r /REBOOTOK "$INSTDIR\amd64"
+    RMDir /r /REBOOTOK "$INSTDIR\amd64"
     RMDir /r /REBOOTOK "$INSTDIR\Bin"
     RMDir /r /REBOOTOK "$INSTDIR\certs"
     RMDir /r /REBOOTOK "$INSTDIR\samples"
