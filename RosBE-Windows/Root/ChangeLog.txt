@@ -1,19 +1,15 @@
-*** Aug 17th, 2019 - RosBE 2.2.0 Released
+*** xxx xxth, 201X - RosBE 2.2.0 Released
 
-- Updated GCC to 8.3.0 (Daniel Reimer)
-  - i686-w64-mingw32 AND x86_64-w64_mingw32 (optional) in one setup!
-- Updated binutils to 2.32 (Daniel Reimer)
-- Updated mingw-w64 to 6.0.0 (Daniel Reimer)
+- Updated GCC to 8.2.0 (Daniel Reimer)
+- Updated binutils to 2.31.1 (Daniel Reimer)
+- Updated mingw-w64 to 5.0.4 (Daniel Reimer)
+- Updated WGet to 1.20.3 (Daniel Reimer) (https://eternallybored.org/misc/wget/)
 - Updated Flex to 2.6.4 (Daniel Reimer) (https://sourceforge.net/projects/winflexbison/)
-- Updated Bison to 3.3.2 (Daniel Reimer) (https://sourceforge.net/projects/winflexbison/)
+- Updated Bison to 3.3.1 (Daniel Reimer) (https://sourceforge.net/projects/winflexbison/)
 - Updated 7Zip to 19.00 (Daniel Reimer) (https://www.7zip.org)
 - Updated Make to 4.2 (Daniel Reimer) (http://www.equation.com/servlet/equation.cmd?fa=make)
 - Updated Diffutils to 3.7 (Daniel Reimer) (https://gitforwindows.org)
 - Updated Patch to 2.7.6 (Daniel Reimer) (https://gitforwindows.org)
-- Fixed Desktop shotcuts removal on uninstall (Daniel Reimer)
-- Updated Ninja to 1.9.0 (Daniel Reimer)
-- Updated cmake to 3.13.4 and made bin folder lower case to make it happy (Daniel Reimer)
-- Fixed Powershell version access rights and bad regex (Daniel Reimer)
 
 *** Feb 04th, 2018 - RosBE 2.1.6 Released
 
