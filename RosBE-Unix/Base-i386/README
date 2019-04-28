@@ -107,9 +107,9 @@ components:
 
     NOTE: This GCC version only supports C and C++
 
-  * CMake 3.2.1-ReactOS
+  * CMake 3.14.3
   * GMP 6.1.2
-  * Ninja 1.7.2
+  * Ninja 1.9.0
   * MinGW-Runtime 5.0.4
   * MPFR 4.0.2
   * W32api 5.0.4
