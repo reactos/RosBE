@@ -90,7 +90,7 @@ set _BUILDBOT_SVNSKIPMAINTRUNK=0
 set CCACHE_SLOPPINESS=time_macros
 
 :: Fix Bison package path (just in case RosBE is installed in a path which contains spaces)
-set BISON_PKGDATADIR=%~ds0%~sp0%i386\share\bison
+set BISON_PKGDATADIR=%~ds0%~sp0%bin\data
 
 :: Get the number of CPUs in the system so we know how many jobs to execute.
 :: To modify the number used, see the cpucount usage for getting to know about the possible options

@@ -11,7 +11,7 @@ $_ROSBE_NINJAVER = (& "$_ROSBE_BASEDIR\bin\ninja.exe" --version)
 (get-WmiObject Win32_OperatingSystem).caption
 
 # GCC
-[regex]$GCCVer = "4.[0-9].[0-9]"
+[regex]$GCCVer = "[0-9]\.[0-9]\.[0-9]"
 $targetgcc = "$_ROSBE_PREFIX" + "gcc.exe"
 $gccversion = &{IEX "&'$_ROSBE_TARGET_MINGWPATH\bin\$targetgcc' -v 2>&1"}
 $_ROSBE_GCC_TARGET_VERSION = $GCCVer.matches($gccversion)[0].value
