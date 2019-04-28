@@ -12,8 +12,8 @@
 - Updated Patch to 2.7.6 (Daniel Reimer) (https://gitforwindows.org)
 - Fixed Desktop shotcuts removal on uninstall (Daniel Reimer)
 - Updated Ninja to 1.9.0 (Daniel Reimer)
-- Updated cmake to 3.14.3 and made bin folder lower case to make it happy (Daniel Reimer)
-- Fixed Pwershell version access rights and bad regex (Daniel Reimer)
+- Updated cmake to 3.13.4 and made bin folder lower case to make it happy (Daniel Reimer)
+- Fixed Powershell version access rights and bad regex (Daniel Reimer)
 
 *** Feb 04th, 2018 - RosBE 2.1.6 Released
 
