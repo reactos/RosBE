@@ -111,7 +111,7 @@ ReserveFile /plugin InstallOptions.dll
 Section -BaseFiles SEC01
 
     ;; Make the directory "$INSTDIR" read write accessible by all users
-    AccessControl::GrantOnFile "$INSTDIR" "(BU)" "FullAccess"
+    AccessControl::SetOnFile "$INSTDIR" "(BU)" "FullAccess"
 
     SetOutPath "$INSTDIR"
     SetOverwrite try
@@ -144,66 +144,66 @@ Section -BaseFiles SEC01
     SetOutPath "$INSTDIR\share"
     SetOverwrite try
     File /r Root\share\*.*
-    SetOutPath "$INSTDIR\Bin"
+    SetOutPath "$INSTDIR\bin"
     SetOverwrite try
-    File /r Components\Bin\7z.dll
-    File /r Components\Bin\7z.exe
-    File /r Components\Bin\bison.exe
-    File /r Components\Bin\buildtime.exe
-    File /r Components\Bin\ccache.exe
-    File /r Components\Bin\chknewer.exe
-    File /r Components\Bin\chkslash.exe
-    File /r Components\Bin\cmake.exe
-    File /r Components\Bin\cmcldeps.exe
-    File /r Components\Bin\cmp.exe
-    File /r Components\Bin\cmw9xcom.exe
-    File /r Components\Bin\cpack.exe
-    File /r Components\Bin\cpucount.exe
-    File /r Components\Bin\ctest.exe
-    File /r Components\Bin\diff.exe
-    File /r Components\Bin\diff3.exe
-    File /r Components\Bin\echoh.exe
-    File /r Components\Bin\elevate.exe
-    File /r Components\Bin\flash.exe
-    File /r Components\Bin\flex.exe
-    File /r Components\Bin\gdb.exe
-    File /r Components\Bin\gdbserver.exe
-    File /r Components\Bin\getdate.exe
-    File /r Components\Bin\libeay32.dll
-    File /r Components\Bin\log2lines.exe
-    File /r Components\Bin\m4.exe
-    File /r Components\Bin\Microsoft.VC90.CRT.manifest
-    File /r Components\Bin\mingw32-make.exe
-    File /r Components\Bin\MSVCM90.dll
-    File /r Components\Bin\msvcp60.dll
-    File /r Components\Bin\MSVCP90.dll
-    File /r Components\Bin\MSVCP100.dll
-    File /r Components\Bin\MSVCP120.dll
-    File /r Components\Bin\MSVCR90.dll
-    File /r Components\Bin\MSVCR100.dll
-    File /r Components\Bin\MSVCR120.dll
-    File /r Components\Bin\msys-2.0.dll
-    File /r Components\Bin\msys-gcc_s-1.dll
-    File /r Components\Bin\msys-iconv-2.dll
-    File /r Components\Bin\msys-intl-8.dll
-    File /r Components\Bin\ninja.exe
-    File /r Components\Bin\options.exe
-    File /r Components\Bin\patch.exe
-    File /r Components\Bin\patch.exe.manifest
-    File /r Components\Bin\pexports.exe
-    File /r Components\Bin\piperead.exe
-    File /r Components\Bin\playwav.exe
-    File /r Components\Bin\regex2.dll
-    File /r Components\Bin\rquote.exe
-    File /r Components\Bin\scut.exe
-    File /r Components\Bin\sdiff.exe
-    File /r Components\Bin\ssleay32.dll
-    File /r Components\Bin\tee.exe
-    File /r Components\Bin\wget.exe
-    File /r Components\Bin\zlib1.dll
-    SetOutPath "$INSTDIR\Bin\data"
+    File /r Components\bin\7z.dll
+    File /r Components\bin\7z.exe
+    File /r Components\bin\bison.exe
+    File /r Components\bin\buildtime.exe
+    File /r Components\bin\ccache.exe
+    File /r Components\bin\chknewer.exe
+    File /r Components\bin\chkslash.exe
+    File /r Components\bin\cmake.exe
+    File /r Components\bin\cmcldeps.exe
+    File /r Components\bin\cmp.exe
+    File /r Components\bin\cmw9xcom.exe
+    File /r Components\bin\cpack.exe
+    File /r Components\bin\cpucount.exe
+    File /r Components\bin\ctest.exe
+    File /r Components\bin\diff.exe
+    File /r Components\bin\diff3.exe
+    File /r Components\bin\echoh.exe
+    File /r Components\bin\elevate.exe
+    File /r Components\bin\flash.exe
+    File /r Components\bin\flex.exe
+    File /r Components\bin\gdb.exe
+    File /r Components\bin\gdbserver.exe
+    File /r Components\bin\getdate.exe
+    File /r Components\bin\libeay32.dll
+    File /r Components\bin\log2lines.exe
+    File /r Components\bin\m4.exe
+    File /r Components\bin\Microsoft.VC90.CRT.manifest
+    File /r Components\bin\mingw32-make.exe
+    File /r Components\bin\MSVCM90.dll
+    File /r Components\bin\msvcp60.dll
+    File /r Components\bin\MSVCP90.dll
+    File /r Components\bin\MSVCP100.dll
+    File /r Components\bin\MSVCP120.dll
+    File /r Components\bin\MSVCR90.dll
+    File /r Components\bin\MSVCR100.dll
+    File /r Components\bin\MSVCR120.dll
+    File /r Components\bin\msys-2.0.dll
+    File /r Components\bin\msys-gcc_s-1.dll
+    File /r Components\bin\msys-iconv-2.dll
+    File /r Components\bin\msys-intl-8.dll
+    File /r Components\bin\ninja.exe
+    File /r Components\bin\options.exe
+    File /r Components\bin\patch.exe
+    File /r Components\bin\patch.exe.manifest
+    File /r Components\bin\pexports.exe
+    File /r Components\bin\piperead.exe
+    File /r Components\bin\playwav.exe
+    File /r Components\bin\regex2.dll
+    File /r Components\bin\rquote.exe
+    File /r Components\bin\scut.exe
+    File /r Components\bin\sdiff.exe
+    File /r Components\bin\ssleay32.dll
+    File /r Components\bin\tee.exe
+    File /r Components\bin\wget.exe
+    File /r Components\bin\zlib1.dll
+    SetOutPath "$INSTDIR\bin\data"
     SetOverwrite try
-    File /r Components\Bin\data\*.*
+    File /r Components\bin\data\*.*
     SetOutPath "$INSTDIR\samples"
     SetOverwrite try
     File /r Components\samples\*.*
@@ -325,7 +325,7 @@ Section -StartMenuShortcuts SEC07
             CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Readme.lnk" \
                            "$INSTDIR\README.pdf"
             CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Options.lnk" \
-                           "$INSTDIR\Bin\options.exe"
+                           "$INSTDIR\bin\options.exe"
     !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
@@ -415,7 +415,7 @@ Section Uninstall
     ;;
     RMDir /r /REBOOTOK "$INSTDIR\i386"
     RMDir /r /REBOOTOK "$INSTDIR\amd64"
-    RMDir /r /REBOOTOK "$INSTDIR\Bin"
+    RMDir /r /REBOOTOK "$INSTDIR\bin"
     RMDir /r /REBOOTOK "$INSTDIR\certs"
     RMDir /r /REBOOTOK "$INSTDIR\samples"
     RMDir /r /REBOOTOK "$INSTDIR\share"
