@@ -26,7 +26,7 @@ fi
 
 # RosBE Setup Variables
 rs_host_cflags="-pipe -O2 -Wl,-S -g0"
-rs_needed_tools="as bison flex $CC $CXX grep makeinfo python tar bzip2 find"        # GNU Make has a special check
+rs_needed_tools="as bison bzip2 find flex $CC $CXX grep makeinfo python re2c tar"        # GNU Make has a special check
 rs_needed_libs="zlib"
 rs_target="i686-w64-mingw32"
 rs_target_cflags="-pipe -O2 -Wl,-S -g0 -march=pentium -mtune=i686"
@@ -154,15 +154,9 @@ if [ "$1" = "" ]; then
 
 					case "$choice" in
 						"U"|"u")
-							# We only allow update from 2.1.2 to 2.2
-							# For other releases:
 							# We don't support update in this version due to lots of changes
 							# To reenable updating, change this to "update=true"
-							if [ "$installed_version" = "2.1.2" ] && [ "$ROSBE_VERSION" = "2.2" ]; then
-								update=true
-							else
-								reinstall=true
-							fi
+							reinstall=true
 							;;
 						"R"|"r")
 							reinstall=true
@@ -208,26 +202,17 @@ else
 fi
 
 if $update; then
-	# For 2.1.2 -> 2.2
-	rs_process_gcc=true
-	rs_process_gmp=true
-	rs_process_ninja=true
-	rs_process_mingw_w64_headers=true
-	rs_process_mingw_w64_crt=true
-	rs_process_mpfr=true
-	rs_process_mpc=true
+	# No update supported for RosBE-Unix 2.2 due to lots of changes.
+	# Add this part back from older versions once we need to update again.
+	exit 1
 else
 	rs_process_binutils=true
 	rs_process_buildtime=true
 	rs_process_cmake=true
 	rs_process_cpucount=true
 	rs_process_gcc=true
-	rs_process_gmp=true
+	rs_process_mingw_w64=true
 	rs_process_ninja=true
-	rs_process_mingw_w64_headers=true
-	rs_process_mingw_w64_crt=true
-	rs_process_mpfr=true
-	rs_process_mpc=true
 	rs_process_scut=true
 
 	if $reinstall; then
@@ -311,17 +296,16 @@ if rs_prepare_module "binutils"; then
 	fi
 fi
 
-if rs_prepare_module "mingw_w64_headers"; then
+if rs_prepare_module "mingw_w64"; then
 	if [ $use_cflags -eq 0 ]; then
 		export CFLAGS="$rs_host_cflags"
 	fi
 
-	rs_do_command ../mingw_w64_headers/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target"
+	rs_do_command ../mingw_w64/mingw-w64-headers/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target"
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_do_command ln -s -f $rs_archprefixdir/$rs_target $rs_archprefixdir/mingw
-	rs_do_command mkdir -p $rs_archprefixdir/$rs_target/lib
-	rs_clean_module "mingw_w64_headers"
+	rs_clean_module "mingw_w64"
 
 	if [ $use_cflags -eq 0 ]; then
 		unset CFLAGS
@@ -339,28 +323,26 @@ if rs_prepare_module "gcc"; then
 
 	cd ../gcc-build
 
-	rs_do_command ln -s "$rs_archprefixdir" ../gcc/winsup
-
 	export old_path=$PATH
 	export PATH="$PATH:$rs_archprefixdir/bin"
 
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
 
-	rs_do_command ../gcc/configure --target="$rs_target" --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --enable-plugins --disable-shared --disable-multilib --disable-nls --disable-werror --disable-sjlj-exceptions --with-gnu-ld --with-gnu-as
+	rs_do_command ../gcc/configure --target="$rs_target" --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --enable-plugins --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --disable-sjlj-exceptions --disable-libstdcxx-verbose
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
 	rs_do_command_can_fail $rs_makecmd install-lto-plugin
 
-	if rs_prepare_module "mingw_w64_crt"; then
+	if rs_prepare_module "mingw_w64"; then
 		if [ $use_cflags -eq 0 ]; then
 			export CFLAGS="$rs_host_cflags"
 		fi
 
-		rs_do_command ../mingw_w64_crt/configure --prefix="$rs_archprefixdir/$rs_target" --with-sysroot="$rs_archprefixdir/$rs_target" --host="$rs_target"
+		rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --with-sysroot="$rs_archprefixdir/$rs_target" --host="$rs_target"
 		rs_do_command $rs_makecmd -j $rs_cpucount
 		rs_do_command $rs_makecmd install
-		rs_clean_module "mingw_w64_crt"
+		rs_clean_module "mingw_w64"
 
 		if [ $use_cflags -eq 0 ]; then
 			unset CFLAGS
@@ -387,15 +369,21 @@ if rs_prepare_module "ninja"; then
 	if [ $use_cflags -eq 0 ]; then
 		export CFLAGS="$rs_host_cflags"
 	fi
+
+	export old_path=$PATH
+	export PATH=".:$PATH"
+
 	rs_do_command cd ../ninja
 	rs_do_command ./configure.py --bootstrap
-	rs_do_command cd ../ninja-build
-	rs_do_command install ../ninja/ninja $rs_prefixdir/bin/ninja
+	rs_do_command install ninja "$rs_prefixdir/bin"
 	rs_clean_module "ninja"
 
 	if [ $use_cflags -eq 0 ]; then
 		unset CFLAGS
 	fi
+
+	export PATH=$old_path
+	unset old_path
 fi
 
 # Final actions
@@ -407,8 +395,9 @@ cd "$rs_prefixdir"
 rm -rf doc man share/info share/man
 
 cd "$rs_archprefixdir"
-rm -rf $rs_target/doc $rs_target/share include info man share
+rm -rf $rs_target/doc $rs_target/share include info man mingw share
 rm -f lib/* >& /dev/null
+##### END almost shared buildtoolchain/RosBE-Unix building part ###############
 
 # See: https://jira.reactos.org/browse/ROSBE-35
 osname=`uname`
@@ -434,8 +423,6 @@ if [ "$osname" != "Darwin" ]; then
 		$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
 	done
 fi
-##### END almost shared buildtoolchain/RosBE-Unix building part ###############
-
 
 echo "Copying scripts..."
 cp -R "$rs_scriptdir/scripts/"* "$installdir"

@@ -99,21 +99,22 @@ Version Information
   This version of RosBE for Unix-based operating systems uses the following
 components:
 
-  * GNU Binutils v2.31.1
-    compiled for mingw32
+  * GNU Binutils v2.32
+    compiled for i686-w64-mingw32
 
-  * GCC, The GNU Compiler Collection v8.2.0
-    compiled for mingw32
+  * GCC, The GNU Compiler Collection v8.3.0
+    compiled for i686-w64-mingw32
 
     NOTE: This GCC version only supports C and C++
 
-  * CMake 3.14.3
+  * CMake 3.15.2
   * GMP 6.1.2
-  * Ninja 1.9.0
-  * MinGW-Runtime 5.0.4
-  * MPFR 4.0.2
-  * W32api 5.0.4
+  * Mingw-w64 6.0.0
   * MPC 1.1.0
+  * MPFR 4.0.2
+  * Ninja 1.9.0
+    patched with:
+      - https://raw.githubusercontent.com/reactos/RosBE/master/Patches/ninja-v1.9.0-Fix-MinGW-bootstrap-build.patch
 
 
 Tested Operating Systems
@@ -130,9 +131,6 @@ x86_64 (64-bit) systems.
 
 Websites
 ---------
-MinGW - Minimalist GNU for Windows
-http://www.mingw.org
-
 Binutils, the Binary Tools Collection
 https://www.gnu.org/software/binutils
 
@@ -148,6 +146,8 @@ https://gmplib.org
 The GNU MPFR library
 http://www.mpfr.org
 
+Mingw-w64
+https://mingw-w64.org
 
 Credits
 --------
