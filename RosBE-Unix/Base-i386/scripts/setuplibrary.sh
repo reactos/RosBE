@@ -1,8 +1,8 @@
 ###############################################################################
 # Shared setup functions for RosBE-Windows' buildtoolchain and RosBE-Unix
-# Copyright 2009-2011 Colin Finck <colin@reactos.org>
+# Copyright 2009-2019 Colin Finck <colin@reactos.org>
 #
-# Released under GNU GPL v2 or any later version.
+# Released under GPL-2.0-or-later (https://spdx.org/licenses/GPL-2.0-or-later)
 ###############################################################################
 # Conventions:
 #   - Prepend all functions of this library with "rs_" (RosBE Setup)
@@ -82,7 +82,7 @@ rs_check_requirements()
 			# Store the complete path in $rs_makecmd to prevent collisions with our own Make.
 			rs_makecmd=`which $app`
 			rs_greenmsg "OK"
-        fi
+		fi
 	done
 
 	if [ "$rs_makecmd" = "" ]; then
@@ -91,9 +91,8 @@ rs_check_requirements()
 	fi
 
 	# Check for libs
-	# Skip that part on OSX
-	local osname=`uname`
-	if [ "$osname" != "Darwin" ]; then
+	# Skip that part on OSX and MSYS
+	if [ "`uname`" != "Darwin" ] && [ "`uname -o`" != "Msys" ]; then
 		# pkg-config needs to be installed to check for libs
 		echo -n "Checking for pkg-config... "
 
@@ -199,8 +198,10 @@ rs_extract_module()
 	cd "$target_dir"
 
 	echo -n "Extracting $module... "
-	tar -xjf "$rs_sourcedir/$module.tar.bz2" >& "$rs_workdir/build.log"
-	rs_check_run
+
+	# Extract with bunzip2 and tar instead of "tar xjf" due to https://github.com/msys2/MSYS2-packages/issues/1548
+	bunzip2 --decompress --stdout "$rs_sourcedir/$module.tar.bz2" | tar -x --file=- >& "$rs_workdir/build.log"
+	rs_check_run 0
 
 	return 0
 }
