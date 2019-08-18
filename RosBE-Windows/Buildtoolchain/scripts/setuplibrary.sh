@@ -1,8 +1,8 @@
 ###############################################################################
 # Shared setup functions for RosBE-Windows' buildtoolchain and RosBE-Unix
-# Copyright 2009 Colin Finck <colin@reactos.org>
+# Copyright 2009-2019 Colin Finck <colin@reactos.org>
 #
-# Released under GNU GPL v2 or any later version.
+# Released under GPL-2.0-or-later (https://spdx.org/licenses/GPL-2.0-or-later)
 ###############################################################################
 # Conventions:
 #   - Prepend all functions of this library with "rs_" (RosBE Setup)
@@ -139,7 +139,9 @@ rs_extract_module()
 	cd "$target_dir"
 
 	echo -n "Extracting $module... "
-	tar -xjf "$rs_sourcedir/$module.tar.bz2" >& "$rs_workdir/build.log"
+
+	# Extract with bunzip2 and tar instead of "tar xjf" due to https://github.com/msys2/MSYS2-packages/issues/1548
+	bunzip2 --decompress --stdout "$rs_sourcedir/$module.tar.bz2" | tar -x --file=- >& "$rs_workdir/build.log"
 	rs_check_run
 
 	return 0
