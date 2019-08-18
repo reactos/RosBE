@@ -191,10 +191,6 @@ rs_extract_module()
 	local module=$1
 	local target_dir=$2
 
-	if ! `eval echo \\$rs_process_$module`; then
-		return 1
-	fi
-
 	cd "$target_dir"
 
 	echo -n "Extracting $module... "
@@ -249,11 +245,12 @@ rs_prepare_module()
 {
 	local module=$1
 
-	rm -rf "$rs_workdir/$module"
-
-	if ! rs_extract_module "$module" "$rs_workdir"; then
+	if ! `eval echo \\$rs_process_$module`; then
 		return 1
 	fi
+
+	rm -rf "$rs_workdir/$module"
+	rs_extract_module "$module"
 
 	rm -rf "$module-build"
 	mkdir "$module-build"
