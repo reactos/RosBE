@@ -250,7 +250,7 @@ rs_prepare_module()
 	fi
 
 	rm -rf "$rs_workdir/$module"
-	rs_extract_module "$module"
+	rs_extract_module "$module" "$rs_workdir"
 
 	rm -rf "$module-build"
 	mkdir "$module-build"
