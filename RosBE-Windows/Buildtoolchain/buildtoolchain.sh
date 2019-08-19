@@ -34,6 +34,9 @@ CC=gcc
 rs_makecmd=make
 use_cflags=0
 
+# Ensure similar error messages on all platforms, especially when we parse them (e.g. for pacman).
+export LANG=C
+
 # Make MSYS use native NTFS links for "ln -s"
 export MSYS=winsymlinks:nativestrict
 
