@@ -286,7 +286,7 @@ if rs_prepare_module "binutils"; then
 		export CFLAGS="$rs_host_cflags"
 	fi
 
-	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --target="$rs_target" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls
+	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "binutils"
@@ -329,7 +329,7 @@ if rs_prepare_module "gcc"; then
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
 
-	rs_do_command ../gcc/configure --target="$rs_target" --prefix="$rs_archprefixdir" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --enable-plugins --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --disable-sjlj-exceptions --disable-libstdcxx-verbose
+	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --enable-plugins --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --disable-sjlj-exceptions --disable-libstdcxx-verbose
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
 	rs_do_command_can_fail $rs_makecmd install-lto-plugin
@@ -339,7 +339,7 @@ if rs_prepare_module "gcc"; then
 			export CFLAGS="$rs_host_cflags"
 		fi
 
-		rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --with-sysroot="$rs_archprefixdir/$rs_target" --host="$rs_target"
+		rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir/$rs_target"
 		rs_do_command $rs_makecmd -j $rs_cpucount
 		rs_do_command $rs_makecmd install
 		rs_clean_module "mingw_w64"
