@@ -111,9 +111,8 @@ ReserveFile /plugin InstallOptions.dll
 Section -BaseFiles SEC01
 
     ;; Make the directory "$INSTDIR" read write accessible by all users
-    AccessControl::GrantOnFile "$INSTDIR" "(BU)" "FullAccess"
+    AccessControl::SetOnFile "$INSTDIR" "(BU)" "FullAccess"
 
-    SetShellVarContext current
     SetOutPath "$INSTDIR"
     SetOverwrite try
     File /r Icons\rosbe.ico
@@ -145,82 +144,79 @@ Section -BaseFiles SEC01
     SetOutPath "$INSTDIR\share"
     SetOverwrite try
     File /r Root\share\*.*
-    SetOutPath "$INSTDIR\Bin"
+    SetOutPath "$INSTDIR\bin"
     SetOverwrite try
-    File /r Components\Bin\7z.dll
-    File /r Components\Bin\7z.exe
-    File /r Components\Bin\bison.exe
-    File /r Components\Bin\buildtime.exe
-    File /r Components\Bin\ccache.exe
-    File /r Components\Bin\chknewer.exe
-    File /r Components\Bin\chkslash.exe
-    File /r Components\Bin\cmake.exe
-    File /r Components\Bin\cmcldeps.exe
-    File /r Components\Bin\cmp.exe
-    File /r Components\Bin\cmw9xcom.exe
-    File /r Components\Bin\cpack.exe
-    File /r Components\Bin\cpucount.exe
-    File /r Components\Bin\ctest.exe
-    File /r Components\Bin\diff.exe
-    File /r Components\Bin\echoh.exe
-    File /r Components\Bin\elevate.exe
-    File /r Components\Bin\flash.exe
-    File /r Components\Bin\flex.exe
-    File /r Components\Bin\gdb.exe
-    File /r Components\Bin\gdbserver.exe
-    File /r Components\Bin\getdate.exe
-	File /r Components\Bin\libeay32.dll
-    File /r Components\Bin\libexpat-1.dll
-    File /r Components\Bin\libgcc_s_dw2-1.dll
-    File /r Components\Bin\libiconv2.dll
-    File /r Components\Bin\libiconv-2.dll
-    File /r Components\Bin\libintl3.dll
-    File /r Components\Bin\libintl-8.dll
-    File /r Components\Bin\log2lines.exe
-    File /r Components\Bin\m4.exe
-    File /r Components\Bin\Microsoft.VC90.CRT.manifest
-    File /r Components\Bin\mingw32-make.exe
-    File /r Components\Bin\msys-1.0.dll
-    File /r Components\Bin\MSVCM90.dll
-    File /r Components\Bin\msvcp60.dll
-    File /r Components\Bin\MSVCP90.dll
-	File /r Components\Bin\MSVCP100.dll
-    File /r Components\Bin\MSVCP120.dll
-    File /r Components\Bin\MSVCR90.dll
-	File /r Components\Bin\MSVCR100.dll
-    File /r Components\Bin\MSVCR120.dll
-    File /r Components\Bin\ninja.exe
-    File /r Components\Bin\options.exe
-    File /r Components\Bin\patch.exe
-    File /r Components\Bin\patch.exe.manifest
-    File /r Components\Bin\pexports.exe
-    File /r Components\Bin\piperead.exe
-    File /r Components\Bin\playwav.exe
-    File /r Components\Bin\regex2.dll
-    File /r Components\Bin\rquote.exe
-    File /r Components\Bin\scut.exe
-    File /r Components\Bin\sdiff.exe
-	File /r Components\Bin\ssleay32.dll
-    File /r Components\Bin\tee.exe
-    File /r Components\Bin\wget.exe
-	File /r Components\Bin\zlib1.dll
-    SetOutPath "$INSTDIR\Bin\data"
+    File /r Components\bin\7z.dll
+    File /r Components\bin\7z.exe
+    File /r Components\bin\bison.exe
+    File /r Components\bin\buildtime.exe
+    File /r Components\bin\ccache.exe
+    File /r Components\bin\chknewer.exe
+    File /r Components\bin\chkslash.exe
+    File /r Components\bin\cmake.exe
+    File /r Components\bin\cmcldeps.exe
+    File /r Components\bin\cmp.exe
+    File /r Components\bin\cmw9xcom.exe
+    File /r Components\bin\cpack.exe
+    File /r Components\bin\cpucount.exe
+    File /r Components\bin\ctest.exe
+    File /r Components\bin\diff.exe
+    File /r Components\bin\diff3.exe
+    File /r Components\bin\echoh.exe
+    File /r Components\bin\elevate.exe
+    File /r Components\bin\flash.exe
+    File /r Components\bin\flex.exe
+    File /r Components\bin\gdb.exe
+    File /r Components\bin\gdbserver.exe
+    File /r Components\bin\getdate.exe
+    File /r Components\bin\libeay32.dll
+    File /r Components\bin\log2lines.exe
+    File /r Components\bin\m4.exe
+    File /r Components\bin\Microsoft.VC90.CRT.manifest
+    File /r Components\bin\mingw32-make.exe
+    File /r Components\bin\msvcp60.dll
+    File /r Components\bin\MSVCP120.dll
+    File /r Components\bin\MSVCR90.dll
+    File /r Components\bin\MSVCR100.dll
+    File /r Components\bin\MSVCR120.dll
+    File /r Components\bin\msys-2.0.dll
+    File /r Components\bin\msys-gcc_s-1.dll
+    File /r Components\bin\msys-iconv-2.dll
+    File /r Components\bin\msys-intl-8.dll
+    File /r Components\bin\ninja.exe
+    File /r Components\bin\options.exe
+    File /r Components\bin\patch.exe
+    File /r Components\bin\patch.exe.manifest
+    File /r Components\bin\pexports.exe
+    File /r Components\bin\piperead.exe
+    File /r Components\bin\playwav.exe
+    File /r Components\bin\regex2.dll
+    File /r Components\bin\rquote.exe
+    File /r Components\bin\scut.exe
+    File /r Components\bin\sdiff.exe
+    File /r Components\bin\ssleay32.dll
+    File /r Components\bin\tee.exe
+    File /r Components\bin\wget.exe
+    File /r Components\bin\zlib1.dll
+    File /r Components\bin\libgcc_s_dw2-1.dll
+    File /r Components\bin\libstdc++-6.dll
+    File /r Components\bin\libwinpthread-1.dll
+	
+    SetOutPath "$INSTDIR\bin\data"
     SetOverwrite try
-    File /r Components\Bin\data\*.*
+    File /r Components\bin\data\*.*
     SetOutPath "$INSTDIR\samples"
     SetOverwrite try
     File /r Components\samples\*.*
 SectionEnd
 
 Section -MinGWGCC SEC02
-    SetShellVarContext current
     SetOutPath "$INSTDIR\i386"
     SetOverwrite try
     File /r Components\i386\*.*
 SectionEnd
 
 Section /o "AMD64 Compiler" SEC03
-    SetShellVarContext current
     SetOutPath "$INSTDIR\amd64"
     SetOverwrite try
     File /r Components\amd64\*.*
@@ -231,16 +227,15 @@ Section /o "Add BIN folder to PATH variable (MSVC users)" SEC04
 SectionEnd
 
 Section /o "Update for GlobalSign Certificates (XP users NEED THAT)" SEC05
-    SetShellVarContext current
     SetOutPath "$INSTDIR\certs"
     SetOverwrite try
-	File /r Components\certs\Root-E46.crt
+    File /r Components\certs\Root-E46.crt
     File /r Components\certs\Root-R1.crt
     File /r Components\certs\Root-R3.crt
     File /r Components\certs\Root-R5.crt
-	File /r Components\certs\Root-R6.crt
-	File /r Components\certs\Root-R46.crt
-    
+    File /r Components\certs\Root-R6.crt
+    File /r Components\certs\Root-R46.crt
+
     Push "$INSTDIR\certs\Root-R1.crt"
     Call AddCertificateToStore
     Pop $0
@@ -259,19 +254,19 @@ Section /o "Update for GlobalSign Certificates (XP users NEED THAT)" SEC05
     ${If} $0 != success
         MessageBox MB_OK "Import of R5 GlobalSign Root Certificate failed: $0"
     ${EndIf}
-	    Push "$INSTDIR\certs\Root-R6.crt"
+        Push "$INSTDIR\certs\Root-R6.crt"
     Call AddCertificateToStore
     Pop $0
     ${If} $0 != success
         MessageBox MB_OK "Import of R6 GlobalSign Root Certificate failed: $0"
     ${EndIf}
-	    Push "$INSTDIR\certs\Root-E46.crt"
+        Push "$INSTDIR\certs\Root-E46.crt"
     Call AddCertificateToStore
     Pop $0
     ${If} $0 != success
         MessageBox MB_OK "Import of E46 GlobalSign Root Certificate failed: $0"
     ${EndIf}
-	    Push "$INSTDIR\certs\Root-R46.crt"
+        Push "$INSTDIR\certs\Root-R46.crt"
     Call AddCertificateToStore
     Pop $0
     ${If} $0 != success
@@ -280,7 +275,6 @@ Section /o "Update for GlobalSign Certificates (XP users NEED THAT)" SEC05
 SectionEnd
 
 Section /o "PowerShell Version" SEC06
-    SetShellVarContext current
     SetOutPath "$INSTDIR"
     SetOverwrite try
     File /r Components\Powershell\Build.ps1
@@ -309,7 +303,6 @@ Section /o "PowerShell Version" SEC06
 SectionEnd
 
 Section -StartMenuShortcuts SEC07
-    SetShellVarContext current
 
     ;;
     ;; Add our start menu shortcuts.
@@ -322,8 +315,8 @@ Section -StartMenuShortcuts SEC07
                 CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
             IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
                 CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
-			IfFileExists "$INSTDIR\amd64\*" 0 +6
-		        IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
+            IfFileExists "$INSTDIR\amd64\*" 0 +5
+                IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
                     CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
                 IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
                     CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
@@ -333,43 +326,41 @@ Section -StartMenuShortcuts SEC07
             CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Readme.lnk" \
                            "$INSTDIR\README.pdf"
             CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Options.lnk" \
-                           "$INSTDIR\Bin\options.exe"
+                           "$INSTDIR\bin\options.exe"
     !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
 Section /o "Desktop Shortcuts" SEC08
-    SetShellVarContext all
 
     ;;
     ;; Add our desktop shortcuts.
     ;;
-    IfFileExists "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +12 0
+    IfFileExists "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +11 0
         SetOutPath $REACTOS_SOURCE_DIRECTORY
         IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
             CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
         IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
             CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
-		IfFileExists "$INSTDIR\amd64\*" 0 +6
-		    IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
+        IfFileExists "$INSTDIR\amd64\*" 0 +5
+            IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
                 CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
             IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
                 CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
 SectionEnd
 
 Section /o "Quick Launch Shortcuts" SEC09
-    SetShellVarContext current
 
     ;;
     ;; Add our quick launch shortcuts.
     ;;
-    IfFileExists "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +12 0
+    IfFileExists "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +11 0
         SetOutPath $REACTOS_SOURCE_DIRECTORY
         IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
             CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
         IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
             CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
-		IfFileExists "$INSTDIR\amd64\*" 0 +6
-		    IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
+        IfFileExists "$INSTDIR\amd64\*" 0 +5
+            IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
                 CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
             IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
                 CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
@@ -394,19 +385,19 @@ Function un.onInit
         "Are you sure you want to remove ReactOS Build Environment and all of its components?" \
         IDYES +2
     Abort
-    IfFileExists "$APPDATA\RosBE\." 0 +5
+    IfFileExists "$APPDATA\RosBE\." 0 +3
         MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 \
         "Do you want to remove the ReactOS Build Environment configuration file from the Application Data Path?" \
         IDNO +2
         RMDir /r /REBOOTOK "$APPDATA\RosBE"
     MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 \
     "Do you want to remove the Shortcuts? If you just want to Update to a new Version of RosBE, keep them. This keeps your previous settings." \
-    IDNO +5
+    IDNO +9
         Delete /REBOOTOK "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk"
         Delete /REBOOTOK "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk"
         Delete /REBOOTOK "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk"
         Delete /REBOOTOK "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk"
-		Delete /REBOOTOK "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk"
+        Delete /REBOOTOK "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk"
         Delete /REBOOTOK "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk"
         Delete /REBOOTOK "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk"
         Delete /REBOOTOK "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk"
@@ -414,7 +405,6 @@ FunctionEnd
 
 Section Uninstall
     !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
-    SetShellVarContext current
 
     ;;
     ;; Clean up PATH Variable.
@@ -425,8 +415,8 @@ Section Uninstall
     ;; Clean up installed files.
     ;;
     RMDir /r /REBOOTOK "$INSTDIR\i386"
-	RMDir /r /REBOOTOK "$INSTDIR\amd64"
-    RMDir /r /REBOOTOK "$INSTDIR\Bin"
+    RMDir /r /REBOOTOK "$INSTDIR\amd64"
+    RMDir /r /REBOOTOK "$INSTDIR\bin"
     RMDir /r /REBOOTOK "$INSTDIR\certs"
     RMDir /r /REBOOTOK "$INSTDIR\samples"
     RMDir /r /REBOOTOK "$INSTDIR\share"
