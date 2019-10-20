@@ -1,7 +1,7 @@
                            ReactOS Build Environment
                  Version 2.2 for Unix-based operating systems
                       Base package and i386 build tools
-                      by Pierre Schweitzer (pierre@reactos.org)
+  by Colin Finck (colin@reactos.org), Pierre Schweitzer (pierre@reactos.org)
 
 Introduction
 -------------
