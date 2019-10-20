@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # ReactOS Build Environment for Unix-based Operating Systems - Packaging tool for the Base package
-# Copyright 2009 Colin Finck <colin@reactos.org>
+# Copyright 2009-2019 Colin Finck <colin@reactos.org>
 #
 # Released under GNU GPL v2 or any later version.
 
@@ -66,7 +66,7 @@ tools=""
 
 case "$package_name" in
 	"Base-i386")
-		sources+="cmake gmp mingw_w64_crt mingw_w64_headers mpc mpfr ninja"
+		sources+="cmake gmp mingw_w64 mpc mpfr ninja"
 		tools+="cpucount scut"
 esac
 
