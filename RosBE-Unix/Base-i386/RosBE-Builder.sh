@@ -10,22 +10,15 @@ if [ -z "$BASH_VERSION" ]; then
     exec bash "$0"
 fi
 
-if [ "x$CC" == "x" ]; then
-	CC=gcc
+if [ "$CC" == "" ]; then
+	export CC=gcc
 fi
 
-if [ "x$CXX" == "x" ]; then
-	CXX=g++
-fi
-
-if [ "x$CFLAGS" != "x" ]; then
-	use_cflags=1
-else
-	use_cflags=0
+if [ "$CXX" == "" ]; then
+	export CXX=g++
 fi
 
 # RosBE Setup Variables
-rs_host_cflags="-pipe -O2 -Wl,-S -g0"
 rs_needed_tools="as bzip2 find $CC $CXX grep makeinfo python re2c tar"        # GNU Make has a special check
 rs_needed_libs="zlib"
 rs_target="i686-w64-mingw32"
@@ -241,18 +234,32 @@ rs_boldmsg "Building..."
 rs_mkdir_if_not_exists "$rs_prefixdir/bin"
 rs_mkdir_if_not_exists "$rs_archprefixdir/$rs_target"
 
-if [ $use_cflags -eq 0 ]; then
-	# Use -march=native if the host compiler supports it
-	echo -n "Checking if the host compiler supports -march=native... "
+# Use -march=native if the host compiler supports it
+echo -n "Checking if the host compiler supports -march=native... "
 
-	if `$CC -march=native -o "$rs_workdir/dummy" "$rs_scriptdir/tools/dummy.c" >& /dev/null`; then
-		echo "yes"
-		rs_host_cflags+=" -march=native"
-		rm "$rs_workdir/dummy"
-	else
-		echo "no"
-	fi
+if `$CC -march=native -o "$rs_workdir/dummy" "$rs_scriptdir/tools/dummy.c" >& /dev/null`; then
+	echo "yes"
+	MARCH_NATIVE="-march=native"
+	rm "$rs_workdir/dummy"
+else
+	echo "no"
+	MARCH_NATIVE=""
 fi
+
+if [ "$CFLAGS" == "" ]; then
+	CFLAGS="-pipe -O2 -Wl,-S -g0 ${MARCH_NATIVE}"
+fi
+
+if [ "$CXXFLAGS" == "" ]; then
+	CXXFLAGS="-pipe -O2 -Wl,-S -g0 ${MARCH_NATIVE}"
+fi
+
+export CFLAGS
+export CXXFLAGS
+echo
+echo "Using CFLAGS=\"$CFLAGS\""
+echo "Using CXXFLAGS=\"$CXXFLAGS\""
+echo
 
 if $rs_process_buildtime; then
 	rs_do_command $CC -s -o "$rs_prefixdir/bin/buildtime" "$rs_scriptdir/tools/buildtime.c"
@@ -269,86 +276,42 @@ if $rs_process_scut; then
 fi
 
 if rs_prepare_module "bison"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
-
 	rs_do_command ../bison/configure --prefix="$rs_prefixdir" --disable-nls
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "bison"
-
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
 fi
 
 if rs_prepare_module "flex"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
-
 	rs_do_command ../flex/configure --prefix="$rs_prefixdir" --disable-nls
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "flex"
-
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
 fi
 
 if rs_prepare_module "cmake"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
-
 	rs_do_command ../cmake/bootstrap --prefix="$rs_prefixdir" --parallel=$rs_cpucount
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "cmake"
-
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
 fi
 
 if rs_prepare_module "binutils"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
-
 	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "binutils"
-
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
 fi
 
 if rs_prepare_module "mingw_w64"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
-
 	rs_do_command ../mingw_w64/mingw-w64-headers/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target"
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_do_command ln -s -f $rs_archprefixdir/$rs_target $rs_archprefixdir/mingw
 	rs_clean_module "mingw_w64"
-
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
 fi
 
 if rs_prepare_module "gcc"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
-
 	rs_extract_module gmp $PWD/../gcc
 	rs_extract_module mpc $PWD/../gcc
 	rs_extract_module mpfr $PWD/../gcc
@@ -367,18 +330,10 @@ if rs_prepare_module "gcc"; then
 	rs_do_command_can_fail $rs_makecmd install-lto-plugin
 
 	if rs_prepare_module "mingw_w64"; then
-		if [ $use_cflags -eq 0 ]; then
-			export CFLAGS="$rs_host_cflags"
-		fi
-
 		rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir/$rs_target"
 		rs_do_command $rs_makecmd -j $rs_cpucount
 		rs_do_command $rs_makecmd install
 		rs_clean_module "mingw_w64"
-
-		if [ $use_cflags -eq 0 ]; then
-			unset CFLAGS
-		fi
 	fi
 
 	cd "$rs_workdir/gcc-build"
@@ -387,9 +342,6 @@ if rs_prepare_module "gcc"; then
 
 	rs_clean_module "gcc"
 
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
 	unset CFLAGS_FOR_TARGET
 	unset CXXFLAGS_FOR_TARGET
 
@@ -398,10 +350,6 @@ if rs_prepare_module "gcc"; then
 fi
 
 if rs_prepare_module "ninja"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
-
 	export old_path=$PATH
 	export PATH=".:$PATH"
 
@@ -409,10 +357,6 @@ if rs_prepare_module "ninja"; then
 	rs_do_command ./configure.py --bootstrap
 	rs_do_command install ninja "$rs_prefixdir/bin"
 	rs_clean_module "ninja"
-
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
 
 	export PATH=$old_path
 	unset old_path
