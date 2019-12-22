@@ -26,12 +26,6 @@ automatically checks for them:
     The executable file and the package name are often called "bash".
     All scripts are designed to work only under the Bash shell.
 
-  * GNU Bison
-    The executable file and the package name are often called "bison".
-
-  * Flex
-    The executable file and the package name are often called "flex".
-
   * GNU GCC
     You need a GCC compiler, which is suitable for your system. The
     executable file and the package name are often called "gcc".
@@ -107,7 +101,9 @@ components:
 
     NOTE: This GCC version only supports C and C++
 
-  * CMake 3.15.2
+  * Bison 3.5
+  * CMake 3.16.2
+  * Flex 2.6.4+ (revision 8b1fbf674f2e038df9cf1fe7725617e3837ae2a9)
   * GMP 6.1.2
   * Mingw-w64 6.0.0
   * MPC 1.1.0
@@ -134,8 +130,14 @@ Websites
 Binutils, the Binary Tools Collection
 https://www.gnu.org/software/binutils
 
+Bison, general-purpose parser generator
+https://www.gnu.org/software/bison
+
 CMake, Cross Platform Make
 https://cmake.org
+
+Flex, The Fast Lexical Analyzer
+https://github.com/westes/flex
 
 GCC, the GNU Compiler Collection
 https://gcc.gnu.org

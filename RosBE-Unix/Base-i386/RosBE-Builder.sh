@@ -26,7 +26,7 @@ fi
 
 # RosBE Setup Variables
 rs_host_cflags="-pipe -O2 -Wl,-S -g0"
-rs_needed_tools="as bison bzip2 find flex $CC $CXX grep makeinfo python re2c tar"        # GNU Make has a special check
+rs_needed_tools="as bzip2 find $CC $CXX grep makeinfo python re2c tar"        # GNU Make has a special check
 rs_needed_libs="zlib"
 rs_target="i686-w64-mingw32"
 rs_target_cflags="-pipe -O2 -Wl,-S -g0 -march=pentium -mtune=i686"
@@ -207,9 +207,11 @@ if $update; then
 	exit 1
 else
 	rs_process_binutils=true
+	rs_process_bison=true
 	rs_process_buildtime=true
 	rs_process_cmake=true
 	rs_process_cpucount=true
+	rs_process_flex=true
 	rs_process_gcc=true
 	rs_process_mingw_w64=true
 	rs_process_ninja=true
@@ -264,6 +266,36 @@ rs_cpucount=`$rs_prefixdir/bin/cpucount -x1`
 
 if $rs_process_scut; then
 	rs_do_command $CC -s -o "$rs_prefixdir/bin/scut" "$rs_scriptdir/tools/scut.c"
+fi
+
+if rs_prepare_module "bison"; then
+	if [ $use_cflags -eq 0 ]; then
+		export CFLAGS="$rs_host_cflags"
+	fi
+
+	rs_do_command ../bison/configure --prefix="$rs_prefixdir" --disable-nls
+	rs_do_command $rs_makecmd -j $rs_cpucount
+	rs_do_command $rs_makecmd install
+	rs_clean_module "bison"
+
+	if [ $use_cflags -eq 0 ]; then
+		unset CFLAGS
+	fi
+fi
+
+if rs_prepare_module "flex"; then
+	if [ $use_cflags -eq 0 ]; then
+		export CFLAGS="$rs_host_cflags"
+	fi
+
+	rs_do_command ../flex/configure --prefix="$rs_prefixdir" --disable-nls
+	rs_do_command $rs_makecmd -j $rs_cpucount
+	rs_do_command $rs_makecmd install
+	rs_clean_module "flex"
+
+	if [ $use_cflags -eq 0 ]; then
+		unset CFLAGS
+	fi
 fi
 
 if rs_prepare_module "cmake"; then
