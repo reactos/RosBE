@@ -11,11 +11,11 @@ if [ -z "$BASH_VERSION" ]; then
 fi
 
 if [ "$CC" == "" ]; then
-	export CC=gcc
+	CC=gcc
 fi
 
 if [ "$CXX" == "" ]; then
-	export CXX=g++
+	CXX=g++
 fi
 
 # RosBE Setup Variables
