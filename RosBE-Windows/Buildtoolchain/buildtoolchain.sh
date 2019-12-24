@@ -1,17 +1,23 @@
 #!/bin/bash
 #
-# ReactOS Build Environment for Windows - Script for building a Binutils/CMake/GCC/MinGW-w64/Ninja toolchain for Windows
+# ReactOS Build Environment for Windows - Script for building a RosBE toolchain for Windows
 # Partly based on RosBE-Unix' "RosBE-Builder.sh"
 # Copyright 2009-2019 Colin Finck <colin@reactos.org>
 #
 # Released under GPL-2.0-or-later (https://spdx.org/licenses/GPL-2.0-or-later)
+#
+# Run "buildtoolchain-msys.sh" after this script.
+# This script must be run under "MSYS2 MinGW 32-bit"!
 
 ########################################################################################################################
 # Package "rosbe_2.2"
 #
 # This script was built for the following toolchain versions:
 # - Binutils 2.32
-# - CMake 3.15.2
+# - Bison 3.5
+#   patched with:
+#     * https://raw.githubusercontent.com/reactos/RosBE/master/Patches/bison-3.5-reactos-fix-win32-build.patch
+# - CMake 3.16.2
 # - GCC 8.3.0
 # - GMP 6.1.2
 # - Mingw-w64 6.0.0
@@ -31,8 +37,8 @@
 
 # Hardcoded values for buildtoolchain/MSYS2
 CC=gcc
+CXX=g++
 rs_makecmd=make
-use_cflags=0
 
 # Ensure similar error messages on all platforms, especially when we parse them (e.g. for pacman).
 export LANG=C
@@ -41,8 +47,7 @@ export LANG=C
 export MSYS=winsymlinks:nativestrict
 
 # RosBE Setup Variables
-rs_host_cflags="-pipe -O2 -Wl,-S -g0 -march=core2 -mfpmath=sse -msse2"
-rs_needed_tools="as bison bzip2 find flex $CC $CXX grep makeinfo python re2c tar"        # GNU Make has a special check
+rs_needed_tools="as bzip2 find $CC $CXX grep help2man m4 makeinfo python re2c tar"        # GNU Make has a special check
 rs_target="i686-w64-mingw32"
 rs_target_cflags="-pipe -O2 -Wl,-S -g0 -march=pentium -mtune=i686"
 
@@ -53,7 +58,11 @@ rs_scriptdir="$PWD"
 # buildtoolchain Constants
 # Use the GCC with POSIX Thread Model! CMake uses C++11 threads, which are not supported in GCC's Win32 Thread Model (yet).
 HOST_GCC_VERSION="gcc version 8.1.0 (i686-posix-dwarf-rev0, Built by MinGW-W64 project)"
-MODULES="cmake binutils mingw_w64 gcc ninja"
+
+# We ship the host M4 version along with Bison, so it should be the expected one.
+HOST_M4_VERSION="m4 (GNU M4) 1.4.18"
+
+MODULES="bison cmake binutils mingw_w64 gcc ninja"
 
 source "$rs_scriptdir/scripts/setuplibrary.sh"
 
@@ -61,11 +70,12 @@ source "$rs_scriptdir/scripts/setuplibrary.sh"
 echo "*******************************************************************************"
 echo "*     Buildtoolchain script for the ReactOS Build Environment for Windows     *"
 echo "*                             Package \"rosbe_2.2\"                             *"
+echo "*                                  MinGW part                                 *"
 echo "*                      by Colin Finck <colin@reactos.org>                     *"
 echo "*******************************************************************************"
 
 echo
-echo "This script builds a Binutils/CMake/GCC/MinGW-w64/Ninja toolchain for Windows."
+echo "This script builds a RosBE toolchain for Windows."
 echo
 
 if [ "`uname -o`" != "Msys" ]; then
@@ -97,7 +107,7 @@ fi
 
 # Install required tools in MSYS2
 rs_boldmsg "Running MSYS pacman..."
-pacman -S --quiet --noconfirm --needed bison diffutils flex make python re2c texinfo | tee /tmp/buildtoolchain-pacman.log
+pacman -S --quiet --noconfirm --needed diffutils help2man make msys2-runtime-devel python re2c texinfo | tee /tmp/buildtoolchain-pacman.log
 
 if grep installation /tmp/buildtoolchain-pacman.log >& /dev/null; then
 	# See e.g. https://sourceforge.net/p/msys2/tickets/74/
@@ -120,6 +130,17 @@ if gcc -v 2>&1 | grep "$HOST_GCC_VERSION" >& /dev/null; then
 else
 	rs_redmsg "MISSING"
 	echo "Correct GCC version is missing, aborted!"
+	exit 1
+fi
+
+# Check for the correct M4 version
+echo -n "Checking for the correct M4 version... "
+
+if /usr/bin/m4 --version 2>&1 | grep "$HOST_M4_VERSION" >& /dev/null; then
+	rs_greenmsg "OK"
+else
+	rs_redmsg "MISSING"
+	echo "Correct M4 version is missing, aborted!"
 	exit 1
 fi
 
@@ -160,60 +181,51 @@ rs_boldmsg "Building..."
 rs_mkdir_if_not_exists "$rs_prefixdir/bin"
 rs_mkdir_if_not_exists "$rs_archprefixdir/$rs_target"
 
+CFLAGS="-pipe -O2 -Wl,-S -g0 -march=core2 -mfpmath=sse -msse2"
+CXXFLAGS="-pipe -O2 -Wl,-S -g0 -march=core2 -mfpmath=sse -msse2"
+
+export CFLAGS
+export CXXFLAGS
+echo
+echo "Using CFLAGS=\"$CFLAGS\""
+echo "Using CXXFLAGS=\"$CXXFLAGS\""
+echo
+
 rs_do_command $CC -s -o "$rs_prefixdir/bin/cpucount.exe" "$rs_scriptdir/tools/cpucount.c"
 rs_cpucount=`$rs_prefixdir/bin/cpucount -x1`
 
-if rs_prepare_module "cmake"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
+if rs_prepare_module "bison"; then
+	rs_do_command ../bison/configure --prefix="$rs_prefixdir" --disable-nls
+	rs_do_command $rs_makecmd -j $rs_cpucount
+	rs_do_command $rs_makecmd install
+	rs_clean_module "bison"
+fi
 
-	rs_do_command ../cmake/bootstrap --prefix="$rs_prefixdir" --parallel=$rs_cpucount
+# flex is handled in buildtoolchain-msys.sh
+
+if rs_prepare_module "cmake"; then
+	rs_do_command ../cmake/bootstrap --prefix="$rs_prefixdir" --parallel=$rs_cpucount -- -DCMAKE_USE_OPENSSL=OFF
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "cmake"
-
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
 fi
 
 if rs_prepare_module "binutils"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
-
 	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --host="$rs_target" --build="$rs_target" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_clean_module "binutils"
-
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
 fi
 
 if rs_prepare_module "mingw_w64"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
-
 	rs_do_command ../mingw_w64/mingw-w64-headers/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target"
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 	rs_do_command ln -s -f $rs_archprefixdir/$rs_target $rs_archprefixdir/mingw
 	rs_clean_module "mingw_w64"
-
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
 fi
 
 if rs_prepare_module "gcc"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
-
 	rs_extract_module gmp $PWD/../gcc
 	rs_extract_module mpc $PWD/../gcc
 	rs_extract_module mpfr $PWD/../gcc
@@ -232,18 +244,10 @@ if rs_prepare_module "gcc"; then
 	rs_do_command_can_fail $rs_makecmd install-lto-plugin
 
 	if rs_prepare_module "mingw_w64"; then
-		if [ $use_cflags -eq 0 ]; then
-			export CFLAGS="$rs_host_cflags"
-		fi
-
 		rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir/$rs_target"
 		rs_do_command $rs_makecmd -j $rs_cpucount
 		rs_do_command $rs_makecmd install
 		rs_clean_module "mingw_w64"
-
-		if [ $use_cflags -eq 0 ]; then
-			unset CFLAGS
-		fi
 	fi
 
 	cd "$rs_workdir/gcc-build"
@@ -252,9 +256,6 @@ if rs_prepare_module "gcc"; then
 
 	rs_clean_module "gcc"
 
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
 	unset CFLAGS_FOR_TARGET
 	unset CXXFLAGS_FOR_TARGET
 
@@ -263,10 +264,6 @@ if rs_prepare_module "gcc"; then
 fi
 
 if rs_prepare_module "ninja"; then
-	if [ $use_cflags -eq 0 ]; then
-		export CFLAGS="$rs_host_cflags"
-	fi
-
 	export old_path=$PATH
 	export PATH=".:$PATH"
 
@@ -274,10 +271,6 @@ if rs_prepare_module "ninja"; then
 	rs_do_command ./configure.py --bootstrap --platform mingw
 	rs_do_command install ninja "$rs_prefixdir/bin"
 	rs_clean_module "ninja"
-
-	if [ $use_cflags -eq 0 ]; then
-		unset CFLAGS
-	fi
 
 	export PATH=$old_path
 	unset old_path
@@ -289,7 +282,8 @@ rs_boldmsg "Final actions"
 
 echo "Removing unneeded files..."
 cd "$rs_prefixdir"
-rm -rf doc man share/info share/man
+rm bin/yacc
+rm -rf doc man share/doc share/info share/man
 
 cd "$rs_archprefixdir"
 rm -rf $rs_target/doc $rs_target/share include info man mingw share
@@ -307,5 +301,8 @@ cd "$rs_prefixdir/bin"
 cp /mingw32/bin/libgcc_s_dw2-1.dll .
 cp /mingw32/bin/libstdc++-6.dll .
 cp /mingw32/bin/libwinpthread-1.dll .
+cp /usr/bin/m4.exe .
+cp /usr/bin/msys-2.0.dll .
+cp /usr/bin/msys-gcc_s-1.dll .
 
 echo "Finished!"
