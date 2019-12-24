@@ -1,0 +1,43 @@
+diff -ur bison-3.5/lib/gnulib.mk bison-3.5-reactos/lib/gnulib.mk
+--- bison-3.5/lib/gnulib.mk	2019-12-11 07:39:04.000000000 +0100
++++ bison-3.5-reactos/lib/gnulib.mk	2019-12-23 12:13:33.651598000 +0100
+@@ -330,7 +330,7 @@
+ 	$(AM_V_GEN)rm -f $@-t && \
+ 	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+ 	  echo '#if HAVE_WINSOCK2_H'; \
+-	  echo '# include <winsock2.h> /* avoid mingw pollution on DATADIR */'; \
++	  echo '//# include <winsock2.h> /* avoid mingw pollution on DATADIR */'; \
+ 	  echo '#endif'; \
+ 	  echo '#define PREFIX "$(prefix)"'; \
+ 	  echo '#define EXEC_PREFIX "$(exec_prefix)"'; \
+diff -ur bison-3.5/Makefile.in bison-3.5-reactos/Makefile.in
+--- bison-3.5/Makefile.in	2019-12-11 07:42:22.000000000 +0100
++++ bison-3.5-reactos/Makefile.in	2019-12-23 12:14:30.471598000 +0100
+@@ -9589,7 +9589,7 @@
+ 	$(AM_V_GEN)rm -f $@-t && \
+ 	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+ 	  echo '#if HAVE_WINSOCK2_H'; \
+-	  echo '# include <winsock2.h> /* avoid mingw pollution on DATADIR */'; \
++	  echo '//# include <winsock2.h> /* avoid mingw pollution on DATADIR */'; \
+ 	  echo '#endif'; \
+ 	  echo '#define PREFIX "$(prefix)"'; \
+ 	  echo '#define EXEC_PREFIX "$(exec_prefix)"'; \
+diff -ur bison-3.5/src/location.c bison-3.5-reactos/src/location.c
+--- bison-3.5/src/location.c	2019-11-02 18:11:17.000000000 +0100
++++ bison-3.5-reactos/src/location.c	2019-12-23 12:11:34.431598000 +0100
+@@ -25,9 +25,13 @@
+ #include <mbswidth.h>
+ #include <quotearg.h>
+ #include <stdio.h>    /* fileno */
+-#include <sys/ioctl.h>
++#ifndef WIN32
++# include <sys/ioctl.h>
++#endif
+ #include <sys/stat.h> /* fstat */
+-#include <termios.h>
++#ifndef WIN32
++# include <termios.h>
++#endif
+ 
+ #ifdef WINSIZE_IN_PTEM
+ # include <sys/stream.h>
