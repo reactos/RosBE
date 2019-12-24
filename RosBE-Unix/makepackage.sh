@@ -50,13 +50,8 @@ case "$package_name" in
 esac
 
 # Check if the required directory structure exists
-if ! [ -d "../../RosBE/Tools/" ]; then
-	echo "This script needs to be run in a working copy of the whole \"RosBE\" tree!"
-	exit 1
-fi
-
 if ! git status >& /dev/null; then
-	echo "This script needs to be run in a working copy of the whole \"RosBE\" tree!"
+	echo "This script needs to be run in a working copy of the \"RosBE\" repository!"
 	exit 1
 fi
 
@@ -66,7 +61,7 @@ tools=""
 
 case "$package_name" in
 	"Base-i386")
-		sources+="cmake gmp mingw_w64 mpc mpfr ninja"
+		sources+="bison cmake flex gmp mingw_w64 mpc mpfr ninja"
 		tools+="cpucount scut"
 esac
 
