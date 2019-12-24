@@ -102,6 +102,9 @@ components:
     NOTE: This GCC version only supports C and C++
 
   * Bison 3.5
+    patched with:
+      - https://raw.githubusercontent.com/reactos/RosBE/master/Patches/bison-3.5-reactos-fix-win32-build.patch
+
   * CMake 3.16.2
   * Flex 2.6.4+ (revision 8b1fbf674f2e038df9cf1fe7725617e3837ae2a9)
   * GMP 6.1.2
