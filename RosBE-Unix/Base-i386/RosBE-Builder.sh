@@ -164,7 +164,7 @@ if [ "$1" = "" ]; then
 					read -p "[no] " answer
 					echo
 
-					if [ "$answer" != "yes" ]; then
+					if [[ "$answer" != [yY][eE][sS] ]]; then
 						echo "Please enter another directory!"
 						installdir=""
 					fi

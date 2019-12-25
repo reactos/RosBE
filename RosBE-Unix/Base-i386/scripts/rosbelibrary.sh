@@ -38,7 +38,7 @@ check_root()
 		local answer
 		read -p "[no] " answer
 
-		if [ "$answer" = "yes" ]; then
+		if [[ "$answer" = [yY][eE][sS] ]]; then
 			echo
 		else
 			exit 1
