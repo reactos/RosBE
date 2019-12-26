@@ -89,8 +89,9 @@ set _ROSBE_TARGET_MINGWPATH=%_ROSBE_BASEDIR%\%ROS_ARCH%
 set _BUILDBOT_SVNSKIPMAINTRUNK=0
 set CCACHE_SLOPPINESS=time_macros
 
-:: Fix Bison package path (just in case RosBE is installed in a path which contains spaces)
-set BISON_PKGDATADIR=%~ds0%~sp0%bin\data
+:: Fix Bison package path (just in case RosBE is installed in a path which contains spaces) and add M4 path to a env var
+set BISON_PKGDATADIR=%~ds0%~sp0%share\bison
+set M4=%~ds0%~sp0%bin
 
 :: Get the number of CPUs in the system so we know how many jobs to execute.
 :: To modify the number used, see the cpucount usage for getting to know about the possible options
