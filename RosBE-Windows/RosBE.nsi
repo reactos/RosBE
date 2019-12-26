@@ -37,8 +37,8 @@ SetCompressor /FINAL /SOLID lzma
 !include "InstallOptions.nsh"
 !include "RosSourceDir.nsh"
 !include "LogicLib.nsh"
-!include "EnvVarUpdate.nsh"
 !include "AddCertificateToStore.nsh"
+!include "WinVer.nsh"
 
 ;;
 ;; Read our custom page ini, remove previous version and make sure only
@@ -226,54 +226,57 @@ Section /o "AMD64 Compiler" SEC03
 SectionEnd
 
 Section /o "Add BIN folder to PATH variable (MSVC users)" SEC04
-    ${EnvVarUpdate} $0 "PATH" "A" "HKCU" "$INSTDIR\bin"
+    EnVar::SetHKCU
+    EnVar::AddValue "PATH" "$INSTDIR\bin"
 SectionEnd
 
 Section /o "Update for GlobalSign Certificates (ONLY FOR XP users!!)" SEC05
-    SetOutPath "$INSTDIR\certs"
-    SetOverwrite try
-    File /r Components\certs\Root-E46.crt
-    File /r Components\certs\Root-R1.crt
-    File /r Components\certs\Root-R3.crt
-    File /r Components\certs\Root-R5.crt
-    File /r Components\certs\Root-R6.crt
-    File /r Components\certs\Root-R46.crt
+    ${IfNot} ${AtLeastWinVista}
+        SetOutPath "$INSTDIR\certs"
+        SetOverwrite try
+        File /r Components\certs\Root-E46.crt
+        File /r Components\certs\Root-R1.crt
+        File /r Components\certs\Root-R3.crt
+        File /r Components\certs\Root-R5.crt
+        File /r Components\certs\Root-R6.crt
+        File /r Components\certs\Root-R46.crt
 
-    Push "$INSTDIR\certs\Root-R1.crt"
-    Call AddCertificateToStore
-    Pop $0
-    ${If} $0 != success
-        MessageBox MB_OK "Import of R1 GlobalSign Root Certificate failed: $0"
-    ${EndIf}
-    Push "$INSTDIR\certs\Root-R3.crt"
-    Call AddCertificateToStore
-    Pop $0
-    ${If} $0 != success
-        MessageBox MB_OK "Import of R3 GlobalSign Root Certificate failed: $0"
-    ${EndIf}
-    Push "$INSTDIR\certs\Root-R5.crt"
-    Call AddCertificateToStore
-    Pop $0
-    ${If} $0 != success
-        MessageBox MB_OK "Import of R5 GlobalSign Root Certificate failed: $0"
-    ${EndIf}
-        Push "$INSTDIR\certs\Root-R6.crt"
-    Call AddCertificateToStore
-    Pop $0
-    ${If} $0 != success
-        MessageBox MB_OK "Import of R6 GlobalSign Root Certificate failed: $0"
-    ${EndIf}
-        Push "$INSTDIR\certs\Root-E46.crt"
-    Call AddCertificateToStore
-    Pop $0
-    ${If} $0 != success
-        MessageBox MB_OK "Import of E46 GlobalSign Root Certificate failed: $0"
-    ${EndIf}
-        Push "$INSTDIR\certs\Root-R46.crt"
-    Call AddCertificateToStore
-    Pop $0
-    ${If} $0 != success
-        MessageBox MB_OK "Import of R46 GlobalSign Root Certificate failed: $0"
+        Push "$INSTDIR\certs\Root-R1.crt"
+        Call AddCertificateToStore
+        Pop $0
+        ${If} $0 != success
+            MessageBox MB_OK "Import of R1 GlobalSign Root Certificate failed: $0"
+        ${EndIf}
+        Push "$INSTDIR\certs\Root-R3.crt"
+        Call AddCertificateToStore
+        Pop $0
+        ${If} $0 != success
+            MessageBox MB_OK "Import of R3 GlobalSign Root Certificate failed: $0"
+        ${EndIf}
+        Push "$INSTDIR\certs\Root-R5.crt"
+        Call AddCertificateToStore
+        Pop $0
+        ${If} $0 != success
+            MessageBox MB_OK "Import of R5 GlobalSign Root Certificate failed: $0"
+        ${EndIf}
+            Push "$INSTDIR\certs\Root-R6.crt"
+        Call AddCertificateToStore
+        Pop $0
+        ${If} $0 != success
+            MessageBox MB_OK "Import of R6 GlobalSign Root Certificate failed: $0"
+        ${EndIf}
+            Push "$INSTDIR\certs\Root-E46.crt"
+        Call AddCertificateToStore
+        Pop $0
+        ${If} $0 != success
+            MessageBox MB_OK "Import of E46 GlobalSign Root Certificate failed: $0"
+        ${EndIf}
+            Push "$INSTDIR\certs\Root-R46.crt"
+        Call AddCertificateToStore
+        Pop $0
+        ${If} $0 != success
+            MessageBox MB_OK "Import of R46 GlobalSign Root Certificate failed: $0"
+        ${EndIf}
     ${EndIf}
 SectionEnd
 
@@ -412,7 +415,8 @@ Section Uninstall
     ;;
     ;; Clean up PATH Variable.
     ;;
-    ${un.EnvVarUpdate} $0 "PATH" "R" "HKCU" "$INSTDIR\bin"
+	EnVar::SetHKCU
+    EnVar::DeleteValue "PATH" "$INSTDIR\bin"
 
     ;;
     ;; Clean up installed files.
