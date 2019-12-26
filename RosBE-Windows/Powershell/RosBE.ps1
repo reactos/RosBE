@@ -70,7 +70,7 @@ $ENV:CCACHE_SLOPPINESS = "time_macros"
 
 # Fix Bison package path (just in case RosBE is installed in a path which contains spaces) and add M4 path to a env var
 $ENV:BISON_PKGDATADIR = ((New-Object -ComObject Scripting.FileSystemObject).GetFolder("$_ROSBE_BASEDIR\share\bison")).ShortPath
-$ENV:M4 = ((New-Object -ComObject Scripting.FileSystemObject).GetFolder("$_ROSBE_BASEDIR\bin")).ShortPath
+$ENV:M4 = ((New-Object -ComObject Scripting.FileSystemObject).GetFile("$_ROSBE_BASEDIR\bin\m4.exe")).ShortPath
 
 # Get the number of CPUs in the system so we know how many jobs to execute.
 # To modify the number used, see the cpucount usage for getting to know about the possible options
@@ -188,10 +188,6 @@ if ("$args" -eq "") {
 
 if (Test-Path "$ENV:APPDATA\RosBE\rosbe-options-$ENV:ROS_ARCH.ps1") {
     & "$ENV:APPDATA\RosBE\rosbe-options-$ENV:ROS_ARCH.ps1"
-}
-
-if (Test-Path "$ENV:APPDATA\RosBE\RBUILDFLAGS-$_ROSBE_VERSION.FLG") {
-    $ENV:ROS_RBUILDFLAGS = get-content "$ENV:APPDATA\RosBE\RBUILDFLAGS-$_ROSBE_VERSION.FLG"
 }
 
 $global:_ROSBE_ORIGINALPATH = "$_ROSBE_BASEDIR;$_ROSBE_BASEDIR\bin;$_ROSBE_BASEDIR\samples;$ENV:PATH"
