@@ -91,7 +91,7 @@ set CCACHE_SLOPPINESS=time_macros
 
 :: Fix Bison package path (just in case RosBE is installed in a path which contains spaces) and add M4 path to a env var
 set BISON_PKGDATADIR=%~ds0%~sp0%share\bison
-set M4=%~ds0%~sp0%bin
+set M4=%~ds0%~sp0%bin\m4.exe
 
 :: Get the number of CPUs in the system so we know how many jobs to execute.
 :: To modify the number used, see the cpucount usage for getting to know about the possible options
@@ -109,6 +109,9 @@ set C_INCLUDE_PATH=
 set CPLUS_INCLUDE_PATH=
 set LIBRARY_PATH=
 
+if "%ROS_ARCH%" == "i386" (
+    color 0A
+)
 if "%ROS_ARCH%" == "amd64" (
     color 0B
 )
@@ -122,12 +125,14 @@ if not exist "%APPDATA%\RosBE\." (
 )
 
 :: Load the user's options if any
-if exist "%APPDATA%\RosBE\rosbe-options-%_ROSBE_VERSION%.cmd" (
-    call "%APPDATA%\RosBE\rosbe-options-%_ROSBE_VERSION%.cmd"
-)
-
-if exist "%APPDATA%\RosBE\rosbe-options-%1.cmd" (
-    call "%APPDATA%\RosBE\rosbe-options-%1.cmd"
+if "%ROS_ARCH%" == "i386" (
+    if exist "%APPDATA%\RosBE\rosbe-options-%_ROSBE_VERSION%.cmd" (
+        call "%APPDATA%\RosBE\rosbe-options-%_ROSBE_VERSION%.cmd"
+    )
+) else (
+    if exist "%APPDATA%\RosBE\rosbe-options-%1.cmd" (
+        call "%APPDATA%\RosBE\rosbe-options-%1.cmd"
+    )
 )
 
 set _ROSBE_ORIGINALPATH=%_ROSBE_BASEDIR%;%_ROSBE_BASEDIR%\bin;%_ROSBE_BASEDIR%\samples;%PATH%
