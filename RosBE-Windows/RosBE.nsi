@@ -1,4 +1,4 @@
-﻿Unicode true
+Unicode true
 !define PRODUCT_NAME "ReactOS Build Environment"
 !define PRODUCT_VERSION "2.2.0"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RosBE.cmd"
