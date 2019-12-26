@@ -1,4 +1,4 @@
-﻿Unicode true
+Unicode true
 !define PRODUCT_NAME "ReactOS Build Environment"
 !define PRODUCT_VERSION "2.2.0"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RosBE.cmd"
@@ -141,6 +141,12 @@ Section -BaseFiles SEC01
     File /r Root\TimeDate.cmd
     File /r Root\update.cmd
     File /r Root\version.cmd
+    SetOutPath "$INSTDIR\include"
+    SetOverwrite try
+    File /r Root\include\*.*
+    SetOutPath "$INSTDIR\lib"
+    SetOverwrite try
+    File /r Root\lib\*.*
     SetOutPath "$INSTDIR\share"
     SetOverwrite try
     File /r Root\share\*.*
@@ -166,10 +172,20 @@ Section -BaseFiles SEC01
     File /r Components\bin\elevate.exe
     File /r Components\bin\flash.exe
     File /r Components\bin\flex.exe
+<<<<<<< HEAD
+    File /r Components\bin\flex++.exe
+=======
+>>>>>>> 12534ef31a8e077df6bf8fe145e09f7e49d7d44b
     File /r Components\bin\gdb.exe
     File /r Components\bin\gdbserver.exe
     File /r Components\bin\getdate.exe
     File /r Components\bin\libeay32.dll
+<<<<<<< HEAD
+    File /r Components\bin\libgcc_s_dw2-1.dll
+    File /r Components\bin\libstdc++-6.dll
+    File /r Components\bin\libwinpthread-1.dll
+=======
+>>>>>>> 12534ef31a8e077df6bf8fe145e09f7e49d7d44b
     File /r Components\bin\log2lines.exe
     File /r Components\bin\m4.exe
     File /r Components\bin\Microsoft.VC90.CRT.manifest
@@ -198,6 +214,8 @@ Section -BaseFiles SEC01
     File /r Components\bin\tee.exe
     File /r Components\bin\wget.exe
     File /r Components\bin\zlib1.dll
+<<<<<<< HEAD
+=======
     File /r Components\bin\libgcc_s_dw2-1.dll
     File /r Components\bin\libstdc++-6.dll
     File /r Components\bin\libwinpthread-1.dll
@@ -205,6 +223,7 @@ Section -BaseFiles SEC01
     SetOutPath "$INSTDIR\bin\data"
     SetOverwrite try
     File /r Components\bin\data\*.*
+>>>>>>> 12534ef31a8e077df6bf8fe145e09f7e49d7d44b
     SetOutPath "$INSTDIR\samples"
     SetOverwrite try
     File /r Components\samples\*.*
@@ -226,7 +245,11 @@ Section /o "Add BIN folder to PATH variable (MSVC users)" SEC04
     ${EnvVarUpdate} $0 "PATH" "A" "HKCU" "$INSTDIR\bin"
 SectionEnd
 
+<<<<<<< HEAD
+Section /o "Update for GlobalSign Certificates (ONLY FOR XP users!!)" SEC05
+=======
 Section /o "Update for GlobalSign Certificates (XP users NEED THAT)" SEC05
+>>>>>>> 12534ef31a8e077df6bf8fe145e09f7e49d7d44b
     SetOutPath "$INSTDIR\certs"
     SetOverwrite try
     File /r Components\certs\Root-E46.crt
@@ -419,6 +442,8 @@ Section Uninstall
     RMDir /r /REBOOTOK "$INSTDIR\bin"
     RMDir /r /REBOOTOK "$INSTDIR\certs"
     RMDir /r /REBOOTOK "$INSTDIR\samples"
+    RMDir /r /REBOOTOK "$INSTDIR\lib"
+    RMDir /r /REBOOTOK "$INSTDIR\include"
     RMDir /r /REBOOTOK "$INSTDIR\share"
     StrCmp $ICONS_GROUP "" NO_SHORTCUTS
     RMDir /r /REBOOTOK "$SMPROGRAMS\$ICONS_GROUP"
