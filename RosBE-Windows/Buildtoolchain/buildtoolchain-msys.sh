@@ -56,8 +56,8 @@ echo
 echo "This script builds a RosBE toolchain for Windows."
 echo
 
-if [ "`uname -o`" != "Msys" ]; then
-	echo "You can only run this script under a MSYS environment!"
+if [ "$MSYSTEM" != "MSYS" ]; then
+	echo "Please run this script in an \"MSYS2 MSYS\" environment!"
 	exit 1
 fi
 
