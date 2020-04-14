@@ -39,7 +39,7 @@ rs_scriptdir="$PWD"
 
 # buildtoolchain Constants
 # Use the GCC building for MSYS, not for MinGW. This is required for POSIX-specific packages like Flex.
-HOST_GCC_VERSION="gcc version 9.1.0 (GCC)"
+HOST_GCC_VERSION="gcc version 9.3.0 (GCC)"
 MODULES="flex"
 
 source "$rs_scriptdir/scripts/setuplibrary.sh"

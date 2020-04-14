@@ -13,19 +13,17 @@
 # Package "rosbe_2.2"
 #
 # This script was built for the following toolchain versions:
-# - Binutils 2.32
-# - Bison 3.5
+# - Binutils 2.34
+# - Bison 3.5.4
 #   patched with:
 #     * https://raw.githubusercontent.com/reactos/RosBE/master/Patches/bison-3.5-reactos-fix-win32-build.patch
-# - CMake 3.16.2
-# - GCC 8.3.0
-# - GMP 6.1.2
+# - CMake 3.17.1
+# - GCC 8.4.0
+# - GMP 6.2.0
 # - Mingw-w64 6.0.0
 # - MPC 1.1.0
 # - MPFR 4.0.2
-# - Ninja 1.9.0
-#   patched with:
-#      * https://raw.githubusercontent.com/reactos/RosBE/master/Patches/ninja-v1.9.0-Fix-MinGW-bootstrap-build.patch
+# - Ninja 1.10
 #
 # These tools have to be compiled using
 # - http://repo.msys2.org/distrib/i686/msys2-i686-20190524.exe
@@ -107,7 +105,7 @@ fi
 
 # Install required tools in MSYS2
 rs_boldmsg "Running MSYS pacman..."
-pacman -S --quiet --noconfirm --needed diffutils help2man make msys2-runtime-devel python re2c texinfo | tee /tmp/buildtoolchain-pacman.log
+pacman -S --quiet --noconfirm --needed diffutils help2man make msys2-runtime-devel python re2c texinfo tar | tee /tmp/buildtoolchain-pacman.log
 
 if grep installation /tmp/buildtoolchain-pacman.log >& /dev/null; then
 	# See e.g. https://sourceforge.net/p/msys2/tickets/74/
