@@ -236,7 +236,7 @@ if rs_prepare_module "gcc"; then
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
 
-	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --host="$rs_target" --build="$rs_target" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --enable-plugins --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --disable-sjlj-exceptions --disable-libstdcxx-verbose
+	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --host="$rs_target" --build="$rs_target" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --enable-plugins --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
 	rs_do_command_can_fail $rs_makecmd install-lto-plugin
