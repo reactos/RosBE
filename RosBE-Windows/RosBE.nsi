@@ -37,7 +37,6 @@ SetCompressor /FINAL /SOLID lzma
 !include "InstallOptions.nsh"
 !include "RosSourceDir.nsh"
 !include "LogicLib.nsh"
-!include "AddCertificateToStore.nsh"
 !include "WinVer.nsh"
 
 ;;
@@ -152,7 +151,6 @@ Section -BaseFiles SEC01
     File /r Root\share\*.*
     SetOutPath "$INSTDIR\bin"
     SetOverwrite try
-    File /r Components\bin\7z.dll
     File /r Components\bin\7z.exe
     File /r Components\bin\bison.exe
     File /r Components\bin\buildtime.exe
@@ -162,21 +160,18 @@ Section -BaseFiles SEC01
     File /r Components\bin\cmake.exe
     File /r Components\bin\cmcldeps.exe
     File /r Components\bin\cmp.exe
-    File /r Components\bin\cmw9xcom.exe
     File /r Components\bin\cpack.exe
     File /r Components\bin\cpucount.exe
     File /r Components\bin\ctest.exe
     File /r Components\bin\diff.exe
     File /r Components\bin\diff3.exe
     File /r Components\bin\echoh.exe
-    File /r Components\bin\elevate.exe
     File /r Components\bin\flash.exe
     File /r Components\bin\flex.exe
     File /r Components\bin\flex++.exe
     File /r Components\bin\gdb.exe
     File /r Components\bin\gdbserver.exe
     File /r Components\bin\getdate.exe
-    File /r Components\bin\libeay32.dll
     File /r Components\bin\libgcc_s_dw2-1.dll
     File /r Components\bin\libstdc++-6.dll
     File /r Components\bin\libwinpthread-1.dll
@@ -184,11 +179,6 @@ Section -BaseFiles SEC01
     File /r Components\bin\m4.exe
     File /r Components\bin\Microsoft.VC90.CRT.manifest
     File /r Components\bin\mingw32-make.exe
-    File /r Components\bin\msvcp60.dll
-    File /r Components\bin\MSVCP120.dll
-    File /r Components\bin\MSVCR90.dll
-    File /r Components\bin\MSVCR100.dll
-    File /r Components\bin\MSVCR120.dll
     File /r Components\bin\msys-2.0.dll
     File /r Components\bin\msys-gcc_s-1.dll
     File /r Components\bin\msys-iconv-2.dll
@@ -200,11 +190,9 @@ Section -BaseFiles SEC01
     File /r Components\bin\pexports.exe
     File /r Components\bin\piperead.exe
     File /r Components\bin\playwav.exe
-    File /r Components\bin\regex2.dll
     File /r Components\bin\rquote.exe
     File /r Components\bin\scut.exe
     File /r Components\bin\sdiff.exe
-    File /r Components\bin\ssleay32.dll
     File /r Components\bin\tee.exe
     File /r Components\bin\wget.exe
     File /r Components\bin\zlib1.dll
@@ -230,57 +218,7 @@ Section /o "Add BIN folder to PATH variable (MSVC users)" SEC04
     EnVar::AddValue "PATH" "$INSTDIR\bin"
 SectionEnd
 
-Section /o "Update for GlobalSign Certificates (ONLY FOR XP users!!)" SEC05
-    ${IfNot} ${AtLeastWinVista}
-        SetOutPath "$INSTDIR\certs"
-        SetOverwrite try
-        File /r Components\certs\Root-E46.crt
-        File /r Components\certs\Root-R1.crt
-        File /r Components\certs\Root-R3.crt
-        File /r Components\certs\Root-R5.crt
-        File /r Components\certs\Root-R6.crt
-        File /r Components\certs\Root-R46.crt
-
-        Push "$INSTDIR\certs\Root-R1.crt"
-        Call AddCertificateToStore
-        Pop $0
-        ${If} $0 != success
-            MessageBox MB_OK "Import of R1 GlobalSign Root Certificate failed: $0"
-        ${EndIf}
-        Push "$INSTDIR\certs\Root-R3.crt"
-        Call AddCertificateToStore
-        Pop $0
-        ${If} $0 != success
-            MessageBox MB_OK "Import of R3 GlobalSign Root Certificate failed: $0"
-        ${EndIf}
-        Push "$INSTDIR\certs\Root-R5.crt"
-        Call AddCertificateToStore
-        Pop $0
-        ${If} $0 != success
-            MessageBox MB_OK "Import of R5 GlobalSign Root Certificate failed: $0"
-        ${EndIf}
-            Push "$INSTDIR\certs\Root-R6.crt"
-        Call AddCertificateToStore
-        Pop $0
-        ${If} $0 != success
-            MessageBox MB_OK "Import of R6 GlobalSign Root Certificate failed: $0"
-        ${EndIf}
-            Push "$INSTDIR\certs\Root-E46.crt"
-        Call AddCertificateToStore
-        Pop $0
-        ${If} $0 != success
-            MessageBox MB_OK "Import of E46 GlobalSign Root Certificate failed: $0"
-        ${EndIf}
-            Push "$INSTDIR\certs\Root-R46.crt"
-        Call AddCertificateToStore
-        Pop $0
-        ${If} $0 != success
-            MessageBox MB_OK "Import of R46 GlobalSign Root Certificate failed: $0"
-        ${EndIf}
-    ${EndIf}
-SectionEnd
-
-Section /o "PowerShell Version" SEC06
+Section /o "PowerShell Version" SEC05
     SetOutPath "$INSTDIR"
     SetOverwrite try
     File /r Components\Powershell\Build.ps1
@@ -308,7 +246,7 @@ Section /o "PowerShell Version" SEC06
                "A REG-File was generated on your desktop. Please use it with Admin Rights to set Powershell's execution rights correctly if your RosBE Powershell Version fails to run after install. Otherwise, just delete it."
 SectionEnd
 
-Section -StartMenuShortcuts SEC07
+Section -StartMenuShortcuts SEC06
 
     ;;
     ;; Add our start menu shortcuts.
@@ -336,7 +274,7 @@ Section -StartMenuShortcuts SEC07
     !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
-Section /o "Desktop Shortcuts" SEC08
+Section /o "Desktop Shortcuts" SEC07
 
     ;;
     ;; Add our desktop shortcuts.
@@ -354,7 +292,7 @@ Section /o "Desktop Shortcuts" SEC08
                 CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
 SectionEnd
 
-Section /o "Quick Launch Shortcuts" SEC09
+Section /o "Quick Launch Shortcuts" SEC08
 
     ;;
     ;; Add our quick launch shortcuts.
@@ -372,7 +310,7 @@ Section /o "Quick Launch Shortcuts" SEC09
                 CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
 SectionEnd
 
-Section -Post SEC10
+Section -Post SEC09
     WriteUninstaller "$INSTDIR\Uninstall.exe"
     WriteRegStr HKCU "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\RosBE.cmd"
     WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
