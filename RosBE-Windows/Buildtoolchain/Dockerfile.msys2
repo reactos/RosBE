@@ -1,0 +1,62 @@
+# Dockerfile for creating a Windows MSYS2 build environment for building MSYS2-based applications for RosBE-Windows
+# Copyright 2020 Colin Finck <colin@reactos.org>
+#
+# Released under GPL-2.0-or-later (https://spdx.org/licenses/GPL-2.0-or-later)
+#
+# You can rebuild it by calling
+#   docker build -t colinfinck/rosbe-windows-buildtoolchain-msys2 -f Dockerfile.msys2 .
+#
+# But usually you just want to use the image readily available at Docker Hub.
+# See "buildtoolchain-msys2.sh" for usage instructions on that.
+
+FROM mcr.microsoft.com/windows/servercore:1909
+MAINTAINER Colin Finck <colin@reactos.org>
+LABEL Description="Windows Server Core 1909 with MSYS2 20160719 for building MSYS2-based applications (last version creating Windows XP-compatible binaries)"
+
+ENV MSYSTEM=MSYS
+
+# Download and install 7-Zip for unpacking the .tar.xz archives
+RUN curl -O https://www.7-zip.org/a/7z1900-x64.msi && \
+    start /wait msiexec /i 7z1900-x64.msi /q /norestart && \
+    del 7z1900-x64.msi
+
+# Download, extract, and set up the MSYS2 archives
+RUN path=C:\Program Files\7-Zip;%path% && \
+    curl -O http://repo.msys2.org/distrib/i686/msys2-base-i686-20160719.tar.xz && \
+    7z x -so msys2-base-i686-20160719.tar.xz | 7z x -aoa -si -ttar && \
+    del msys2-base-i686-20160719.tar.xz && \
+    cd msys32 && \
+    curl -O http://repo.msys2.org/msys/i686/binutils-2.26-1-i686.pkg.tar.xz && \
+    7z x -so binutils-2.26-1-i686.pkg.tar.xz | 7z x -aoa -si -ttar && \
+    del binutils-2.26-1-i686.pkg.tar.xz && \
+    curl -O http://repo.msys2.org/msys/i686/bzip2-1.0.6-2-i686.pkg.tar.xz && \
+    7z x -so bzip2-1.0.6-2-i686.pkg.tar.xz | 7z x -aoa -si -ttar && \
+    del bzip2-1.0.6-2-i686.pkg.tar.xz && \
+    curl -O http://repo.msys2.org/msys/i686/gcc-5.3.0-3-i686.pkg.tar.xz && \
+    7z x -so gcc-5.3.0-3-i686.pkg.tar.xz | 7z x -aoa -si -ttar && \
+    del gcc-5.3.0-3-i686.pkg.tar.xz && \
+    curl -O http://repo.msys2.org/msys/i686/isl-0.16.1-1-i686.pkg.tar.xz && \
+    7z x -so isl-0.16.1-1-i686.pkg.tar.xz | 7z x -aoa -si -ttar && \
+    del isl-0.16.1-1-i686.pkg.tar.xz && \
+    curl -O http://repo.msys2.org/msys/i686/make-4.2.1-1-i686.pkg.tar.xz && \
+    7z x -so make-4.2.1-1-i686.pkg.tar.xz | 7z x -aoa -si -ttar && \
+    del make-4.2.1-1-i686.pkg.tar.xz && \
+    curl -O http://repo.msys2.org/msys/i686/mpc-1.0.3-1-i686.pkg.tar.xz && \
+    7z x -so mpc-1.0.3-1-i686.pkg.tar.xz | 7z x -aoa -si -ttar && \
+    del mpc-1.0.3-1-i686.pkg.tar.xz && \
+    curl -O http://repo.msys2.org/msys/i686/msys2-runtime-devel-2.5.2-2-i686.pkg.tar.xz && \
+    7z x -so msys2-runtime-devel-2.5.2-2-i686.pkg.tar.xz | 7z x -aoa -si -ttar && \
+    del msys2-runtime-devel-2.5.2-2-i686.pkg.tar.xz && \
+    curl -O http://repo.msys2.org/msys/i686/msys2-w32api-headers-5.0.0.4732.6172d2f-1-i686.pkg.tar.xz && \
+    7z x -so msys2-w32api-headers-5.0.0.4732.6172d2f-1-i686.pkg.tar.xz | 7z x -aoa -si -ttar && \
+    del msys2-w32api-headers-5.0.0.4732.6172d2f-1-i686.pkg.tar.xz && \
+    curl -O http://repo.msys2.org/msys/i686/msys2-w32api-runtime-5.0.0.4732.6172d2f-1-i686.pkg.tar.xz && \
+    7z x -so msys2-w32api-runtime-5.0.0.4732.6172d2f-1-i686.pkg.tar.xz | 7z x -aoa -si -ttar && \
+    del msys2-w32api-runtime-5.0.0.4732.6172d2f-1-i686.pkg.tar.xz && \
+    curl -O http://repo.msys2.org/msys/i686/tar-1.29-1-i686.pkg.tar.xz && \
+    7z x -so tar-1.29-1-i686.pkg.tar.xz | 7z x -aoa -si -ttar && \
+    del tar-1.29-1-i686.pkg.tar.xz && \
+    autorebase.bat && \
+    usr\bin\bash --login
+
+ENTRYPOINT ["C:\\msys32\\usr\\bin\\bash", "--login"]
