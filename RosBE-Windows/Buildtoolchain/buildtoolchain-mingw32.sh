@@ -57,9 +57,6 @@ rs_scriptdir="$PWD"
 # Use the GCC with POSIX Thread Model! CMake uses C++11 threads, which are not supported in GCC's Win32 Thread Model (yet).
 HOST_GCC_VERSION="gcc version 8.1.0 (i686-posix-dwarf-rev0, Built by MinGW-W64 project)"
 
-# We ship the host M4 version along with Bison, so it should be the expected one.
-HOST_M4_VERSION="m4 (GNU M4) 1.4.18"
-
 MODULES="bison cmake binutils mingw_w64 gcc ninja"
 
 source "$rs_scriptdir/scripts/setuplibrary.sh"
@@ -81,9 +78,9 @@ if [ "$MSYSTEM" != "MINGW32" ]; then
 	exit 1
 fi
 
-# We don't want too less parameters
+# We don't want too few parameters
 if [ "$2" == "" ]; then
-	echo -n "Syntax: ./buildtoolchain.sh <sources> <workdir>"
+	echo -n "Syntax: ./buildtoolchain-mingw32.sh <sources> <workdir>"
 
 	for module in $MODULES; do
 		echo -n " [$module]"
@@ -131,17 +128,6 @@ else
 	exit 1
 fi
 
-# Check for the correct M4 version
-echo -n "Checking for the correct M4 version... "
-
-if /usr/bin/m4 --version 2>&1 | grep "$HOST_M4_VERSION" >& /dev/null; then
-	rs_greenmsg "OK"
-else
-	rs_redmsg "MISSING"
-	echo "Correct M4 version is missing, aborted!"
-	exit 1
-fi
-
 echo
 
 # Get the absolute path to the source directory
@@ -179,8 +165,8 @@ rs_boldmsg "Building..."
 rs_mkdir_if_not_exists "$rs_prefixdir/bin"
 rs_mkdir_if_not_exists "$rs_archprefixdir/$rs_target"
 
-CFLAGS="-pipe -O2 -Wl,-S -g0 -march=core2 -mfpmath=sse -msse2"
-CXXFLAGS="-pipe -O2 -Wl,-S -g0 -march=core2 -mfpmath=sse -msse2"
+CFLAGS="-pipe -O2 -Wl,-S -g0 -march=core2"
+CXXFLAGS="-pipe -O2 -Wl,-S -g0 -march=core2"
 
 export CFLAGS
 export CXXFLAGS
@@ -299,8 +285,5 @@ cd "$rs_prefixdir/bin"
 cp /mingw32/bin/libgcc_s_dw2-1.dll .
 cp /mingw32/bin/libstdc++-6.dll .
 cp /mingw32/bin/libwinpthread-1.dll .
-cp /usr/bin/m4.exe .
-cp /usr/bin/msys-2.0.dll .
-cp /usr/bin/msys-gcc_s-1.dll .
 
 echo "Finished!"
