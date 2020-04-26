@@ -16,6 +16,7 @@
 - Updated cmake to 3.17.1 and made bin folder lower case to make it happy (Colin Finck)
 - Fixed Powershell version access rights and bad regex (Daniel Reimer)
 - Wiped some not needed anymore dependencies from /bin (Colin Finck, Mark Jansen)
+- MASSIVE XP support overhaul for all used 3rdparty tools (Colin Finck)
 
 *** Feb 04th, 2018 - RosBE 2.1.6 Released
 
