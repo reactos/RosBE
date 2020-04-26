@@ -177,7 +177,6 @@ Section -BaseFiles SEC01
     File /r Components\bin\libwinpthread-1.dll
     File /r Components\bin\log2lines.exe
     File /r Components\bin\m4.exe
-    File /r Components\bin\Microsoft.VC90.CRT.manifest
     File /r Components\bin\mingw32-make.exe
     File /r Components\bin\msys-2.0.dll
     File /r Components\bin\msys-gcc_s-1.dll

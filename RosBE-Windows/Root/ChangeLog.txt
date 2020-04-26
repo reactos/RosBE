@@ -1,4 +1,4 @@
-*** Dec 30th, 2020 - RosBE 2.2.0 Released
+*** Apr 27th, 2020 - RosBE 2.2.0 Released
 
 - Updated GCC to 8.4.0 (Colin Finck, Daniel Reimer)
   - i686-w64-mingw32 AND x86_64-w64_mingw32 (optional) in one setup!
