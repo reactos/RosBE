@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # ReactOS Build Environment for Unix-based Operating Systems - Builder Tool for the Base package
-# Copyright 2007-2019 Colin Finck <colin@reactos.org>
+# Copyright 2007-2020 Colin Finck <colin@reactos.org>
 # partially based on the BuildMingwCross script (http://www.mingw.org/MinGWiki/index.php/BuildMingwCross)
 #
 # Released under GNU GPL v2 or any later version.
@@ -45,7 +45,7 @@ echo "*         ReactOS Build Environment for Unix-based Operating Systems      
 echo "*                      Builder Tool for the Base package                      *"
 echo "*                      by Colin Finck <colin@reactos.org>                     *"
 echo "*                                                                             *"
-echo "*                                 Version $ROSBE_VERSION                               *"
+echo "*                                 Version $ROSBE_VERSION                                 *"
 echo "*******************************************************************************"
 
 echo
