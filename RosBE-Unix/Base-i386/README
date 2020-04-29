@@ -93,27 +93,25 @@ Version Information
   This version of RosBE for Unix-based operating systems uses the following
 components:
 
-  * GNU Binutils v2.32
+  * GNU Binutils v2.34
     compiled for i686-w64-mingw32
 
-  * GCC, The GNU Compiler Collection v8.3.0
+  * GCC, The GNU Compiler Collection v8.4.0
     compiled for i686-w64-mingw32
 
     NOTE: This GCC version only supports C and C++
 
-  * Bison 3.5
+  * Bison 3.5.4
     patched with:
       - https://raw.githubusercontent.com/reactos/RosBE/master/Patches/bison-3.5-reactos-fix-win32-build.patch
 
-  * CMake 3.16.2
+  * CMake 3.17.1
   * Flex 2.6.4+ (revision 8b1fbf674f2e038df9cf1fe7725617e3837ae2a9)
   * GMP 6.1.2
   * Mingw-w64 6.0.0
   * MPC 1.1.0
   * MPFR 4.0.2
-  * Ninja 1.9.0
-    patched with:
-      - https://raw.githubusercontent.com/reactos/RosBE/master/Patches/ninja-v1.9.0-Fix-MinGW-bootstrap-build.patch
+  * Ninja 1.10
 
 
 Tested Operating Systems
