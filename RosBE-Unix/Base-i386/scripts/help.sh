@@ -8,12 +8,6 @@
 
 echo
 echo "Available Commands:"
-echo " make [OPTIONS]     - make, without options does a standard build of"
-echo "                      ReactOS. OPTIONS are the standard ReactOS build"
-echo "                      options, i.e. bootcd."
-echo " makex [OPTIONS]    - Same as 'make' but automatically determines the"
-echo "                      number of CPUs in the system and uses -j with"
-echo "                      the appropriate number."
 echo " basedir            - Switch back to the ReactOS source directory."
 echo " charch [OPTIONS]   - Change the Architecture to build ReactOS for"
 echo "                      for the current RosBE session."

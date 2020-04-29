@@ -201,7 +201,6 @@ if $update; then
 else
 	rs_process_binutils=true
 	rs_process_bison=true
-	rs_process_buildtime=true
 	rs_process_cmake=true
 	rs_process_cpucount=true
 	rs_process_flex=true
@@ -260,10 +259,6 @@ echo
 echo "Using CFLAGS=\"$CFLAGS\""
 echo "Using CXXFLAGS=\"$CXXFLAGS\""
 echo
-
-if $rs_process_buildtime; then
-	rs_do_command $CC -s -o "$rs_prefixdir/bin/buildtime" "$rs_scriptdir/tools/buildtime.c"
-fi
 
 if $rs_process_cpucount; then
 	rs_do_command $CC -s -o "$rs_prefixdir/bin/cpucount" "$rs_scriptdir/tools/cpucount.c"
