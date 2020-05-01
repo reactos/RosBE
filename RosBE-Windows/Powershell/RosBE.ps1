@@ -53,7 +53,7 @@ $global:BUILD_ENVIRONMENT = "MinGW"
 $global:0 = $myInvocation.MyCommand.Definition
 $global:_ROSBE_BASEDIR = [System.IO.Path]::GetDirectoryName($0)
 $global:_ROSBE_PREFIX = $null
-$global:_ROSBE_VERSION = "2.1.6"
+$global:_ROSBE_VERSION = "2.2.0"
 $global:_ROSBE_ROSSOURCEDIR = "$pwd"
 $global:_ROSBE_SHOWTIME = 1
 $global:_ROSBE_WRITELOG = 1
@@ -68,8 +68,9 @@ $global:_ROSBE_TARGET_MINGWPATH = "$_ROSBE_BASEDIR\$ENV:ROS_ARCH"
 $global:_BUILDBOT_SVNSKIPMAINTRUNK = "0"
 $ENV:CCACHE_SLOPPINESS = "time_macros"
 
-# Fix Bison package path (just in case RosBE is installed in a path which contains spaces)
-$ENV:BISON_PKGDATADIR = ((New-Object -ComObject Scripting.FileSystemObject).GetFolder("$_ROSBE_HOST_MINGWPATH\share\bison")).ShortPath
+# Fix Bison package path (just in case RosBE is installed in a path which contains spaces) and add M4 path to a env var
+$ENV:BISON_PKGDATADIR = ((New-Object -ComObject Scripting.FileSystemObject).GetFolder("$_ROSBE_BASEDIR\share\bison")).ShortPath
+$ENV:M4 = ((New-Object -ComObject Scripting.FileSystemObject).GetFile("$_ROSBE_BASEDIR\bin\m4.exe")).ShortPath
 
 # Get the number of CPUs in the system so we know how many jobs to execute.
 # To modify the number used, see the cpucount usage for getting to know about the possible options
@@ -187,10 +188,6 @@ if ("$args" -eq "") {
 
 if (Test-Path "$ENV:APPDATA\RosBE\rosbe-options-$ENV:ROS_ARCH.ps1") {
     & "$ENV:APPDATA\RosBE\rosbe-options-$ENV:ROS_ARCH.ps1"
-}
-
-if (Test-Path "$ENV:APPDATA\RosBE\RBUILDFLAGS-$_ROSBE_VERSION.FLG") {
-    $ENV:ROS_RBUILDFLAGS = get-content "$ENV:APPDATA\RosBE\RBUILDFLAGS-$_ROSBE_VERSION.FLG"
 }
 
 $global:_ROSBE_ORIGINALPATH = "$_ROSBE_BASEDIR;$_ROSBE_BASEDIR\bin;$_ROSBE_BASEDIR\samples;$ENV:PATH"
