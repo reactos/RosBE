@@ -2,7 +2,7 @@
 #
 # Script for initializing RosBE
 # Part of RosBE for Unix-based Operating Systems
-# Copyright 2007-2011 Colin Finck <colin@reactos.org>
+# Copyright 2007-2020 Colin Finck <colin@reactos.org>
 #
 # Released under GNU GPL v2 or any later version.
 
@@ -42,7 +42,7 @@ echo "**************************************************************************
 echo "*         ReactOS Build Environment for Unix-based Operating Systems          *"
 echo "*                      by Colin Finck <colin@reactos.org>                     *"
 echo "*                                                                             *"
-echo "*                                 Version $_ROSBE_VERSION                                 *"
+echo "*                                 Version $_ROSBE_VERSION                               *"
 echo "*******************************************************************************"
 echo
 echo "For a list of all included commands, type: \"help\""

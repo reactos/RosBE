@@ -32,8 +32,8 @@ rs_sourcedir="$rs_scriptdir/sources"
 
 # RosBE-Unix Constants
 DEFAULT_INSTALL_DIR="/usr/local/RosBE"
-KNOWN_ROSBE_VERSIONS="0.3.6 1.1 1.4 1.4.2 1.5 2.0 2.1 2.1.1 2.1.2 2.2"
-ROSBE_VERSION="2.2"
+KNOWN_ROSBE_VERSIONS="0.3.6 1.1 1.4 1.4.2 1.5 2.0 2.1 2.1.1 2.1.2 2.2 2.2.1"
+ROSBE_VERSION="2.2.1"
 TARGET_ARCH="i386"
 
 source "$rs_scriptdir/scripts/rosbelibrary.sh"
@@ -45,7 +45,7 @@ echo "*         ReactOS Build Environment for Unix-based Operating Systems      
 echo "*                      Builder Tool for the Base package                      *"
 echo "*                      by Colin Finck <colin@reactos.org>                     *"
 echo "*                                                                             *"
-echo "*                                 Version $ROSBE_VERSION                                 *"
+echo "*                                 Version $ROSBE_VERSION                               *"
 echo "*******************************************************************************"
 
 echo
@@ -319,7 +319,7 @@ if rs_prepare_module "gcc"; then
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
 
-	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --enable-plugins --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
+	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --enable-plugins --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
 	rs_do_command_can_fail $rs_makecmd install-lto-plugin
