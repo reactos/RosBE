@@ -1,0 +1,71 @@
+diff -Naur ./gmp/mpn/generic/compute_powtab.c ./gmp-new/mpn/generic/compute_powtab.c
+--- ./gmp/mpn/generic/compute_powtab.c	2020-01-17 07:44:49.000000000 -0600
++++ ./gmp-new/mpn/generic/compute_powtab.c	2020-05-01 15:54:26.834552991 -0500
+@@ -70,6 +70,7 @@
+   mp_limb_t cy;
+   long start_idx;
+   int c;
++  long pi;
+ 
+   mp_limb_t big_base = mp_bases[base].big_base;
+   int chars_per_limb = mp_bases[base].chars_per_limb;
+@@ -139,7 +140,7 @@
+       start_idx = n_pows - 3;
+     }
+ 
+-  for (long pi = start_idx; pi >= 0; pi--)
++  for (/*long*/ pi = start_idx; pi >= 0; pi--)
+     {
+       t = powtab_mem_ptr;
+       powtab_mem_ptr += 2 * n + 2;
+@@ -204,6 +205,7 @@
+ 			int base, const size_t *exptab, size_t n_pows)
+ {
+   mp_ptr p, t;
++  long pi;
+ 
+   mp_limb_t big_base = mp_bases[base].big_base;
+   int chars_per_limb = mp_bases[base].chars_per_limb;
+@@ -223,7 +225,7 @@
+ 
+   mp_size_t n = 1;
+   mp_size_t shift = 0;
+-  for (long pi = n_pows - 1; pi >= 0; pi--)
++  for (/*long*/ pi = n_pows - 1; pi >= 0; pi--)
+     {
+       t = powtab_mem_ptr;
+       powtab_mem_ptr += 2 * n;
+@@ -271,7 +273,7 @@
+ 
+   /* Strip any remaining low zero limbs.  */
+   pt -= n_pows + 1;
+-  for (long pi = n_pows; pi >= 0; pi--)
++  for (/*long*/ pi = n_pows; pi >= 0; pi--)
+     {
+       mp_ptr t = pt[pi].p;
+       mp_size_t shift = pt[pi].shift;
+@@ -293,7 +295,9 @@
+ {
+   int chars_per_limb = mp_bases[base].chars_per_limb;
+   long n_pows = 0;
+-  for (size_t pn = (un + 1) >> 1; pn != 1; pn = (pn + 1) >> 1)
++  size_t pn;
++  long i;
++  for (/*size_t*/ pn = (un + 1) >> 1; pn != 1; pn = (pn + 1) >> 1)
+     {
+       exptab[n_pows] = pn * chars_per_limb;
+       n_pows++;
+@@ -301,11 +305,11 @@
+   exptab[n_pows] = chars_per_limb;
+ 
+ #if HAVE_mpn_compute_powtab_mul && HAVE_mpn_compute_powtab_div
+-  size_t pn = un - 1;
++  /*size_t*/ pn = un - 1;
+   size_t xn = (un + 1) >> 1;
+   unsigned mcost = 1;
+   unsigned dcost = 1;
+-  for (long i = n_pows - 2; i >= 0; i--)
++  for (/*long*/ i = n_pows - 2; i >= 0; i--)
+     {
+       size_t pow = (pn >> (i + 1)) + 1;
+ 
