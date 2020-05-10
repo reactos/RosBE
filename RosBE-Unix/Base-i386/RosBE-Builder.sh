@@ -313,9 +313,6 @@ if rs_prepare_module "gcc"; then
 
 	cd ../gcc-build
 
-	export old_path=$PATH
-	export PATH="$PATH:$rs_archprefixdir/bin"
-
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
 
@@ -325,7 +322,9 @@ if rs_prepare_module "gcc"; then
 	rs_do_command_can_fail $rs_makecmd install-lto-plugin
 
 	if rs_prepare_module "mingw_w64"; then
-		rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir/$rs_target"
+		# The mingw_w64 package needs to know about the target build tools. This used to be done by adding "$rs_archprefixdir/bin" to the PATH, but failed for hpoussin on NixOS.
+		# Passing them manually works for him and doesn't break anything else.
+		AR="$rs_archprefixdir/bin/i686-w64-mingw32-ar" AS="$rs_archprefixdir/bin/i686-w64-mingw32-as" CC="$rs_archprefixdir/bin/i686-w64-mingw32-gcc" DLLTOOL="$rs_archprefixdir/bin/i686-w64-mingw32-dlltool" RANLIB="$rs_archprefixdir/bin/i686-w64-mingw32-ranlib" STRIP="$rs_archprefixdir/bin/i686-w64-mingw32-strip" rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir/$rs_target"
 		rs_do_command $rs_makecmd -j $rs_cpucount
 		rs_do_command $rs_makecmd install
 		rs_clean_module "mingw_w64"
@@ -339,22 +338,12 @@ if rs_prepare_module "gcc"; then
 
 	unset CFLAGS_FOR_TARGET
 	unset CXXFLAGS_FOR_TARGET
-
-	export PATH=$old_path
-	unset old_path
 fi
 
 if rs_prepare_module "ninja"; then
-	export old_path=$PATH
-	export PATH=".:$PATH"
-
-	rs_do_command cd ../ninja
-	rs_do_command ./configure.py --bootstrap
+	rs_do_command ../ninja/configure.py --bootstrap
 	rs_do_command install ninja "$rs_prefixdir/bin"
 	rs_clean_module "ninja"
-
-	export PATH=$old_path
-	unset old_path
 fi
 
 # Final actions
