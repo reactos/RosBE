@@ -246,11 +246,11 @@ else
 fi
 
 if [ "$CFLAGS" == "" ]; then
-	CFLAGS="-pipe -O2 -Wl,-S -g0 ${MARCH_NATIVE}"
+	CFLAGS="-pipe -O2 -g0 ${MARCH_NATIVE}"
 fi
 
 if [ "$CXXFLAGS" == "" ]; then
-	CXXFLAGS="-pipe -O2 -Wl,-S -g0 ${MARCH_NATIVE}"
+	CXXFLAGS="-pipe -O2 -g0 ${MARCH_NATIVE}"
 fi
 
 export CFLAGS
