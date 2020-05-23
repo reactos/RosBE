@@ -34,7 +34,6 @@ rs_sourcedir="$rs_scriptdir/sources"
 
 # RosBE-Unix Constants
 DEFAULT_INSTALL_DIR="/usr/local/RosBE"
-KNOWN_ROSBE_VERSIONS="0.3.6 1.1 1.4 1.4.2 1.5 2.0 2.1 2.1.1 2.1.2 2.2 2.2.1"
 ROSBE_VERSION="2.2.1"
 TARGET_ARCH="i386"
 
@@ -103,77 +102,23 @@ if [ "$1" = "" ]; then
 			# Check if the directory is empty
 			if [ ! "`ls $installdir`" = "" ]; then
 				if [ -f "$installdir/RosBE-Version" ]; then
-					choice=""
-
-					# Allow the user to update an already installed RosBE version
 					installed_version=`cat "$installdir/RosBE-Version"`
-
-					for known_version in $KNOWN_ROSBE_VERSIONS; do
-						if [ "$known_version" = "$installed_version" ]; then
-							if [ "$installed_version" = "$ROSBE_VERSION" ]; then
-								echo "The current version of the Build Environment is already installed in this directory."
-								echo "Please choose one of the following options:"
-								echo
-								echo " (R)einstall all components of the Build Environment"
-								echo " (C)hoose a different installation directory"
-								echo
-
-								rs_showchoice "R" "r R c C"
-							else
-								echo "An older version of the Build Environment has been found in this directory."
-								echo "Please choose one of the following options:"
-								echo
-								echo " (U)pdate/(r)einstall the Build Environment"
-								echo " (C)hoose a different installation directory"
-								echo
-
-								rs_showchoice "U" "u U r R c C"
-							fi
-
-							break
-						fi
-					done
-
-					if [ "$choice" = "" ]; then
-						# We found no known version, so this could be for example a Release Candidate.
-						# Only offer the reinstallation option.
-						echo "Another version of the Build Environment is already installed in this directory."
-						echo "Please choose one of the following options:"
-						echo
-						echo " (R)einstall all components of the Build Environment"
-						echo " (C)hoose a different installation directory"
-						echo
-
-						rs_showchoice "R" "r R c C"
-					fi
-
-					case "$choice" in
-						"U"|"u")
-							# We don't support update in this version due to lots of changes
-							# To reenable updating, change this to "update=true"
-							reinstall=true
-							;;
-						"R"|"r")
-							reinstall=true
-							;;
-						"C"|"c")
-							echo "Please enter another directory!"
-							installdir=""
-							;;
-					esac
+					echo "ReactOS Build Environment $installed_version is already installed in this directory."
 				else
-					echo "The directory \"$installdir\" is not empty. Do you really want to continue? (yes/no)"
-					read -p "[no] " answer
-					echo
+					echo "The directory \"$installdir\" is not empty."
+				fi
 
-					if [[ "$answer" != [yY][eE][sS] ]]; then
-						echo "Please enter another directory!"
-						installdir=""
-					fi
+				echo "Do you want to remove this directory and install the new Build Environment into it? (yes/no)"
+				read -p "[no] " answer
+				echo
+
+				if [[ "$answer" != [yY][eE][sS] ]]; then
+					echo "Please enter another directory!"
+					installdir=""
 				fi
 			fi
 		else
-			echo "The directory \"$installdir\" does not exist. The installation script will create it for you."
+			echo "The directory \"$installdir\" does not exist. It will be created for you."
 			echo
 		fi
 	done
@@ -196,29 +141,15 @@ else
 	echo
 fi
 
-if $update; then
-	# No update supported for RosBE-Unix 2.2 due to lots of changes.
-	# Add this part back from older versions once we need to update again.
-	exit 1
-else
-	rs_process_binutils=true
-	rs_process_bison=true
-	rs_process_cmake=true
-	rs_process_cpucount=true
-	rs_process_flex=true
-	rs_process_gcc=true
-	rs_process_mingw_w64=true
-	rs_process_ninja=true
-	rs_process_scut=true
-
-	if $reinstall; then
-		# Empty the directory if we're reinstalling
-		rs_mkdir_empty "$installdir"
-	else
-		# Otherwise just create the directory if it does not exist
-		rs_mkdir_if_not_exists "$installdir"
-	fi
-fi
+rs_process_binutils=true
+rs_process_bison=true
+rs_process_cmake=true
+rs_process_cpucount=true
+rs_process_flex=true
+rs_process_gcc=true
+rs_process_mingw_w64=true
+rs_process_ninja=true
+rs_process_scut=true
 
 # Test if the installation directory is writable
 if [ ! -w "$installdir" ]; then
@@ -226,14 +157,17 @@ if [ ! -w "$installdir" ]; then
 	exit 1
 fi
 
+rm -rf "$installdir"
+mkdir -p "$installdir"
+
 rs_prefixdir="$installdir"
 rs_archprefixdir="$installdir/$TARGET_ARCH"
 
 ##### BEGIN almost shared buildtoolchain/RosBE-Unix building part #############
 rs_boldmsg "Building..."
 
-rs_mkdir_if_not_exists "$rs_prefixdir/bin"
-rs_mkdir_if_not_exists "$rs_archprefixdir/$rs_target"
+mkdir -p "$rs_prefixdir/bin"
+mkdir -p "$rs_archprefixdir/$rs_target"
 
 echo "Using CFLAGS=\"$CFLAGS\""
 echo "Using CXXFLAGS=\"$CXXFLAGS\""
