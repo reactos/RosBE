@@ -10,19 +10,21 @@ if [ -z "$BASH_VERSION" ]; then
     exec bash "$0"
 fi
 
-if [ "$CC" == "" ]; then
-	CC=gcc
-fi
-
-if [ "$CXX" == "" ]; then
-	CXX=g++
-fi
-
 # RosBE Setup Variables
+rs_host_cc="${CC:=gcc}"
+rs_host_cflags="${CFLAGS:=-pipe -O2 -g0 -march=native}"
+rs_host_cxx="${CXX:=g++}"
+rs_host_cxxflags="${CXXFLAGS:=$rs_host_cflags}"
 rs_needed_tools="as bzip2 find $CC $CXX grep m4 makeinfo python tar"        # GNU Make has a special check
 rs_needed_libs="zlib"
 rs_target="i686-w64-mingw32"
 rs_target_cflags="-pipe -O2 -Wl,-S -g0 -march=pentium -mtune=i686"
+rs_target_cxxflags="$rs_target_cflags"
+
+export CC
+export CFLAGS
+export CXX
+export CXXFLAGS
 
 # Get the absolute path to the script directory
 cd `dirname $0`
@@ -233,29 +235,6 @@ rs_boldmsg "Building..."
 rs_mkdir_if_not_exists "$rs_prefixdir/bin"
 rs_mkdir_if_not_exists "$rs_archprefixdir/$rs_target"
 
-# Use -march=native if the host compiler supports it
-echo -n "Checking if the host compiler supports -march=native... "
-
-if `$CC -march=native -o "$rs_workdir/dummy" "$rs_scriptdir/tools/dummy.c" >& /dev/null`; then
-	echo "yes"
-	MARCH_NATIVE="-march=native"
-	rm "$rs_workdir/dummy"
-else
-	echo "no"
-	MARCH_NATIVE=""
-fi
-
-if [ "$CFLAGS" == "" ]; then
-	CFLAGS="-pipe -O2 -g0 ${MARCH_NATIVE}"
-fi
-
-if [ "$CXXFLAGS" == "" ]; then
-	CXXFLAGS="-pipe -O2 -g0 ${MARCH_NATIVE}"
-fi
-
-export CFLAGS
-export CXXFLAGS
-echo
 echo "Using CFLAGS=\"$CFLAGS\""
 echo "Using CXXFLAGS=\"$CXXFLAGS\""
 echo
@@ -314,26 +293,43 @@ if rs_prepare_module "gcc"; then
 	cd ../gcc-build
 
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
-	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
+	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
 
-	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --enable-plugins --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
+	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-fully-dynamic-string --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
-	rs_do_command_can_fail $rs_makecmd install-lto-plugin
+	rs_do_command $rs_makecmd install-lto-plugin
 
 	if rs_prepare_module "mingw_w64"; then
-		# The mingw_w64 package needs to know about the target build tools. This used to be done by adding "$rs_archprefixdir/bin" to the PATH, but failed for hpoussin on NixOS.
-		# Passing them manually works for him and doesn't break anything else.
-		AR="$rs_archprefixdir/bin/i686-w64-mingw32-ar" AS="$rs_archprefixdir/bin/i686-w64-mingw32-as" CC="$rs_archprefixdir/bin/i686-w64-mingw32-gcc" DLLTOOL="$rs_archprefixdir/bin/i686-w64-mingw32-dlltool" RANLIB="$rs_archprefixdir/bin/i686-w64-mingw32-ranlib" STRIP="$rs_archprefixdir/bin/i686-w64-mingw32-strip" rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir/$rs_target"
+		export AR="$rs_archprefixdir/bin/$rs_target-ar"
+		export AS="$rs_archprefixdir/bin/$rs_target-as"
+		export CC="$rs_archprefixdir/bin/$rs_target-gcc"
+		export CFLAGS="$rs_target_cflags"
+		export CXX="$rs_archprefixdir/bin/$rs_target-g++"
+		export CXXFLAGS="$rs_target_cxxflags"
+		export DLLTOOL="$rs_archprefixdir/bin/$rs_target-dlltool"
+		export RANLIB="$rs_archprefixdir/bin/$rs_target-ranlib"
+		export STRIP="$rs_archprefixdir/bin/$rs_target-strip"
+
+		rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir"
 		rs_do_command $rs_makecmd -j $rs_cpucount
 		rs_do_command $rs_makecmd install
 		rs_clean_module "mingw_w64"
+
+		unset AR
+		unset AS
+		export CC="$rs_host_cc"
+		export CFLAGS="$rs_host_cflags"
+		export CXX="$rs_host_cxx"
+		export CXXFLAGS="$rs_host_cxxflags"
+		unset DLLTOOL
+		unset RANLIB
+		unset STRIP
 	fi
 
 	cd "$rs_workdir/gcc-build"
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
-
 	rs_clean_module "gcc"
 
 	unset CFLAGS_FOR_TARGET
