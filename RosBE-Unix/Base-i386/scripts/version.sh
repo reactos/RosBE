@@ -2,9 +2,9 @@
 #
 # Show the tool versions
 # Part of RosBE for Unix-based Operating Systems
-# Copyright 2007-2010 Colin Finck <colin@reactos.org>
+# Copyright 2007-2020 Colin Finck <colin@reactos.org>
 #
-# Released under GNU GPL v2 or any later version.
+# Released under GPL-2.0-or-later (https://spdx.org/licenses/GPL-2.0-or-later)
 
 source "$_ROSBE_ROSSCRIPTDIR/setuplibrary.sh"
 
@@ -21,3 +21,7 @@ echo
 # Display tool versions
 rs_boldmsg "Build Tools"
 source "$_ROSBE_ROSSCRIPTDIR/$ROS_ARCH/version.sh"
+bison --version | grep "GNU Bison"
+flex --version
+echo "Ninja `ninja --version`"
+cmake --version | grep "version"
