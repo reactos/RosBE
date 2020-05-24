@@ -2,21 +2,20 @@
 #
 # Script for displaying the help
 # Part of RosBE for Unix-based Operating Systems
-# Copyright 2007-2009 Colin Finck <mail@colinfinck.de>
+# Copyright 2007-2020 Colin Finck <colin@reactos.org>
 #
-# Released under GNU GPL v2 or any later version.
+# Released under GPL-2.0-or-later (https://spdx.org/licenses/GPL-2.0-or-later)
 
 echo
 echo "Available Commands:"
-echo " basedir            - Switch back to the ReactOS source directory."
-echo " charch [OPTIONS]   - Change the Architecture to build ReactOS for"
+echo " basedir            - Switch to the ReactOS source directory."
+echo " charch [OPTIONS]   - Change the target architecture for building ReactOS"
 echo "                      for the current RosBE session."
 echo " chdefdir [OPTIONS] - Change the ReactOS source directory for the"
 echo "                      current RosBE session."
-echo " clean              - Fully clean the ReactOS source directory."
-echo " help               - Display the available commands."
-echo " scut [OPTIONS]     - List, add, edit, remove, switch and default to"
-echo "                      shortcutted ReactOS source directories."
-echo " version            - Show information about the tool versions."
+echo " clean              - Completely clean the ReactOS source directory."
+echo " help               - Show this help."
+echo " scut [OPTIONS]     - Manage shortcuts to multiple ReactOS source directories."
+echo " version            - Show information about the toolchain versions."
 
 echo
