@@ -1,9 +1,9 @@
 # Shared functions for RosBE-Unix components
 # Part of RosBE for Unix-based Operating Systems
-# Copyright 2009-2012 Colin Finck <colin@reactos.org>
+# Copyright 2009-2020 Colin Finck <colin@reactos.org>
 #                     Pierre Schweitzer <pierre@reactos.org>
 #
-# Released under GNU GPL v2 or any later version.
+# Released under GPL-2.0-or-later (https://spdx.org/licenses/GPL-2.0-or-later)
 
 # Check whether the given architecture is supported and if so, change the ROS_ARCH variable appropriately
 #   Parameter 1: The architecture to set
@@ -44,19 +44,4 @@ check_root()
 			exit 1
 		fi
 	fi
-}
-
-# Execute required hooks
-# Parameter 1 - type of hooks (ie, dir)
-# Parameter 2 - all the arguments passed to build
-execute_hooks()
-{
-	local hook_type="$1"
-	shift
-
-	echo "Executing $hook_type hooks"
-
-	for file in `ls -1 $_ROSBE_ROSSCRIPTDIR/$hook_type/ | grep [[:digit:]]-*.sh`; do
-		$_ROSBE_ROSSCRIPTDIR/$hook_type/$file $*
-	done
 }
