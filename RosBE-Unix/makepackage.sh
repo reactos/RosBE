@@ -92,6 +92,7 @@ find "$full_package_name" -type f -name "SVN-Readme.txt" -exec rm {} ";"
 rm "$full_package_name/README.odt"
 
 # Copy the shared tools
+mkdir -p "$full_package_name/tools"
 for tool in $tools; do
 	echo "Copying $tool.c..."
 	cp "../Tools/$tool.c" "$full_package_name/tools/$tool.c"
