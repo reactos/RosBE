@@ -22,6 +22,10 @@ export CFLAGS=
 export CXXFLAGS=
 export LDFLAGS=
 
+# The RosBE-Unix directory may have been relocated after installation, but  Bison contains a compiled-in path to its supplemental files.
+# Reset this path via an environment variable.
+export BISON_PKGDATADIR="$_ROSBE_ROSSCRIPTDIR/share/bison"
+
 # Read the RosBE version
 # The file "RosBE-Version" has been created by the RosBE-Builder.sh script
 export _ROSBE_VERSION=`cat "$_ROSBE_ROSSCRIPTDIR/RosBE-Version"`
