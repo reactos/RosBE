@@ -97,8 +97,8 @@ components:
     patched with:
       - https://raw.githubusercontent.com/reactos/RosBE/e87b00c8f8732ed3fa393b9b05a12093ae5942e8/Patches/bison-3.5-reactos-fix-win32-build.patch
 
-  * CMake 3.17.1-ReactOS
-    (revision 21d3c5cfeb6fa9303b134773afe921182f6c6fcb from https://github.com/reactos/CMake/tree/cmake-3.17.1-reactos)
+  * CMake 3.17.2-ReactOS
+    (revision 07c58033d74bad5466775fb2dad7d84494a846bd from https://github.com/reactos/CMake/tree/cmake-3.17.2-reactos)
 
   * Flex 2.6.4+ (revision 8b1fbf674f2e038df9cf1fe7725617e3837ae2a9)
 
