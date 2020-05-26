@@ -13,29 +13,30 @@
 # Package "rosbe_2.2"
 #
 # This script was built for the following toolchain versions:
-# - Binutils 2.34
-# - Bison 3.5.4
+# * GNU Binutils v2.34
+# * GCC, The GNU Compiler Collection v8.4.0
+# * Bison 3.5.4
 #   patched with:
-#     * https://raw.githubusercontent.com/reactos/RosBE/master/Patches/bison-3.5-reactos-fix-win32-build.patch
-# - CMake 3.17.1
-# - GCC 8.4.0
-# - GMP 6.2.0
-# - Mingw-w64 6.0.0
-# - MPC 1.1.0
-# - MPFR 4.0.2
-# - Ninja 1.10
+#     - https://raw.githubusercontent.com/reactos/RosBE/e87b00c8f8732ed3fa393b9b05a12093ae5942e8/Patches/bison-3.5-reactos-fix-win32-build.patch
+# * CMake 3.17.2-ReactOS
+#   (revision 07c58033d74bad5466775fb2dad7d84494a846bd from https://github.com/reactos/CMake/tree/cmake-3.17.2-reactos)
+# * GMP 6.2.0
+#   patched with:
+#     * https://raw.githubusercontent.com/reactos/RosBE/e87b00c8f8732ed3fa393b9b05a12093ae5942e8/Patches/GMP-6.2.0-C89-fixes.patch
+# * Mingw-w64 6.0.0
+# * MPC 1.1.0
+# * MPFR 4.0.2
+# * Ninja 1.10.0
 #
 # These tools have to be compiled using
 # - http://repo.msys2.org/distrib/i686/msys2-i686-20190524.exe
 # - https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/8.1.0/threads-posix/dwarf/i686-8.1.0-release-posix-dwarf-rt_v6-rev0.7z
 #
-# These versions are used in RosBE-Windows 2.2 and RosBE-Unix 2.2.
-# Get the toolchain packages from http://svn.reactos.org/RosBE-Sources/rosbe_2.2
+# These versions are used in RosBE-Windows 2.2.1 and RosBE-Unix 2.2.1.
+# Get the toolchain packages from http://svn.reactos.org/RosBE-Sources/rosbe_2.2.1
 ########################################################################################################################
 
 # Hardcoded values for buildtoolchain/MSYS2
-CC=gcc
-CXX=g++
 rs_makecmd=make
 
 # Ensure similar error messages on all platforms, especially when we parse them (e.g. for pacman).
@@ -45,9 +46,19 @@ export LANG=C
 export MSYS=winsymlinks:nativestrict
 
 # RosBE Setup Variables
-rs_needed_tools="as bzip2 find $CC $CXX grep help2man m4 makeinfo python re2c tar"        # GNU Make has a special check
+rs_host_cc="gcc"
+rs_host_cflags="-pipe -O2 -g0 -march=core2"
+rs_host_cxx="g++"
+rs_host_cxxflags="$rs_host_cflags"
+rs_needed_tools="as bzip2 find $CC $CXX grep help2man m4 makeinfo python tar"        # GNU Make has a special check
 rs_target="i686-w64-mingw32"
 rs_target_cflags="-pipe -O2 -Wl,-S -g0 -march=pentium -mtune=i686"
+rs_target_cxxflags="$rs_target_cflags"
+
+export CC="$rs_host_cc"
+export CFLAGS="$rs_host_cflags"
+export CXX="$rs_host_cxx"
+export CXXFLAGS="$rs_host_cxxflags"
 
 # Get the absolute path to the script directory
 cd `dirname $0`
@@ -64,7 +75,7 @@ source "$rs_scriptdir/scripts/setuplibrary.sh"
 
 echo "*******************************************************************************"
 echo "*     Buildtoolchain script for the ReactOS Build Environment for Windows     *"
-echo "*                             Package \"rosbe_2.2\"                             *"
+echo "*                             Package \"rosbe_2.2.1\"                           *"
 echo "*                                  MinGW part                                 *"
 echo "*                      by Colin Finck <colin@reactos.org>                     *"
 echo "*******************************************************************************"
@@ -102,7 +113,7 @@ fi
 
 # Install required tools in MSYS2
 rs_boldmsg "Running MSYS pacman..."
-pacman -S --quiet --noconfirm --needed diffutils help2man make msys2-runtime-devel python re2c texinfo tar | tee /tmp/buildtoolchain-pacman.log
+pacman -S --quiet --noconfirm --needed diffutils help2man make msys2-runtime-devel python texinfo tar | tee /tmp/buildtoolchain-pacman.log
 
 if grep installation /tmp/buildtoolchain-pacman.log >& /dev/null; then
 	# See e.g. https://sourceforge.net/p/msys2/tickets/74/
@@ -158,24 +169,23 @@ for module in $MODULES; do
 	shift
 done
 
+rs_process_cpucount=true
+
 
 ##### BEGIN almost shared buildtoolchain/RosBE-Unix building part #############
 rs_boldmsg "Building..."
 
-rs_mkdir_if_not_exists "$rs_prefixdir/bin"
-rs_mkdir_if_not_exists "$rs_archprefixdir/$rs_target"
+mkdir -p "$rs_prefixdir/bin"
+mkdir -p "$rs_archprefixdir/$rs_target"
 
-CFLAGS="-pipe -O2 -Wl,-S -g0 -march=core2"
-CXXFLAGS="-pipe -O2 -Wl,-S -g0 -march=core2"
-
-export CFLAGS
-export CXXFLAGS
-echo
 echo "Using CFLAGS=\"$CFLAGS\""
 echo "Using CXXFLAGS=\"$CXXFLAGS\""
 echo
 
-rs_do_command $CC -s -o "$rs_prefixdir/bin/cpucount.exe" "$rs_scriptdir/tools/cpucount.c"
+if $rs_process_cpucount; then
+	rs_do_command $CC -s -o "$rs_prefixdir/bin/cpucount" "$rs_scriptdir/tools/cpucount.c"
+fi
+
 rs_cpucount=`$rs_prefixdir/bin/cpucount -x1`
 
 if rs_prepare_module "bison"; then
@@ -216,48 +226,54 @@ if rs_prepare_module "gcc"; then
 
 	cd ../gcc-build
 
-	export old_path=$PATH
-	export PATH="$PATH:$rs_archprefixdir/bin"
-
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
-	export CXXFLAGS_FOR_TARGET="$rs_target_cflags"
+	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
 
-	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --host="$rs_target" --build="$rs_target" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-checking=release --enable-version-specific-runtime-libs --enable-plugins --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
+	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --host="$rs_target" --build="$rs_target" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-fully-dynamic-string --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
-	rs_do_command_can_fail $rs_makecmd install-lto-plugin
+	rs_do_command $rs_makecmd install-lto-plugin
 
 	if rs_prepare_module "mingw_w64"; then
-		rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir/$rs_target"
+		export AR="$rs_archprefixdir/bin/ar"
+		export AS="$rs_archprefixdir/bin/as"
+		export CC="$rs_archprefixdir/bin/gcc"
+		export CFLAGS="$rs_target_cflags"
+		export CXX="$rs_archprefixdir/bin/g++"
+		export CXXFLAGS="$rs_target_cxxflags"
+		export DLLTOOL="$rs_archprefixdir/bin/dlltool"
+		export RANLIB="$rs_archprefixdir/bin/ranlib"
+		export STRIP="$rs_archprefixdir/bin/strip"
+
+		rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir"
 		rs_do_command $rs_makecmd -j $rs_cpucount
 		rs_do_command $rs_makecmd install
 		rs_clean_module "mingw_w64"
+
+		unset AR
+		unset AS
+		export CC="$rs_host_cc"
+		export CFLAGS="$rs_host_cflags"
+		export CXX="$rs_host_cxx"
+		export CXXFLAGS="$rs_host_cxxflags"
+		unset DLLTOOL
+		unset RANLIB
+		unset STRIP
 	fi
 
 	cd "$rs_workdir/gcc-build"
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
-
 	rs_clean_module "gcc"
 
 	unset CFLAGS_FOR_TARGET
 	unset CXXFLAGS_FOR_TARGET
-
-	export PATH=$old_path
-	unset old_path
 fi
 
 if rs_prepare_module "ninja"; then
-	export old_path=$PATH
-	export PATH=".:$PATH"
-
-	rs_do_command cd ../ninja
-	rs_do_command ./configure.py --bootstrap --platform mingw
+	rs_do_command ../ninja/configure.py --bootstrap --platform mingw
 	rs_do_command install ninja "$rs_prefixdir/bin"
 	rs_clean_module "ninja"
-
-	export PATH=$old_path
-	unset old_path
 fi
 
 # Final actions

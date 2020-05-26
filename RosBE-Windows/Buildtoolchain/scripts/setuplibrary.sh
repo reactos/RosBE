@@ -1,6 +1,6 @@
 ###############################################################################
 # Shared setup functions for RosBE-Windows' buildtoolchain and RosBE-Unix
-# Copyright 2009-2019 Colin Finck <colin@reactos.org>
+# Copyright 2009-2020 Colin Finck <colin@reactos.org>
 #
 # Released under GPL-2.0-or-later (https://spdx.org/licenses/GPL-2.0-or-later)
 ###############################################################################
@@ -130,22 +130,15 @@ rs_check_requirements()
 # Check whether the previous command finished with errorlevel 0
 # If it did so, print a green "OK" and delete the debug logfile for the command.
 # If that wasn't the case, print a red "FAILED" and give information about the debug logfile.
-#   Parameter 1: Can fail, if set to 0, failure leads to process termination
 rs_check_run()
 {
 	if [ $? -ne 0 ]; then
-		if [ $1 -eq 0 ]; then
-			rs_redmsg "FAILED"
-			echo "Please take a look at the log file \"$rs_workdir/build.log\""
-			echo "If you did not do something wrong, please save the log file and contact the ReactOS Team."
+		rs_redmsg "FAILED"
+		echo "Please take a look at the log file \"$rs_workdir/build.log\""
+		echo "If you did not do something wrong, please save the log file and contact the ReactOS Team."
 
-			echo "Aborted!"
-			exit 1
-		else
-			rs_yellowmsg "ERRORS"
-			cat "$rs_workdir/build.log" >> "$rs_workdir/build-ignored.log"
-			rm "$rs_workdir/build.log"
-		fi
+		echo "Aborted!"
+		exit 1
 	else
 		rs_greenmsg "OK"
 		rm "$rs_workdir/build.log"
@@ -169,17 +162,7 @@ rs_do_command()
 {
 	echo -n "Running \"$*\"... "
 	$* >& "$rs_workdir/build.log"
-	rs_check_run 0
-}
-
-# Executes a building command and checks whether it succeeded.
-# Doesn't terminate the building process in case of failure.
-#   Parameters: The command to execute including parameters
-rs_do_command_can_fail()
-{
-	echo -n "Running \"$*\"... "
-	$* >& "$rs_workdir/build.log"
-	rs_check_run 1
+	rs_check_run
 }
 
 # Checks whether the given module needs to be processed and if so, extracts it.
@@ -218,26 +201,6 @@ rs_yellowmsg()
 	echo -e $2 "\033[33m$1\033[0m"
 }
 
-# Creates the given directory if it does not exist and cleans it if it does.
-#   Parameter 1: The directory
-rs_mkdir_empty()
-{
-	if [ -d "$1" ]; then
-		rm -rf "$1"
-	fi
-
-	mkdir -p "$1"
-}
-
-# Creates a directory if it does not exist.
-#   Parameter 1: The directory
-rs_mkdir_if_not_exists()
-{
-	if ! [ -d "$1" ]; then
-		mkdir -p "$1"
-	fi
-}
-
 # Checks whether the given module needs to be processed and if so, extracts it into a dedicated build directory
 # Returns 0 if it needs to be built, otherwise 1.
 #   Parameter 1: The module name
@@ -267,33 +230,3 @@ rs_redmsg()
 	echo -e $2 "\033[31m$1\033[0m"
 }
 
-# Allow a choice between several options
-# If a valid choice was done, the result is stored in $choice
-#   Parameter 1 - The default value
-#   Parameter 2 - All possible values
-rs_showchoice()
-{
-	local default_value="$1"
-	local valid_choices="$2"
-
-	local breakloop=false
-	choice=""
-
-	while ! $breakloop; do
-		read -p "Your choice [$default_value]: " choice
-
-		if [ "$choice" = "" ]; then
-			choice="$default_value"
-			break
-		fi
-
-		for valid_choice in $valid_choices; do
-			if [ "$choice" = "$valid_choice" ]; then
-				breakloop=true
-				break
-			fi
-		done
-	done
-
-	echo
-}
