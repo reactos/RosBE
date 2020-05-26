@@ -271,9 +271,17 @@ if rs_prepare_module "gcc"; then
 fi
 
 if rs_prepare_module "ninja"; then
-	rs_do_command ../ninja/configure.py --bootstrap --platform mingw
+	# Ninja under Windows/MinGW needs special build directory handling.
+	old_path=$PATH
+	export PATH=".:$PATH"
+
+	rs_do_command cd ../ninja
+	rs_do_command ./configure.py --bootstrap --platform mingw
 	rs_do_command install ninja "$rs_prefixdir/bin"
 	rs_clean_module "ninja"
+
+	export PATH=$old_path
+	unset old_path
 fi
 
 # Final actions
