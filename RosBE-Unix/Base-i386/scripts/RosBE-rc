@@ -1,3 +1,11 @@
+# extend user's RC file
+if [ -f $HOME/.bashrc ]; then
+  source $HOME/.bashrc
+fi
+
+# identify us in prompt
+export PS1="(RosBE) ${PS1}"
+
 # Set aliases
 alias basedir="source $_ROSBE_ROSSCRIPTDIR/basedir.sh"
 alias charch="source $_ROSBE_ROSSCRIPTDIR/charch.sh"
