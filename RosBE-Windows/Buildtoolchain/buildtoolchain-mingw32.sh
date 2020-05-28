@@ -2,7 +2,7 @@
 #
 # ReactOS Build Environment for Windows - Script for building a RosBE toolchain for Windows
 # Partly based on RosBE-Unix' "RosBE-Builder.sh"
-# Copyright 2009-2019 Colin Finck <colin@reactos.org>
+# Copyright 2009-2020 Colin Finck <colin@reactos.org>
 #
 # Released under GPL-2.0-or-later (https://spdx.org/licenses/GPL-2.0-or-later)
 #
@@ -10,7 +10,7 @@
 # This script must be run under "MSYS2 MinGW 32-bit"!
 
 ########################################################################################################################
-# Package "rosbe_2.2"
+# Package "rosbe_2.2.1"
 #
 # This script was built for the following toolchain versions:
 # * GNU Binutils v2.34
@@ -120,7 +120,7 @@ if grep installation /tmp/buildtoolchain-pacman.log >& /dev/null; then
 	echo
 	rs_boldmsg "Installed MSYS packages have changed!"
 	echo "For a successful toolchain build, this requires you to close all MSYS windows and run \"autorebase.bat\" in the MSYS installation directory."
-	echo "After you have done so, please rerun \"buildtoolchain.sh\"."
+	echo "After you have done so, please rerun \"buildtoolchain-mingw32.sh\"."
 	exit 1
 fi
 
