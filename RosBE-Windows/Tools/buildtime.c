@@ -3,7 +3,7 @@
  * LICENSE:     GNU General Public License v2. (see LICENSE.txt)
  * FILE:        Tools/buildtime.c
  * PURPOSE:     Buildtime Counter
- * COPYRIGHT:   Copyright 2018 KJK::Hyperion
+ * COPYRIGHT:   Copyright 2020 KJK::Hyperion
  *                             Peter Ward <dralnix@gmail.com>
  *                             Colin Finck <colin@reactos.org>
  *

@@ -3,8 +3,8 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/RosBE.cmd
 :: PURPOSE:     This script provides/sets up various build environments for
-::              ReactOS. Currently it provides a GCC 4.7.2 build environment.
-:: COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
+::              ReactOS. Currently it provides a GCC 8.4.0 build environment.
+:: COPYRIGHT:   Copyright 2020 Daniel Reimer <reimer.daniel@freenet.de>
 ::                             Peter Ward <dralnix@gmail.com>
 ::                             Colin Finck <colin@reactos.org>
 ::
@@ -18,52 +18,13 @@ if %_ROSBE_DEBUG% == 1 (
 title ReactOS Build Environment %_ROSBE_VERSION%
 
 set platform=false
-set _ROSBE_MSVCARCH=%2
 if /i "%PROCESSOR_ARCHITECTURE%" == "amd64" set platform=true
 if /i "%PROCESSOR_ARCHITEW6432%" == "amd64" set platform=true
-if defined VS90COMNTOOLS (
-    if exist "%VS90COMNTOOLS%\..\..\VC\vcvarsall.bat" (
-        set _ROSBE_MSVCVERS=%_ROSBE_MSVCVERS% 9.0
-    )
-)
-if defined VS100COMNTOOLS (
-    if exist "%VS100COMNTOOLS%\..\..\VC\vcvarsall.bat" (
-        set _ROSBE_MSVCVERS=%_ROSBE_MSVCVERS% 10.0
-    )
-)
-if defined VS110COMNTOOLS (
-    if exist "%VS110COMNTOOLS%\..\..\VC\vcvarsall.bat" (
-        set _ROSBE_MSVCVERS=%_ROSBE_MSVCVERS% 11.0
-    )
-)
-if defined VS120COMNTOOLS (
-    if exist "%VS120COMNTOOLS%\..\..\VC\vcvarsall.bat" (
-        set _ROSBE_MSVCVERS=%_ROSBE_MSVCVERS% 12.0
-    )
-)
-if defined VS140COMNTOOLS (
-    if exist "%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" (
-        set _ROSBE_MSVCVERS=%_ROSBE_MSVCVERS% 14.0
-    )
-)
-
-for %%A in (%_ROSBE_MSVCVERS%) do set _ROSBE_MSVCVER=%%A
-
-if "%1" == "vs" (
-    if "%platform%" == "true" (
-        for /f "usebackq skip=2 tokens=2,*" %%A in (`"reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\%_ROSBE_MSVCVER% /v ShellFolder"`) do set VSINSTALLDIR=%%B
-    ) else (
-        for /f "usebackq skip=2 tokens=2,*" %%A in (`"reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\%_ROSBE_MSVCVER% /v ShellFolder"`) do set VSINSTALLDIR=%%B
-    )
-)
 
 :: Set defaults to work with and override them if edited by
 :: the options utility.
 if "%1" == "" (
     set ROS_ARCH=i386
-) else if "%1" == "vs" (
-    set ROS_ARCH=
-    call "%VSINSTALLDIR%\VC\vcvarsall.bat" %_ROSBE_MSVCARCH%
 ) else (
     set ROS_ARCH=%1
 )
@@ -75,7 +36,7 @@ if defined _ROSBE_CMAKE_DIFF (
 set BUILD_ENVIRONMENT=MinGW
 set _ROSBE_BASEDIR=%~dp0
 set _ROSBE_BASEDIR=%_ROSBE_BASEDIR:~0,-1%
-set _ROSBE_VERSION=2.2.0
+set _ROSBE_VERSION=2.2.1
 set _ROSBE_ROSSOURCEDIR=%CD%
 set _ROSBE_SHOWTIME=1
 set _ROSBE_WRITELOG=1

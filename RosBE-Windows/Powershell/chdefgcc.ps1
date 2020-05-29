@@ -3,7 +3,7 @@
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 # FILE:        Root/chdefgcc.ps1
 # PURPOSE:     Tool to change the current gcc in RosBE.
-# COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2020 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
 $host.ui.RawUI.WindowTitle = "Change the current MinGW/GCC Host/Target directory..."

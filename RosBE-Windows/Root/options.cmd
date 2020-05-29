@@ -3,7 +3,7 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/options.cmd
 :: PURPOSE:     Starts options.exe and restarts RosBE afterwards.
-:: COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
+:: COPYRIGHT:   Copyright 2020 Daniel Reimer <reimer.daniel@freenet.de>
 ::
 
 @echo off
