@@ -49,6 +49,9 @@ rs_target="x86_64-w64-mingw32"
 rs_target_cflags="-pipe -O2 -Wl,-S -g0"
 rs_target_cxxflags="$rs_target_cflags"
 
+# This is a cross-compiler with prefix.
+rs_target_tool_prefix="${rs_target}-"
+
 export CC="$rs_host_cc"
 export CFLAGS="$rs_host_cflags"
 export CXX="$rs_host_cxx"
@@ -193,21 +196,21 @@ if rs_prepare_module "gcc"; then
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
 
-	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-fully-dynamic-string --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
+	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
 	rs_do_command $rs_makecmd install-lto-plugin
 
 	if rs_prepare_module "mingw_w64"; then
-		export AR="$rs_archprefixdir/bin/$rs_target-ar"
-		export AS="$rs_archprefixdir/bin/$rs_target-as"
-		export CC="$rs_archprefixdir/bin/$rs_target-gcc"
+		export AR="$rs_archprefixdir/bin/${rs_target_tool_prefix}ar"
+		export AS="$rs_archprefixdir/bin/${rs_target_tool_prefix}as"
+		export CC="$rs_archprefixdir/bin/${rs_target_tool_prefix}gcc"
 		export CFLAGS="$rs_target_cflags"
-		export CXX="$rs_archprefixdir/bin/$rs_target-g++"
+		export CXX="$rs_archprefixdir/bin/${rs_target_tool_prefix}g++"
 		export CXXFLAGS="$rs_target_cxxflags"
-		export DLLTOOL="$rs_archprefixdir/bin/$rs_target-dlltool"
-		export RANLIB="$rs_archprefixdir/bin/$rs_target-ranlib"
-		export STRIP="$rs_archprefixdir/bin/$rs_target-strip"
+		export DLLTOOL="$rs_archprefixdir/bin/${rs_target_tool_prefix}dlltool"
+		export RANLIB="$rs_archprefixdir/bin/${rs_target_tool_prefix}ranlib"
+		export STRIP="$rs_archprefixdir/bin/${rs_target_tool_prefix}strip"
 
 		rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir"
 		rs_do_command $rs_makecmd -j $rs_cpucount
@@ -250,9 +253,9 @@ rm -f lib/* >& /dev/null
 
 echo "Removing debugging symbols..."
 cd "$rs_workdir"
-find -executable -type f -exec "$rs_archprefixdir/bin/$rs_target-strip" -s {} ";" >& /dev/null
-find -name "*.a" -type f -exec "$rs_archprefixdir/bin/$rs_target-strip" -d {} ";" >& /dev/null
-find -name "*.o" -type f -exec "$rs_archprefixdir/bin/$rs_target-strip" -d {} ";" >& /dev/null
+find -executable -type f -exec $rs_archprefixdir/bin/${rs_target_tool_prefix}strip -s {} ";" >& /dev/null
+find -name "*.a" -type f -exec $rs_archprefixdir/bin/${rs_target_tool_prefix}strip -d {} ";" >& /dev/null
+find -name "*.o" -type f -exec $rs_archprefixdir/bin/${rs_target_tool_prefix}strip -d {} ";" >& /dev/null
 
 echo "Copying additional dependencies from MSYS..."
 cd "$rs_prefixdir/bin"
