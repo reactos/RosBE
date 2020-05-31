@@ -11,20 +11,23 @@ if [ -z "$BASH_VERSION" ]; then
 fi
 
 # RosBE Setup Variables
-rs_host_cc="${CC:=gcc}"
-rs_host_cflags="${CFLAGS:=-pipe -O2 -g0 -march=native}"
-rs_host_cxx="${CXX:=g++}"
-rs_host_cxxflags="${CXXFLAGS:=$rs_host_cflags}"
+rs_host_cc="${CC:-gcc}"
+rs_host_cflags="${CFLAGS:--pipe -O2 -g0 -march=native}"
+rs_host_cxx="${CXX:-g++}"
+rs_host_cxxflags="${CXXFLAGS:-$rs_host_cflags}"
 rs_needed_tools="as bzip2 find $CC $CXX grep m4 makeinfo python tar"        # GNU Make has a special check
 rs_needed_libs="zlib"
 rs_target="i686-w64-mingw32"
 rs_target_cflags="-pipe -O2 -Wl,-S -g0 -march=pentium -mtune=i686"
 rs_target_cxxflags="$rs_target_cflags"
 
-export CC
-export CFLAGS
-export CXX
-export CXXFLAGS
+# This is a cross-compiler with prefix.
+rs_target_tool_prefix="${rs_target}-"
+
+export CC="$rs_host_cc"
+export CFLAGS="$rs_host_cflags"
+export CXX="$rs_host_cxx"
+export CXXFLAGS="$rs_host_cxxflags"
 
 # Get the absolute path to the script directory
 cd `dirname $0`
@@ -229,21 +232,21 @@ if rs_prepare_module "gcc"; then
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
 
-	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-fully-dynamic-string --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
+	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
 	rs_do_command $rs_makecmd install-lto-plugin
 
 	if rs_prepare_module "mingw_w64"; then
-		export AR="$rs_archprefixdir/bin/$rs_target-ar"
-		export AS="$rs_archprefixdir/bin/$rs_target-as"
-		export CC="$rs_archprefixdir/bin/$rs_target-gcc"
+		export AR="$rs_archprefixdir/bin/${rs_target_tool_prefix}ar"
+		export AS="$rs_archprefixdir/bin/${rs_target_tool_prefix}as"
+		export CC="$rs_archprefixdir/bin/${rs_target_tool_prefix}gcc"
 		export CFLAGS="$rs_target_cflags"
-		export CXX="$rs_archprefixdir/bin/$rs_target-g++"
+		export CXX="$rs_archprefixdir/bin/${rs_target_tool_prefix}g++"
 		export CXXFLAGS="$rs_target_cxxflags"
-		export DLLTOOL="$rs_archprefixdir/bin/$rs_target-dlltool"
-		export RANLIB="$rs_archprefixdir/bin/$rs_target-ranlib"
-		export STRIP="$rs_archprefixdir/bin/$rs_target-strip"
+		export DLLTOOL="$rs_archprefixdir/bin/${rs_target_tool_prefix}dlltool"
+		export RANLIB="$rs_archprefixdir/bin/${rs_target_tool_prefix}ranlib"
+		export STRIP="$rs_archprefixdir/bin/${rs_target_tool_prefix}strip"
 
 		rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir"
 		rs_do_command $rs_makecmd -j $rs_cpucount
@@ -302,15 +305,15 @@ if [ "$osname" != "Darwin" ]; then
 
 	# Executables are created for the host system while most libraries are linked to target components
 	for exe in `find -name "*.a" -type f -print`; do
-		$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
-		$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --strip-debug $exe 2>/dev/null
-		$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
+		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
+		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --strip-debug $exe 2>/dev/null
+		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
 	done
 
 	for exe in `find -name "*.o" -type f -print`; do
-		$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
-		$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --strip-debug $exe 2>/dev/null
-		$rs_archprefixdir/bin/i686-w64-mingw32-objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
+		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
+		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --strip-debug $exe 2>/dev/null
+		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
 	done
 fi
 
