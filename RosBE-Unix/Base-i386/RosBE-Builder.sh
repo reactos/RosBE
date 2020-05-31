@@ -154,14 +154,8 @@ rs_process_mingw_w64=true
 rs_process_ninja=true
 rs_process_scut=true
 
-# Test if the installation directory is writable
-if [ ! -w "$installdir" ]; then
-	rs_redmsg "Installation directory \"$installdir\" is not writable, aborted!"
-	exit 1
-fi
-
-rm -rf "$installdir"
-mkdir -p "$installdir"
+rm -rf "$installdir" || exit 1
+mkdir -p "$installdir" || exit 1
 
 rs_prefixdir="$installdir"
 rs_archprefixdir="$installdir/$TARGET_ARCH"
