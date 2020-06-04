@@ -1,4 +1,4 @@
-*** May XXth, 2020 - RosBE 2.2.1 Released
+*** Jun 05th, 2020 - RosBE 2.2.1 Released
 
 - Updated CMake to 3.17.2-ReactOS (Colin Finck)
 - Fixed a miscompilation of the shipped mingw-w64 6.0.0 binaries (Colin Finck)
