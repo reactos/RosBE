@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright (c) 2018, Ziliang Guo
+Copyright (c) 2020, Ziliang Guo
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without modification,

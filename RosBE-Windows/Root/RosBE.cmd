@@ -3,8 +3,8 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/RosBE.cmd
 :: PURPOSE:     This script provides/sets up various build environments for
-::              ReactOS. Currently it provides a GCC 4.7.2 build environment.
-:: COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
+::              ReactOS. Currently it provides a GCC 8.4.0 build environment.
+:: COPYRIGHT:   Copyright 2020 Daniel Reimer <reimer.daniel@freenet.de>
 ::                             Peter Ward <dralnix@gmail.com>
 ::                             Colin Finck <colin@reactos.org>
 ::
@@ -75,7 +75,7 @@ if defined _ROSBE_CMAKE_DIFF (
 set BUILD_ENVIRONMENT=MinGW
 set _ROSBE_BASEDIR=%~dp0
 set _ROSBE_BASEDIR=%_ROSBE_BASEDIR:~0,-1%
-set _ROSBE_VERSION=2.2.0
+set _ROSBE_VERSION=2.2.1
 set _ROSBE_ROSSOURCEDIR=%CD%
 set _ROSBE_SHOWTIME=1
 set _ROSBE_WRITELOG=1

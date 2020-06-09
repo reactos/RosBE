@@ -3,7 +3,7 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/Renv.cmd
 :: PURPOSE:     Shows RosBE's Environment Variables.
-:: COPYRIGHT:   Copyright 2018 Colin Finck <colin@reactos.org>
+:: COPYRIGHT:   Copyright 2020 Colin Finck <colin@reactos.org>
 ::
 
 @echo off

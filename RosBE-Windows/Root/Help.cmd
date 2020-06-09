@@ -3,7 +3,7 @@
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 :: FILE:        Root/Help.cmd
 :: PURPOSE:     Display help for the commands included with the ReactOS Build Environment.
-:: COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
+:: COPYRIGHT:   Copyright 2020 Daniel Reimer <reimer.daniel@freenet.de>
 ::                             Peter Ward <dralnix@gmail.com>
 ::                             Colin Finck <colin@reactos.org>
 ::

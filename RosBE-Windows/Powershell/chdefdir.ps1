@@ -4,7 +4,7 @@
 # FILE:        Root/chdefdir.ps1
 # PURPOSE:     Tool to change the current working ReactOS source directory
 #              in RosBE.
-# COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2020 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
 $host.ui.RawUI.WindowTitle = "Change the current working ReactOS source directory..."

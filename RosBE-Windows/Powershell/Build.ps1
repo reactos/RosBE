@@ -3,7 +3,7 @@
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 # FILE:        Root/Build.ps1
 # PURPOSE:     Perform the build of ReactOS.
-# COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2020 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
 if ($_ROSBE_USECCACHE -eq 1) {

@@ -3,7 +3,7 @@
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
 # FILE:        Root/rosbe-gcc-env.ps1
 # PURPOSE:     Set up the GCC 4.x.x build environment.
-# COPYRIGHT:   Copyright 2018 Daniel Reimer <reimer.daniel@freenet.de>
+# COPYRIGHT:   Copyright 2020 Daniel Reimer <reimer.daniel@freenet.de>
 #
 
 # Check if we're switching to the AMD64 or AMR architecture.
