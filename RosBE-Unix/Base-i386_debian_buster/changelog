@@ -1,5 +1,0 @@
-rosbe-unix (2.2.1-1ppa1~buster) buster; urgency=medium
-
-  * Initial packaged release
-
- -- Colin Finck <colin@reactos.org>  Thu, 11 Jun 2020 17:26:00 +0200
