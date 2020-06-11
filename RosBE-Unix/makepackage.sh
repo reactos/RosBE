@@ -10,7 +10,7 @@
 #
 check_file()
 {
-	if ! [ -f "$1" ]; then
+	if [[ ! -f "$1" ]]; then
 		echo "File \"$1\" is required, but does not exist!"
 		exit 1
 	fi
@@ -24,7 +24,7 @@ cd `dirname $0`
 # Prerequisites
 #
 # Check the parameters
-if [ "$2" = "" ]; then
+if [[ "$2" = "" ]]; then
 	echo "makepackage - Package a RosBE-Unix version"
 	echo "Syntax: ./makepackage.sh <package> <version>"
 	echo
@@ -37,7 +37,7 @@ package_name="$1"
 package_version="$2"
 
 # Set the full package name
-full_package_name="RosBE-Unix-$package_version"
+full_package_name="RosBE-Unix"
 
 case "$package_name" in
 	"Base-i386")
@@ -48,6 +48,9 @@ case "$package_name" in
 		full_package_name+="-$package_name"
 		;;
 esac
+
+full_package_name+="-$package_version"
+full_package_file="$full_package_name.tar.bz2"
 
 # Check if the required directory structure exists
 if ! git status >& /dev/null; then
@@ -100,7 +103,7 @@ done
 
 # Finally create a package out of this
 echo "Creating the package..."
-tar cjf "$full_package_name.tar.bz2" "$full_package_name"
+tar cjf "$full_package_file" "$full_package_name"
 
 echo
 echo "Done!"

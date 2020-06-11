@@ -1,0 +1,5 @@
+rosbe-unix (2.2.1-1ppa1~bionic) bionic; urgency=medium
+
+  * Initial packaged release
+
+ -- Colin Finck <colin@reactos.org>  Thu, 11 Jun 2020 11:57:00 +0200

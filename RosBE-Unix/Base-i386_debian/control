@@ -1,0 +1,17 @@
+Source: rosbe-unix
+Section: devel
+Priority: optional
+Maintainer: Colin Finck <colin@reactos.org>
+Build-Depends: debhelper (>= 10), bzip2, findutils (>= 4.4), grep (>= 2.20), m4, pkg-config, python, tar (>= 1.27), texinfo, zlib1g-dev
+Standards-Version: 4.1.2
+Homepage: https://reactos.org/wiki/Build_Environment
+Vcs-Git: https://github.com/reactos/RosBE
+Vcs-Browser: https://github.com/reactos/RosBE
+
+Package: rosbe-unix
+Architecture: amd64
+Depends: build-essential, ${shlibs:Depends}, ${misc:Depends}
+Recommends: git
+Description: ReactOS Build Environment for Unix-based Operating Systems
+ The official build environment for the ReactOS operating system
+ (https://reactos.org)

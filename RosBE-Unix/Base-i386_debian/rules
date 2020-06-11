@@ -1,0 +1,13 @@
+#!/usr/bin/make -f
+
+export DEB_CFLAGS_MAINT_SET = -pipe -O2 -Wl,-S -g0 -march=core2
+export DEB_CXXFLAGS_MAINT_SET = -pipe -O2 -Wl,-S -g0 -march=core2
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	fakeroot ./RosBE-Builder.sh $(CURDIR)/usr/RosBE
+
+override_dh_strip:
+	# RosBE-Builder.sh already takes care of debug symbols
