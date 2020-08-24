@@ -1,7 +1,6 @@
 /*
  * PROJECT:     RosBE - ReactOS Build Environment for Windows.
  * LICENSE:     GNU General Public License v2. (see LICENSE.txt)
- * FILE:        Tools/buildtime.c
  * PURPOSE:     Buildtime Counter
  * COPYRIGHT:   Copyright 2020 KJK::Hyperion
  *                             Peter Ward <dralnix@gmail.com>

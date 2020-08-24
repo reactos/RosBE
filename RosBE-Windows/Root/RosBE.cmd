@@ -1,7 +1,6 @@
 ::
 :: PROJECT:     RosBE - ReactOS Build Environment for Windows
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
-:: FILE:        Root/RosBE.cmd
 :: PURPOSE:     This script provides/sets up various build environments for
 ::              ReactOS. Currently it provides a GCC 8.4.0 build environment.
 :: COPYRIGHT:   Copyright 2020 Daniel Reimer <reimer.daniel@freenet.de>

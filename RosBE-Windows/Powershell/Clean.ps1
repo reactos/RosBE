@@ -1,7 +1,6 @@
 #
 # PROJECT:     RosBE - ReactOS Build Environment for Windows
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
-# FILE:        Root/Clean.ps1
 # PURPOSE:     Clean the ReactOS source directory.
 # COPYRIGHT:   Copyright 2020 Daniel Reimer <reimer.daniel@freenet.de>
 #

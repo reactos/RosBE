@@ -1,7 +1,6 @@
 ::
 :: PROJECT:     RosBE - ReactOS Build Environment for Windows
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
-:: FILE:        Root/Build-Shared.cmd
 :: PURPOSE:     Perform the build of ReactOS - Shared commands.
 :: COPYRIGHT:   Copyright 2020 Daniel Reimer <daniel.reimer@reactos.org>
 ::                             Colin Finck <colin@reactos.org>

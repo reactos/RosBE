@@ -1,7 +1,6 @@
 ::
 :: PROJECT:     RosBE - ReactOS Build Environment for Windows
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
-:: FILE:        Root/TimeDate.cmd
 :: PURPOSE:     Get the current date and time for use in our build log's file name.
 :: COPYRIGHT:   Copyright 2020 Daniel Reimer <reimer.daniel@freenet.de>
 ::                             Peter Ward <dralnix@gmail.com>

@@ -1,7 +1,6 @@
 #
 # PROJECT:     RosBE - ReactOS Build Environment for Windows.
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
-# FILE:        Root/scut.ps1
 # PURPOSE:     Manages named shortcuts to ReactOS source directories.
 # COPYRIGHT:   Copyright 2020 Daniel Reimer <reimer.daniel@freenet.de>
 #

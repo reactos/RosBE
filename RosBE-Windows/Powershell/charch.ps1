@@ -1,7 +1,6 @@
 #
 # PROJECT:     RosBE - ReactOS Build Environment for Windows
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
-# FILE:        Root/charch.ps1
 # PURPOSE:     Tool to change the current Arch to build ROS for in RosBE.
 # COPYRIGHT:   Copyright 2020 Daniel Reimer <reimer.daniel@freenet.de>
 #

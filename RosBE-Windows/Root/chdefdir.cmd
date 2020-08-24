@@ -1,7 +1,6 @@
 ::
 :: PROJECT:     RosBE - ReactOS Build Environment for Windows
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
-:: FILE:        Root/chdefdir.cmd
 :: PURPOSE:     Tool to change the current working ReactOS source directory
 ::              in RosBE.
 :: COPYRIGHT:   Copyright 2020 Daniel Reimer <reimer.daniel@freenet.de>

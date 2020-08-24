@@ -1,7 +1,6 @@
 /*
  * PROJECT:     RosBE - ReactOS Build Environment for Windows.
  * LICENSE:     GNU General Public License v2. (see LICENSE.txt)
- * FILE:        Tools/getdate.c
  * PURPOSE:     Returns System Date
  * COPYRIGHT:   Copyright 2020 Peter Ward <dralnix@gmail.com>
  *

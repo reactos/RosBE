@@ -1,7 +1,6 @@
 ::
 :: PROJECT:     RosBE - ReactOS Build Environment for Windows
 :: LICENSE:     GNU General Public License v2. (see LICENSE.txt)
-:: FILE:        Root/Basedir.cmd
 :: PURPOSE:     Temporarily change the Basedir in RosBE.
 :: COPYRIGHT:   Copyright 2020 Colin Finck <colin@reactos.org>
 ::

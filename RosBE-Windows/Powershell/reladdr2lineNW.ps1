@@ -1,7 +1,6 @@
 #
 # PROJECT:     RosBE - ReactOS Build Environment for Windows
 # LICENSE:     GNU General Public License v2. (see LICENSE.txt)
-# FILE:        Root/reladdr2line.ps1
 # PURPOSE:     Converts a value to hex and displays it.
 # COPYRIGHT:   Copyright 2020 Daniel Reimer <reimer.daniel@freenet.de>
 #
