@@ -62,9 +62,9 @@ getConfigFileCMD()
         }
         else
         {
-            if ((wcslen(filename) + wcslen(L"\\RosBE\\rosbe-options-2.2.1.cmd")) < MAX_PATH)
+            if ((wcslen(filename) + wcslen(L"\\RosBE\\rosbe-options-2.2.2.cmd")) < MAX_PATH)
             {
-                wcscat(filename, L"\\RosBE\\rosbe-options-2.2.1.cmd");
+                wcscat(filename, L"\\RosBE\\rosbe-options-2.2.2.cmd");
             }
         }
     }
@@ -80,7 +80,7 @@ getConfigFileCMD()
         }
         else
         {
-            wcscpy(filename, L"rosbe-options-2.2.1.cmd");
+            wcscpy(filename, L"rosbe-options-2.2.2.cmd");
         }
     }
     return filename;
@@ -110,9 +110,9 @@ getConfigFilePS1()
         }
         else
         {
-            if ((wcslen(filename) + wcslen(L"\\RosBE\\rosbe-options-2.2.1.ps1")) < MAX_PATH)
+            if ((wcslen(filename) + wcslen(L"\\RosBE\\rosbe-options-2.2.2.ps1")) < MAX_PATH)
             {
-                wcscat(filename, L"\\RosBE\\rosbe-options-2.2.1.ps1");
+                wcscat(filename, L"\\RosBE\\rosbe-options-2.2.2.ps1");
             }
         }
     }
@@ -128,7 +128,7 @@ getConfigFilePS1()
         }
         else
         {
-            wcscpy(filename, L"rosbe-options-2.2.1.ps1");
+            wcscpy(filename, L"rosbe-options-2.2.2.ps1");
         }
     }
     return filename;

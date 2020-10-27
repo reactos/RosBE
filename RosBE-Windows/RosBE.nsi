@@ -1,6 +1,6 @@
 Unicode true
 !define PRODUCT_NAME "ReactOS Build Environment"
-!define PRODUCT_VERSION "2.2.1"
+!define PRODUCT_VERSION "2.2.2"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RosBE.cmd"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKCU"
@@ -18,7 +18,7 @@ ShowUnInstDetails show
 ;;
 ;; Add version/product information metadata to the installation file.
 ;;
-VIAddVersionKey /LANG=1033 "FileVersion" "2.2.1.0"
+VIAddVersionKey /LANG=1033 "FileVersion" "2.2.2.0"
 VIAddVersionKey /LANG=1033 "ProductVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey /LANG=1033 "ProductName" "${PRODUCT_NAME}"
 VIAddVersionKey /LANG=1033 "Comments" "This installer was written by Peter Ward and Daniel Reimer using Nullsoft Scriptable Install System"
@@ -26,7 +26,7 @@ VIAddVersionKey /LANG=1033 "CompanyName" "ReactOS Foundation"
 VIAddVersionKey /LANG=1033 "LegalTrademarks" "Copyright © 2020 ReactOS Foundation"
 VIAddVersionKey /LANG=1033 "LegalCopyright" "Copyright © 2020 ReactOS Foundation"
 VIAddVersionKey /LANG=1033 "FileDescription" "${PRODUCT_NAME} Setup"
-VIProductVersion "2.2.1.0"
+VIProductVersion "2.2.2.0"
 
 CRCCheck force
 SetDatablockOptimize on
@@ -152,6 +152,7 @@ Section -BaseFiles SEC01
     SetOutPath "$INSTDIR\bin"
     SetOverwrite try
     File /r Components\bin\7z.exe
+	File /r Components\bin\7z.dll
     File /r Components\bin\bison.exe
     File /r Components\bin\buildtime.exe
     File /r Components\bin\ccache.exe
