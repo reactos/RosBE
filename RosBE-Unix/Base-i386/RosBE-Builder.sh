@@ -58,14 +58,24 @@ echo "ReactOS."
 echo
 
 if [ "$1" = "-h" ] || [ "$1" = "-?" ] || [ "$1" = "--help" ]; then
-	echo "Syntax: ./RosBE-Builder.sh [installdir]"
+	echo "Syntax: ./RosBE-Builder.sh [prefixdir] [destdir]"
 	echo
-	echo " installdir - Optional parameter to specify an installation directory. If you"
-	echo "              do this, the script will check whether this directory does not"
-	echo "              yet exist and in this case, it will perform an unattended"
-	echo "              installation to this directory."
+	echo " prefixdir  - Optional parameter to specify an prefix directory. This parameter"
+	echo "              will be passed to the  tools' configuration  as  the  argument of"
+	echo "              '--prefix'."
+	echo "              [default: '$DEFAULT_INSTALL_DIR']"
+	echo " destdir    - Optional parameter to specify an destination directory as  system"
+	echo "              root path to install ReactOS build environment. This parameter is"
+	echo "              only used when you want to build RosBE but  not  install it right" 
+	echo "              away, e.g. for build a sofware package. For who want  to  install"
+	echo "              RosBE directly, just leave it as default."
+	echo "              [default: '/']"
 	echo
-	echo "Usually, you just call the script without any parameters and it will guide you"
+	echo "This script will check whether the '\$destdir\$prefixdir' does  not  yet  exist"
+	echo "and in this case, it will treat this directory as root  path  then  perform  an"
+	echo "unattended installation to this directory."
+	echo
+	echo "Usually, you just call the script without any parameters and it will guide  you"
 	echo "through all possible installation options."
 	exit 0
 fi
@@ -80,35 +90,35 @@ update=false
 rs_boldmsg "Installation Directory"
 
 if [ "$1" = "" ]; then
-	installdir=""
+	prefixdir=""
 
 	echo "In which directory do you want to install it?"
 	echo "Enter the path to the directory here or simply press ENTER to install it into the default directory."
 
-	while [ "$installdir" = "" ]; do
-		read -p "[$DEFAULT_INSTALL_DIR] " installdir
+	while [ "$prefixdir" = "" ]; do
+		read -p "[$DEFAULT_INSTALL_DIR] " prefixdir
 		echo
 
-		if [ "$installdir" = "" ]; then
-			installdir=$DEFAULT_INSTALL_DIR
+		if [ "$prefixdir" = "" ]; then
+			prefixdir=$DEFAULT_INSTALL_DIR
 		fi
 
 		# Make sure we have the absolute path to the installation directory
-		installdir=`eval echo $installdir`
+		prefixdir=`eval echo $prefixdir`
 
 		# Check if the installation directory already exists
-		if [ -f "$installdir" ]; then
-			echo "The directory \"$installdir\" is a file! Please enter another directory!"
+		if [ -f "$prefixdir" ]; then
+			echo "The directory \"$prefixdir\" is a file! Please enter another directory!"
 			echo
-			installdir=""
-		elif [ -d "$installdir" ]; then
+			prefixdir=""
+		elif [ -d "$prefixdir" ]; then
 			# Check if the directory is empty
-			if [ ! "`ls $installdir`" = "" ]; then
-				if [ -f "$installdir/RosBE-Version" ]; then
-					installed_version=`cat "$installdir/RosBE-Version"`
+			if [ ! "`ls $prefixdir`" = "" ]; then
+				if [ -f "$prefixdir/RosBE-Version" ]; then
+					installed_version=`cat "$prefixdir/RosBE-Version"`
 					echo "ReactOS Build Environment $installed_version is already installed in this directory."
 				else
-					echo "The directory \"$installdir\" is not empty."
+					echo "The directory \"$prefixdir\" is not empty."
 				fi
 
 				echo "Do you want to remove this directory and install the new Build Environment into it? (yes/no)"
@@ -117,11 +127,11 @@ if [ "$1" = "" ]; then
 
 				if [[ "$answer" != [yY][eE][sS] ]]; then
 					echo "Please enter another directory!"
-					installdir=""
+					prefixdir=""
 				fi
 			fi
 		else
-			echo "The directory \"$installdir\" does not exist. It will be created for you."
+			echo "The directory \"$prefixdir\" does not exist. It will be created for you."
 			echo
 		fi
 	done
@@ -133,16 +143,30 @@ if [ "$1" = "" ]; then
 	echo "Press Return to continue or Ctrl+C to exit."
 	read
 else
-	installdir=`eval echo $1`
-
+	prefixdir=`eval echo $1`
+	if [ -n "$2" ]; then
+		destdir=`eval echo $2`
+	fi
+	installdir="$destdir/$prefixdir"
 	if [ -e "$installdir" ]; then
 		rs_redmsg "Installation directory \"$installdir\" already exists, aborted!"
 		exit 1
 	fi
-
-	echo "Using \"$installdir\""
-	echo
 fi
+
+if [ -n "$destdir" ]; then
+	rs_destdir="$destdir"
+else
+	rs_destdir="/"
+fi
+
+rs_prefixdir="$prefixdir"
+rs_installdir="$destdir$prefixdir"
+rs_archprefixdir="$prefixdir/$TARGET_ARCH"
+rs_archinstalldir="$destdir$prefixdir/$TARGET_ARCH"
+
+echo "configured prefix: \"$rs_prefixdir\""
+echo "output directory: \"$rs_destdir\""
 
 rs_process_binutils=true
 rs_process_bison=true
@@ -154,65 +178,64 @@ rs_process_mingw_w64=true
 rs_process_ninja=true
 rs_process_scut=true
 
-rm -rf "$installdir" || exit 1
-mkdir -p "$installdir" || exit 1
-
-rs_prefixdir="$installdir"
-rs_archprefixdir="$installdir/$TARGET_ARCH"
+rm -rf "$rs_installdir" || exit 1
+mkdir -p "$rs_installdir" || exit 1
 
 ##### BEGIN almost shared buildtoolchain/RosBE-Unix building part #############
 rs_boldmsg "Building..."
 
-mkdir -p "$rs_prefixdir/bin"
-mkdir -p "$rs_archprefixdir/$rs_target"
+mkdir -p "$rs_installdir/bin"
+mkdir -p "$rs_archinstalldir/$rs_target"
 
 echo "Using CFLAGS=\"$CFLAGS\""
 echo "Using CXXFLAGS=\"$CXXFLAGS\""
 echo
 
 if $rs_process_cpucount; then
-	rs_do_command $CC $CFLAGS $LDFLAGS -s -o "$rs_prefixdir/bin/cpucount" "$rs_scriptdir/tools/cpucount.c"
+	rs_do_command $CC $CFLAGS $LDFLAGS -s -o "$rs_installdir/bin/cpucount" "$rs_scriptdir/tools/cpucount.c"
 fi
 
-rs_cpucount=`$rs_prefixdir/bin/cpucount -x1`
+rs_cpucount=`$rs_installdir/bin/cpucount -x1`
 
 if $rs_process_scut; then
-	rs_do_command $CC $CFLAGS $LDFLAGS -s -o "$rs_prefixdir/bin/scut" "$rs_scriptdir/tools/scut.c"
+	rs_do_command $CC $CFLAGS $LDFLAGS -s -o "$rs_installdir/bin/scut" "$rs_scriptdir/tools/scut.c"
 fi
 
 if rs_prepare_module "bison"; then
 	rs_do_command ../bison/configure --prefix="$rs_prefixdir" --disable-nls
 	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
+	rs_do_command $rs_makecmd DESTDIR="$rs_destdir" install
 	rs_clean_module "bison"
 fi
 
 if rs_prepare_module "flex"; then
 	rs_do_command ../flex/configure --prefix="$rs_prefixdir" --disable-nls
 	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
+	rs_do_command $rs_makecmd DESTDIR="$rs_destdir" install
 	rs_clean_module "flex"
 fi
 
 if rs_prepare_module "cmake"; then
 	rs_do_command ../cmake/bootstrap --prefix="$rs_prefixdir" --parallel=$rs_cpucount -- -DCMAKE_USE_OPENSSL=OFF
 	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
+	rs_do_command $rs_makecmd DESTDIR="$rs_destdir" install
 	rs_clean_module "cmake"
 fi
 
 if rs_prepare_module "binutils"; then
-	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls
+	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" \
+		--target="$rs_target" --with-sysroot="$rs_archprefixdir" \
+		--disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls
 	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
+	rs_do_command $rs_makecmd DESTDIR="$rs_destdir" install
 	rs_clean_module "binutils"
 fi
 
 if rs_prepare_module "mingw_w64"; then
 	rs_do_command ../mingw_w64/mingw-w64-headers/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target"
 	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
-	rs_do_command ln -s -f $rs_archprefixdir/$rs_target $rs_archprefixdir/mingw
+	rs_do_command $rs_makecmd DESTDIR="$rs_destdir" install
+	rs_do_command ln -s -f $rs_target $rs_archinstalldir/mingw
 	rs_clean_module "mingw_w64"
 fi
 
@@ -225,26 +248,35 @@ if rs_prepare_module "gcc"; then
 
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
+	export PATH="$rs_archinstalldir/bin:$PATH"
 
-	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
+	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" \
+		--target="$rs_target" --with-sysroot="$rs_archprefixdir" \
+		--with-build-sysroot="$rs_archinstalldir" \
+		--with-pkgversion="RosBE-Unix" --enable-languages=c,c++ \
+		--enable-fully-dynamic-string --enable-version-specific-runtime-libs \
+		--disable-shared --disable-multilib --disable-nls --disable-werror \
+		--disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
-	rs_do_command $rs_makecmd install-gcc
-	rs_do_command $rs_makecmd install-lto-plugin
+	rs_do_command $rs_makecmd DESTDIR="$rs_destdir" install-gcc
+	rs_do_command $rs_makecmd DESTDIR="$rs_destdir" install-lto-plugin
 
 	if rs_prepare_module "mingw_w64"; then
-		export AR="$rs_archprefixdir/bin/${rs_target_tool_prefix}ar"
-		export AS="$rs_archprefixdir/bin/${rs_target_tool_prefix}as"
-		export CC="$rs_archprefixdir/bin/${rs_target_tool_prefix}gcc"
+		export AR="$rs_archinstalldir/bin/${rs_target_tool_prefix}ar"
+		export AS="$rs_archinstalldir/bin/${rs_target_tool_prefix}as"
+		export CC="$rs_archinstalldir/bin/${rs_target_tool_prefix}gcc"
 		export CFLAGS="$rs_target_cflags"
-		export CXX="$rs_archprefixdir/bin/${rs_target_tool_prefix}g++"
+		export CXX="$rs_archinstalldir/bin/${rs_target_tool_prefix}g++"
 		export CXXFLAGS="$rs_target_cxxflags"
-		export DLLTOOL="$rs_archprefixdir/bin/${rs_target_tool_prefix}dlltool"
-		export RANLIB="$rs_archprefixdir/bin/${rs_target_tool_prefix}ranlib"
-		export STRIP="$rs_archprefixdir/bin/${rs_target_tool_prefix}strip"
+		export DLLTOOL="$rs_archinstalldir/bin/${rs_target_tool_prefix}dlltool"
+		export RANLIB="$rs_archinstalldir/bin/${rs_target_tool_prefix}ranlib"
+		export STRIP="$rs_archinstalldir/bin/${rs_target_tool_prefix}strip"
 
-		rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir"
+		rs_do_command ../mingw_w64/mingw-w64-crt/configure \
+			--prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" \
+			--with-sysroot="$rs_archprefixdir" --with-build-sysroot="$rs_archinstalldir"
 		rs_do_command $rs_makecmd -j $rs_cpucount
-		rs_do_command $rs_makecmd install
+		rs_do_command $rs_makecmd DESTDIR="$rs_destdir" install
 		rs_clean_module "mingw_w64"
 
 		unset AR
@@ -260,7 +292,7 @@ if rs_prepare_module "gcc"; then
 
 	cd "$rs_workdir/gcc-build"
 	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
+	rs_do_command $rs_makecmd DESTDIR="$rs_destdir" install
 	rs_clean_module "gcc"
 
 	unset CFLAGS_FOR_TARGET
@@ -269,7 +301,7 @@ fi
 
 if rs_prepare_module "ninja"; then
 	rs_do_command ../ninja/configure.py --bootstrap
-	rs_do_command install ninja "$rs_prefixdir/bin"
+	rs_do_command install ninja "$rs_installdir/bin"
 	rs_clean_module "ninja"
 fi
 
@@ -278,10 +310,10 @@ echo
 rs_boldmsg "Final actions"
 
 echo "Removing unneeded files..."
-cd "$rs_prefixdir"
+cd "$rs_installdir"
 rm -rf doc man share/info share/man
 
-cd "$rs_archprefixdir"
+cd "$rs_archinstalldir"
 rm -rf $rs_target/doc $rs_target/share include info man mingw share
 rm -f lib/* >& /dev/null
 ##### END almost shared buildtoolchain/RosBE-Unix building part ###############
@@ -290,7 +322,7 @@ rm -f lib/* >& /dev/null
 osname=`uname`
 if [ "$osname" != "Darwin" ]; then
 	echo "Removing debugging symbols..."
-	cd "$rs_prefixdir"
+	cd "$rs_installdir"
 	for exe in `find -executable -type f -print`; do
 		objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
 		objcopy --strip-debug $exe 2>/dev/null
@@ -299,36 +331,38 @@ if [ "$osname" != "Darwin" ]; then
 
 	# Executables are created for the host system while most libraries are linked to target components
 	for exe in `find -name "*.a" -type f -print`; do
-		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
-		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --strip-debug $exe 2>/dev/null
-		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
+		$rs_archinstalldir/bin/${rs_target_tool_prefix}objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
+		$rs_archinstalldir/bin/${rs_target_tool_prefix}objcopy --strip-debug $exe 2>/dev/null
+		$rs_archinstalldir/bin/${rs_target_tool_prefix}objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
 	done
 
 	for exe in `find -name "*.o" -type f -print`; do
-		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
-		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --strip-debug $exe 2>/dev/null
-		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
+		$rs_archinstalldir/bin/${rs_target_tool_prefix}objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
+		$rs_archinstalldir/bin/${rs_target_tool_prefix}objcopy --strip-debug $exe 2>/dev/null
+		$rs_archinstalldir/bin/${rs_target_tool_prefix}objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
 	done
 fi
 
 echo "Copying scripts..."
-cp -R "$rs_scriptdir/scripts/"* "$installdir"
+cp -R "$rs_scriptdir/scripts/"* "$rs_installdir"
 
 echo "Writing version..."
-echo "$ROSBE_VERSION" > "$installdir/RosBE-Version"
+echo "$ROSBE_VERSION" > "$rs_installdir/RosBE-Version"
 echo
 
 # Finish
-rs_boldmsg "Finished successfully!"
-echo "To create a shortcut to the Build Environment on the Desktop, please switch back to your"
-echo "normal User Account (I assume you ran this script as \"root\")."
-echo "Then execute the following command:"
-echo
-echo "  $installdir/createshortcut.sh"
-echo
-echo "If you just want to start the Build Environment without using a shortcut, execute the"
-echo "following command:"
-echo
-echo "  $installdir/RosBE.sh [source directory] [color code] [architecture]"
-echo
-echo "All parameters for that script are optional."
+if [ -z "$1" ]; then # manually install
+	rs_boldmsg "Finished successfully!"
+	echo "To create a shortcut to the Build Environment on the Desktop, please switch back to your"
+	echo "normal User Account (I assume you ran this script as \"root\")."
+	echo "Then execute the following command:"
+	echo
+	echo "  $rs_prefixdir/createshortcut.sh"
+	echo
+	echo "If you just want to start the Build Environment without using a shortcut, execute the"
+	echo "following command:"
+	echo
+	echo "  $rs_prefixdir/RosBE.sh [source directory] [color code] [architecture]"
+	echo
+	echo "All parameters for that script are optional."
+fi
