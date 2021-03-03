@@ -171,13 +171,13 @@ echo "Using CXXFLAGS=\"$CXXFLAGS\""
 echo
 
 if $rs_process_cpucount; then
-	rs_do_command $CC -s -o "$rs_prefixdir/bin/cpucount" "$rs_scriptdir/tools/cpucount.c"
+	rs_do_command $CC $CFLAGS $LDFLAGS -s -o "$rs_prefixdir/bin/cpucount" "$rs_scriptdir/tools/cpucount.c"
 fi
 
 rs_cpucount=`$rs_prefixdir/bin/cpucount -x1`
 
 if $rs_process_scut; then
-	rs_do_command $CC -s -o "$rs_prefixdir/bin/scut" "$rs_scriptdir/tools/scut.c"
+	rs_do_command $CC $CFLAGS $LDFLAGS -s -o "$rs_prefixdir/bin/scut" "$rs_scriptdir/tools/scut.c"
 fi
 
 if rs_prepare_module "bison"; then
