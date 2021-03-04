@@ -49,7 +49,7 @@ echo "*         ReactOS Build Environment for Unix-based Operating Systems      
 echo "*                      Builder Tool for the Base package                      *"
 echo "*                      by Colin Finck <colin@reactos.org>                     *"
 echo "*                                                                             *"
-echo "*                                 Version $ROSBE_VERSION                               *"
+printf "*                                 Version %-8s                            *\n" $ROSBE_VERSION
 echo "*******************************************************************************"
 
 echo
