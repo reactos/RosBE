@@ -80,7 +80,10 @@ if [ "$1" = "-h" ] || [ "$1" = "-?" ] || [ "$1" = "--help" ]; then
 	exit 0
 fi
 
-check_root
+# only check permission when manually installing
+if [ -z "$1" ]; then
+	check_root
+fi
 rs_check_requirements
 
 reinstall=false
