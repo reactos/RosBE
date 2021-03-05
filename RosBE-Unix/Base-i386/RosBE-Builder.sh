@@ -60,11 +60,11 @@ echo
 if [ "$1" = "-h" ] || [ "$1" = "-?" ] || [ "$1" = "--help" ]; then
 	echo "Syntax: ./RosBE-Builder.sh [prefixdir] [destdir]"
 	echo
-	echo " prefixdir  - Optional parameter to specify an prefix directory. This parameter"
+	echo " prefixdir  - Optional parameter to specify a prefix directory. This  parameter"
 	echo "              will be passed to the  tools' configuration  as  the  argument of"
 	echo "              '--prefix'."
 	echo "              [default: '$DEFAULT_INSTALL_DIR']"
-	echo " destdir    - Optional parameter to specify an destination directory as  system"
+	echo " destdir    - Optional parameter to specify a destination directory  as  system"
 	echo "              root path to install ReactOS build environment. This parameter is"
 	echo "              only used when you want to build RosBE but  not  install it right" 
 	echo "              away, e.g. for build a sofware package. For who want  to  install"
