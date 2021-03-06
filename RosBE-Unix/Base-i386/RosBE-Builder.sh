@@ -251,11 +251,11 @@ if rs_prepare_module "gcc"; then
 
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
-	export PATH="$rs_archinstalldir/bin:$PATH"
 
 	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" \
 		--target="$rs_target" --with-sysroot="$rs_archprefixdir" \
 		--with-build-sysroot="$rs_archinstalldir" \
+		--with-build-time-tools="$rs_archinstalldir/mingw/bin" \
 		--with-pkgversion="RosBE-Unix" --enable-languages=c,c++ \
 		--enable-fully-dynamic-string --enable-version-specific-runtime-libs \
 		--disable-shared --disable-multilib --disable-nls --disable-werror \
