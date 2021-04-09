@@ -17,12 +17,17 @@ rs_host_cxx="${CXX:-g++}"
 rs_host_cxxflags="${CXXFLAGS:-$rs_host_cflags}"
 rs_needed_tools="as bzip2 find $CC $CXX grep m4 makeinfo python tar"        # GNU Make has a special check
 rs_needed_libs="zlib"
-rs_target="i686-w64-mingw32"
-rs_target_cflags="-pipe -O2 -Wl,-S -g0 -march=pentium -mtune=i686"
-rs_target_cxxflags="$rs_target_cflags"
-
-# This is a cross-compiler with prefix.
-rs_target_tool_prefix="${rs_target}-"
+declare -A rs_targets
+declare -A rs_targets_cflags
+declare -A rs_targets_cxxflags
+declare -A rs_gcc_configures_flags
+rs_targets=(["i386"]="i686-w64-mingw32" ["amd64"]="x86_64-w64-mingw32")
+rs_targets_cflags=(["i386"]="-pipe -O2 -Wl,-S -g0 -march=pentium -mtune=i686" ["amd64"]="-pipe -O2 -Wl,-S -g0")
+rs_targets_cxxflags=(["i386"]="-pipe -O2 -Wl,-S -g0 -march=pentium -mtune=i686" ["amd64"]="-pipe -O2 -Wl,-S -g0")
+rs_gcc_configures_flags=(
+    ["i386"]="--enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose"
+    ["amd64"]="--enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --disable-libstdcxx-verbose"
+)
 
 export CC="$rs_host_cc"
 export CFLAGS="$rs_host_cflags"
@@ -38,7 +43,7 @@ rs_sourcedir="$rs_scriptdir/sources"
 # RosBE-Unix Constants
 DEFAULT_INSTALL_DIR="/usr/local/RosBE"
 ROSBE_VERSION="2.2.1"
-TARGET_ARCH="i386"
+TARGET_ARCHS=("i386" "amd64")
 
 source "$rs_scriptdir/scripts/rosbelibrary.sh"
 source "$rs_scriptdir/scripts/setuplibrary.sh"
@@ -158,13 +163,11 @@ rm -rf "$installdir" || exit 1
 mkdir -p "$installdir" || exit 1
 
 rs_prefixdir="$installdir"
-rs_archprefixdir="$installdir/$TARGET_ARCH"
 
 ##### BEGIN almost shared buildtoolchain/RosBE-Unix building part #############
 rs_boldmsg "Building..."
 
 mkdir -p "$rs_prefixdir/bin"
-mkdir -p "$rs_archprefixdir/$rs_target"
 
 echo "Using CFLAGS=\"$CFLAGS\""
 echo "Using CXXFLAGS=\"$CXXFLAGS\""
@@ -201,71 +204,91 @@ if rs_prepare_module "cmake"; then
 	rs_clean_module "cmake"
 fi
 
-if rs_prepare_module "binutils"; then
-	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
-	rs_clean_module "binutils"
-fi
+for TARGET_ARCH in ${TARGET_ARCHS[@]}; do
+    rs_archprefixdir="$installdir/$TARGET_ARCH"
+    rs_target=${rs_targets[$TARGET_ARCH]}
+    rs_target_cflags=${rs_targets_cflags[$TARGET_ARCH]}
+    rs_target_cxxflags=${rs_targets_cxxflags[$TARGET_ARCH]}
+    rs_gcc_configure_flags=${rs_gcc_configures_flags[$TARGET_ARCH]}
+    
+    # This is a cross-compiler with prefix.
+    rs_target_tool_prefix="${rs_target}-"
+    
+    mkdir -p "$rs_archprefixdir/$rs_target"
+    
+    echo "Building toolchain for ${TARGET_ARCH}"
+    echo "Prefix: $rs_archprefixdir"
+    echo "Target: $rs_target"
+    echo "Target C flags: $rs_target_cflags"
+    echo "Target C++ flags: $rs_target_cxxflags"
+    echo "GCC configure flags: $rs_gcc_configure_flags"
+    
+    if rs_prepare_module "binutils"; then
+        rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls
+        rs_do_command $rs_makecmd -j $rs_cpucount
+        rs_do_command $rs_makecmd install
+        rs_clean_module "binutils"
+    fi
 
-if rs_prepare_module "mingw_w64"; then
-	rs_do_command ../mingw_w64/mingw-w64-headers/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target"
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
-	rs_do_command ln -s -f $rs_archprefixdir/$rs_target $rs_archprefixdir/mingw
-	rs_clean_module "mingw_w64"
-fi
+    if rs_prepare_module "mingw_w64"; then
+        rs_do_command ../mingw_w64/mingw-w64-headers/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target"
+        rs_do_command $rs_makecmd -j $rs_cpucount
+        rs_do_command $rs_makecmd install
+        rs_do_command ln -s -f $rs_archprefixdir/$rs_target $rs_archprefixdir/mingw
+        rs_clean_module "mingw_w64"
+    fi
 
-if rs_prepare_module "gcc"; then
-	rs_extract_module gmp $PWD/../gcc
-	rs_extract_module mpc $PWD/../gcc
-	rs_extract_module mpfr $PWD/../gcc
+    if rs_prepare_module "gcc"; then
+        rs_extract_module gmp $PWD/../gcc
+        rs_extract_module mpc $PWD/../gcc
+        rs_extract_module mpfr $PWD/../gcc
 
-	cd ../gcc-build
+        cd ../gcc-build
 
-	export CFLAGS_FOR_TARGET="$rs_target_cflags"
-	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
+        export CFLAGS_FOR_TARGET="$rs_target_cflags"
+        export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
 
-	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
-	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
-	rs_do_command $rs_makecmd install-gcc
-	rs_do_command $rs_makecmd install-lto-plugin
+        rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Unix" --enable-languages=c,c++ $rs_gcc_configure_flags
+        rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
+        rs_do_command $rs_makecmd install-gcc
+        rs_do_command $rs_makecmd install-lto-plugin
 
-	if rs_prepare_module "mingw_w64"; then
-		export AR="$rs_archprefixdir/bin/${rs_target_tool_prefix}ar"
-		export AS="$rs_archprefixdir/bin/${rs_target_tool_prefix}as"
-		export CC="$rs_archprefixdir/bin/${rs_target_tool_prefix}gcc"
-		export CFLAGS="$rs_target_cflags"
-		export CXX="$rs_archprefixdir/bin/${rs_target_tool_prefix}g++"
-		export CXXFLAGS="$rs_target_cxxflags"
-		export DLLTOOL="$rs_archprefixdir/bin/${rs_target_tool_prefix}dlltool"
-		export RANLIB="$rs_archprefixdir/bin/${rs_target_tool_prefix}ranlib"
-		export STRIP="$rs_archprefixdir/bin/${rs_target_tool_prefix}strip"
+        if rs_prepare_module "mingw_w64"; then
+            export AR="$rs_archprefixdir/bin/${rs_target_tool_prefix}ar"
+            export AS="$rs_archprefixdir/bin/${rs_target_tool_prefix}as"
+            export CC="$rs_archprefixdir/bin/${rs_target_tool_prefix}gcc"
+            export CFLAGS="$rs_target_cflags"
+            export CXX="$rs_archprefixdir/bin/${rs_target_tool_prefix}g++"
+            export CXXFLAGS="$rs_target_cxxflags"
+            export DLLTOOL="$rs_archprefixdir/bin/${rs_target_tool_prefix}dlltool"
+            export RANLIB="$rs_archprefixdir/bin/${rs_target_tool_prefix}ranlib"
+            export STRIP="$rs_archprefixdir/bin/${rs_target_tool_prefix}strip"
 
-		rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir"
-		rs_do_command $rs_makecmd -j $rs_cpucount
-		rs_do_command $rs_makecmd install
-		rs_clean_module "mingw_w64"
+            rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir"
+            rs_do_command $rs_makecmd -j $rs_cpucount
+            rs_do_command $rs_makecmd install
+            rs_clean_module "mingw_w64"
 
-		unset AR
-		unset AS
-		export CC="$rs_host_cc"
-		export CFLAGS="$rs_host_cflags"
-		export CXX="$rs_host_cxx"
-		export CXXFLAGS="$rs_host_cxxflags"
-		unset DLLTOOL
-		unset RANLIB
-		unset STRIP
-	fi
+            unset AR
+            unset AS
+            export CC="$rs_host_cc"
+            export CFLAGS="$rs_host_cflags"
+            export CXX="$rs_host_cxx"
+            export CXXFLAGS="$rs_host_cxxflags"
+            unset DLLTOOL
+            unset RANLIB
+            unset STRIP
+        fi
 
-	cd "$rs_workdir/gcc-build"
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
-	rs_clean_module "gcc"
+        cd "$rs_workdir/gcc-build"
+        rs_do_command $rs_makecmd -j $rs_cpucount
+        rs_do_command $rs_makecmd install
+        rs_clean_module "gcc"
 
-	unset CFLAGS_FOR_TARGET
-	unset CXXFLAGS_FOR_TARGET
-fi
+        unset CFLAGS_FOR_TARGET
+        unset CXXFLAGS_FOR_TARGET
+    fi
+done
 
 if rs_prepare_module "ninja"; then
 	rs_do_command ../ninja/configure.py --bootstrap
@@ -281,9 +304,11 @@ echo "Removing unneeded files..."
 cd "$rs_prefixdir"
 rm -rf doc man share/info share/man
 
-cd "$rs_archprefixdir"
-rm -rf $rs_target/doc $rs_target/share include info man mingw share
-rm -f lib/* >& /dev/null
+for TARGET_ARCH in ${TARGET_ARCHS[@]}; do
+    cd "$installdir/$TARGET_ARCH"
+    rm -rf ${rs_targets[$TARGET_ARCH]}/doc ${rs_targets[$TARGET_ARCH]}/share include info man mingw share
+    rm -f lib/* >& /dev/null
+done
 ##### END almost shared buildtoolchain/RosBE-Unix building part ###############
 
 # See: https://jira.reactos.org/browse/ROSBE-35
@@ -298,16 +323,19 @@ if [ "$osname" != "Darwin" ]; then
 	done
 
 	# Executables are created for the host system while most libraries are linked to target components
-	for exe in `find -name "*.a" -type f -print`; do
-		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
-		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --strip-debug $exe 2>/dev/null
-		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
-	done
+	for TARGET_ARCH in ${TARGET_ARCHS[@]}; do
+        cd "$installdir/$TARGET_ARCH"
+        for exe in `find -name "*.a" -type f -print`; do
+            ./bin/${rs_targets[$TARGET_ARCH]}-objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
+            ./bin/${rs_targets[$TARGET_ARCH]}-objcopy --strip-debug $exe 2>/dev/null
+            ./bin/${rs_targets[$TARGET_ARCH]}-objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
+        done
 
-	for exe in `find -name "*.o" -type f -print`; do
-		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
-		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --strip-debug $exe 2>/dev/null
-		$rs_archprefixdir/bin/${rs_target_tool_prefix}objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
+        for exe in `find -name "*.o" -type f -print`; do
+            ./bin/${rs_targets[$TARGET_ARCH]}-objcopy --only-keep-debug $exe $exe.dbg 2>/dev/null
+            ./bin/${rs_targets[$TARGET_ARCH]}-objcopy --strip-debug $exe 2>/dev/null
+            ./bin/${rs_targets[$TARGET_ARCH]}-objcopy --add-gnu-debuglink=$exe.dbg $exe 2>/dev/null
+        done
 	done
 fi
 
