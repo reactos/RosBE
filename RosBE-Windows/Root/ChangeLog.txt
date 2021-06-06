@@ -1,6 +1,11 @@
-*** Oct 27th, 2020 - RosBE 2.2.1 Released
+*** Jun XXth, 2021 - RosBE 2.2.2 Released
 
 - Readded forgotten 7z.dll to setup. Fixes ROSBE-171 (Daniel Reimer)
+- Fixed build problems of some testers by going from "core2" cpu optimize to "nocona" optimize. (Daniel Reimer)
+- Added GMP as separate libs to RosBE's compiler suite. (Daniel Reimer)
+- Added Windows experimental plugin support to RosBE's compiler suite.
+  Needed for Jérôme Gardou's x64 PSEH plugin support. (Daniel Reimer)
+Needed patches for GCC, binutils and ninja can be found here: https://www.dreimer.de/?p=1582
 
 *** Jun 05th, 2020 - RosBE 2.2.1 Released
 
