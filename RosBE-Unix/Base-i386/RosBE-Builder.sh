@@ -70,7 +70,11 @@ if [ "$1" = "-h" ] || [ "$1" = "-?" ] || [ "$1" = "--help" ]; then
 	exit 0
 fi
 
-check_root
+# Only check for root on an interactive installation.
+if [ "$1" = "" ]; then
+	check_root
+fi
+
 rs_check_requirements
 
 reinstall=false
