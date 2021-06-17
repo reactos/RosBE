@@ -272,7 +272,7 @@ if rs_prepare_module "gcc"; then
 fi
 
 if rs_prepare_module "ninja"; then
-	rs_do_command ../ninja/configure.py --bootstrap
+	rs_do_command python ../ninja/configure.py --bootstrap
 	rs_do_command install ninja "$rs_prefixdir/bin"
 	rs_clean_module "ninja"
 fi
