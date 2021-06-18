@@ -1,6 +1,9 @@
 # extend user's RC file
+
 if [ -f $HOME/.bashrc ]; then
+  SAVEDPATH=$PATH
   source $HOME/.bashrc
+  PATH=$SAVEDPATH
 fi
 
 # identify us in prompt
