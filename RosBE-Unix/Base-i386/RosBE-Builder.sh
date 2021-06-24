@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 #
-# ReactOS Build Environment for Unix-based Operating Systems - Builder Tool for the Base package
-# Copyright 2007-2020 Colin Finck <colin@reactos.org>
+# ReactOS Build Environment for Unix-based Operating Systems - Builder Tool for the base package and i386 compiler
+# Copyright 2007-2021 Colin Finck <colin@reactos.org>
 # partially based on the BuildMingwCross script (http://www.mingw.org/MinGWiki/index.php/BuildMingwCross)
 #
-# Released under GNU GPL v2 or any later version.
+# Released under GPL-2.0-or-later (https://spdx.org/licenses/GPL-2.0-or-later)
 
 if [ -z "$BASH_VERSION" ]; then
     exec bash "$0"
@@ -37,7 +37,7 @@ rs_sourcedir="$rs_scriptdir/sources"
 
 # RosBE-Unix Constants
 DEFAULT_INSTALL_DIR="/usr/local/RosBE"
-ROSBE_VERSION="2.2.1"
+ROSBE_VERSION="2.3"
 TARGET_ARCH="i386"
 
 source "$rs_scriptdir/scripts/rosbelibrary.sh"
@@ -46,15 +46,15 @@ source "$rs_scriptdir/scripts/setuplibrary.sh"
 
 echo "*******************************************************************************"
 echo "*         ReactOS Build Environment for Unix-based Operating Systems          *"
-echo "*                      Builder Tool for the Base package                      *"
+echo "*             Builder Tool for the Base package and i386 compiler             *"
 echo "*                      by Colin Finck <colin@reactos.org>                     *"
 echo "*                                                                             *"
-echo "*                                 Version $ROSBE_VERSION                               *"
+echo "*                                 Version $ROSBE_VERSION                             *"
 echo "*******************************************************************************"
 
 echo
 echo "This script compiles and installs a complete Build Environment for building"
-echo "ReactOS."
+echo "ReactOS for i386 (x86) processors."
 echo
 
 if [ "$1" = "-h" ] || [ "$1" = "-?" ] || [ "$1" = "--help" ]; then
@@ -76,9 +76,6 @@ if [ "$1" = "" ]; then
 fi
 
 rs_check_requirements
-
-reinstall=false
-update=false
 
 # Select the installation directory
 rs_boldmsg "Installation Directory"
