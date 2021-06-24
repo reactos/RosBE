@@ -1,6 +1,8 @@
-# extend user's RC file
+# extend user's RC file, but preserve our already set $PATH variable
 if [ -f $HOME/.bashrc ]; then
+  savedpath="$PATH"
   source $HOME/.bashrc
+  export PATH="$savedpath"
 fi
 
 # identify us in prompt
