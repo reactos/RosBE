@@ -46,7 +46,7 @@ echo "**************************************************************************
 echo "*         ReactOS Build Environment for Unix-based Operating Systems          *"
 echo "*                      by Colin Finck <colin@reactos.org>                     *"
 echo "*                                                                             *"
-echo "*                                 Version $_ROSBE_VERSION                               *"
+printf "*                                 Version %-8s                            *\n" $_ROSBE_VERSION
 echo "*******************************************************************************"
 echo
 echo "For a list of all included commands, type: \"help\""
