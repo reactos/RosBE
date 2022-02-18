@@ -1,0 +1,47 @@
+From d039200a7ee8ac170afbdc3b987af553c07fb6a3 Mon Sep 17 00:00:00 2001
+From: Jérôme Gardou <jerome.gardou@gmail.com>
+Date: Fri, 23 Apr 2021 16:33:47 +0100
+Subject: [PATCH] Allow .seh_pushframe to take an optional [code] parameter
+
+	* config/obj-coff-seh.c (obj_coff_seh_pushframe): Allow an
+	optional "code" argument.
+---
+ gas/config/obj-coff-seh.c | 21 ++++++++++++++++++++-
+
+diff --git a/gas/config/obj-coff-seh.c b/gas/config/obj-coff-seh.c
+index 964fe87e0ac1..f907e729bcf0 100644
+--- a/gas/config/obj-coff-seh.c
++++ b/gas/config/obj-coff-seh.c
+@@ -582,12 +582,31 @@ obj_coff_seh_pushreg (int what ATTRIBUTE_UNUSED)
+ static void
+ obj_coff_seh_pushframe (int what ATTRIBUTE_UNUSED)
+ {
++  int code = 0;
++  
+   if (!verify_context_and_target (".seh_pushframe", seh_kind_x64)
+       || !seh_validate_seg (".seh_pushframe"))
+     return;
++  
++  SKIP_WHITESPACE();
++  
++  if (is_name_beginner (*input_line_pointer))
++    {
++      char* identifier;
++
++      get_symbol_name (&identifier);
++      if (strcmp (identifier, "code") != 0)
++	{
++	  as_bad(_("invalid argument \"%s\" for .seh_pushframe. Expected \"code\" or nothing"),
++		 identifier);
++	  return;
++	}
++      code = 1;
++    }
++  
+   demand_empty_rest_of_line ();
+ 
+-  seh_x64_make_prologue_element (UWOP_PUSH_MACHFRAME, 0, 0);
++  seh_x64_make_prologue_element (UWOP_PUSH_MACHFRAME, code, 0);
+ }
+ 
+ /* Add a register save-unwind token to current context.  */
