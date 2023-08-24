@@ -52,7 +52,12 @@ Function .onInit
     StrCmp $R0 0 +3
         MessageBox MB_OK|MB_ICONEXCLAMATION "The ${PRODUCT_NAME} v${PRODUCT_VERSION} installer is already running."
         Abort
-    StrCpy $INSTDIR "C:\RosBE"
+
+    ${If} $INSTDIR == "" ; InstallDirRegKey not valid?
+        StrCpy $0 $ProgramFiles 1
+        StrCpy $INSTDIR "$0:\RosBE"
+    ${EndIf}
+
     Call UninstallPrevious
     !insertmacro INSTALLOPTIONS_EXTRACT "RosSourceDir.ini"
 FunctionEnd
