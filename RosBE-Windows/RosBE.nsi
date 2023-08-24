@@ -250,7 +250,7 @@ Section -StartMenuShortcuts SEC06
     ;;
     ;; Add our start menu shortcuts.
     ;;
-    IfFileExists "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +18 0
+    ${If} ${FileExists} "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk"
         !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
             CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
             SetOutPath $REACTOS_SOURCE_DIRECTORY
@@ -270,7 +270,8 @@ Section -StartMenuShortcuts SEC06
                            "$INSTDIR\README.pdf"
             CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Options.lnk" \
                            "$INSTDIR\bin\options.exe"
-    !insertmacro MUI_STARTMENU_WRITE_END
+        !insertmacro MUI_STARTMENU_WRITE_END
+    ${EndIf}
 SectionEnd
 
 Section /o "Desktop Shortcuts" SEC07
@@ -278,7 +279,7 @@ Section /o "Desktop Shortcuts" SEC07
     ;;
     ;; Add our desktop shortcuts.
     ;;
-    IfFileExists "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +11 0
+    ${If} ${FileExists} "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk"
         SetOutPath $REACTOS_SOURCE_DIRECTORY
         IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
             CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
@@ -289,6 +290,7 @@ Section /o "Desktop Shortcuts" SEC07
                 CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0B /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
             IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
                 CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
+    ${EndIf}
 SectionEnd
 
 Section /o "Quick Launch Shortcuts" SEC08
@@ -296,7 +298,7 @@ Section /o "Quick Launch Shortcuts" SEC08
     ;;
     ;; Add our quick launch shortcuts.
     ;;
-    IfFileExists "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +11 0
+    ${If} ${FileExists} "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk"
         SetOutPath $REACTOS_SOURCE_DIRECTORY
         IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
             CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
@@ -307,6 +309,7 @@ Section /o "Quick Launch Shortcuts" SEC08
                 CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0B /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
             IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
                 CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
+    ${EndIf}
 SectionEnd
 
 Section -Post SEC09
