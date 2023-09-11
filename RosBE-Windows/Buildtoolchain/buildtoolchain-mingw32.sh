@@ -47,7 +47,7 @@ export MSYS=winsymlinks:nativestrict
 
 # RosBE Setup Variables
 rs_host_cc="gcc"
-rs_host_cflags="-pipe -O2 -g0 -march=core2"
+rs_host_cflags="-pipe -O2 -g0 -march=nocona"
 rs_host_cxx="g++"
 rs_host_cxxflags="$rs_host_cflags"
 rs_needed_tools="as bzip2 find $CC $CXX grep help2man m4 makeinfo python tar"        # GNU Make has a special check
@@ -71,7 +71,7 @@ rs_scriptdir="$PWD"
 # Use the GCC with POSIX Thread Model! CMake uses C++11 threads, which are not supported in GCC's Win32 Thread Model (yet).
 HOST_GCC_VERSION="gcc version 8.1.0 (i686-posix-dwarf-rev0, Built by MinGW-W64 project)"
 
-MODULES="bison cmake binutils mingw_w64 gcc ninja"
+MODULES="bison cmake binutils mingw_w64 gmp gcc ninja"
 
 source "$rs_scriptdir/scripts/setuplibrary.sh"
 
@@ -222,6 +222,13 @@ if rs_prepare_module "mingw_w64"; then
 	rs_clean_module "mingw_w64"
 fi
 
+if rs_prepare_module "gmp"; then
+	rs_do_command ../gmp/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --build="$rs_target"
+	rs_do_command $rs_makecmd -j $rs_cpucount
+	rs_do_command $rs_makecmd install
+	rs_clean_module "gmp"
+fi
+
 if rs_prepare_module "gcc"; then
 	rs_extract_module gmp $PWD/../gcc
 	rs_extract_module mpc $PWD/../gcc
@@ -232,7 +239,7 @@ if rs_prepare_module "gcc"; then
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
 
-	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --host="$rs_target" --build="$rs_target" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
+	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --host="$rs_target" --build="$rs_target" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose --enable-plugin
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
 	rs_do_command $rs_makecmd install-lto-plugin

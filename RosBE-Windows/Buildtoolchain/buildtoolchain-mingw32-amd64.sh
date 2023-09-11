@@ -41,7 +41,7 @@ export MSYS=winsymlinks:nativestrict
 
 # RosBE Setup Variables
 rs_host_cc="gcc"
-rs_host_cflags="-pipe -O2 -g0 -march=core2"
+rs_host_cflags="-pipe -O2 -g0 -march=nocona"
 rs_host_cxx="g++"
 rs_host_cxxflags="$rs_host_cflags"
 rs_needed_tools="as bzip2 find $CC $CXX grep help2man m4 makeinfo python tar"        # GNU Make has a special check
@@ -196,7 +196,7 @@ if rs_prepare_module "gcc"; then
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
 
-	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
+	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="RosBE-Windows" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose --enable-plugin
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
 	rs_do_command $rs_makecmd install-lto-plugin
