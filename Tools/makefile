@@ -5,33 +5,46 @@
 CC := gcc
 CFLAGS := ${HOST_CFLAGS} -Wall -O2 -o
 STRIP := strip
+SUFFIX := .exe
+WINVER := 0x500
 
-ifeq ($(word 1,$(shell gcc -dumpmachine)),mingw32)
-	# Windows host
-	RM := del /f
-	SUFFIX := .exe
-else
-    ifeq ($(word 1,$(shell gcc -dumpmachine)),i686-w64-mingw32)
-	    # Windows host
-	    RM := del /f
-	    SUFFIX := .exe
-    else
-	    # Unix host
-	    RM := rm -f
-	    SUFFIX :=
-    endif
-endif
+all: buildtime chknewer chkslash echoh flash getdate playwav rquote tee
 
-all: cpucount scut
+buildtime:  buildtime.c
+	${CC} ${CFLAGS} buildtime$(SUFFIX) buildtime.c
+	$(STRIP) buildtime$(SUFFIX)
 
-cpucount:  cpucount.c
-	${CC} ${CFLAGS} cpucount$(SUFFIX) cpucount.c
-	$(STRIP) cpucount$(SUFFIX)
+chknewer:  chknewer.c
+	${CC} ${CFLAGS} chknewer chknewer.c
+	$(STRIP) chknewer$(SUFFIX)
 
-scut:  scut.c
-	${CC} ${CFLAGS} scut$(SUFFIX) scut.c
-	$(STRIP) scut$(SUFFIX)
+chkslash:  chkslash.c
+	${CC} ${CFLAGS} chkslash chkslash.c
+	$(STRIP) chkslash$(SUFFIX)
+
+echoh:  echoh.c
+	${CC} ${CFLAGS} echoh echoh.c
+	$(STRIP) echoh$(SUFFIX)
+
+flash:  flash.c
+	${CC} -DWINVER=${WINVER} -D_WIN32_WINNT=${WINVER} ${CFLAGS} flash flash.c
+	$(STRIP) flash$(SUFFIX)
+
+getdate:  getdate.c
+	${CC} ${CFLAGS} getdate getdate.c
+	$(STRIP) getdate$(SUFFIX)
+
+playwav:  playwav.cpp
+	${CC} ${CFLAGS} playwav playwav.cpp -lwinmm
+	$(STRIP) playwav$(SUFFIX)
+	
+rquote:  rquote.c
+	${CC} ${CFLAGS} rquote rquote.c
+	$(STRIP) rquote$(SUFFIX)
+
+tee:  tee.c
+	${CC} ${CFLAGS} tee tee.c
+	$(STRIP) tee$(SUFFIX)
 
 clean:
-	$(RM) cpucount$(SUFFIX)
-	$(RM) scut$(SUFFIX)
+	del /f buildtime.exe chknewer.exe chkslash.exe echoh.exe flash.exe getdate.exe playwav.exe rquote.exe tee.exe
