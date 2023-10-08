@@ -146,6 +146,8 @@ if [ "$1" = "-h" ] || [ "$1" = "-?" ] || [ "$1" = "--help" ]; then
 	echo "  --exclude-module  [module]   Exclude one module from the toolchain compilation"
 	echo "  --exclude-arch    [arch]     Exclude one architecture from the toolchain compilation"
 	echo "  --exclude-tools              Exclude building of all provided tools"
+	echo "  --include-arch    [arch]     Include one architecture from the toolchain compilation"
+	echo "  --include-module  [module]   Include one module from the toolchain compilation"
 	echo "  --enable-xp-mode             Build RosBe with XP-host compatible host"
 	echo "  --resume                     Resumes the compilation of Rosbe, this can be usefull with passing different commands to continue building the environment"
 	echo 
@@ -175,6 +177,18 @@ for var in "$@"; do
 		--exclude-arch)
 			shift
 			declare rs_arch_$1=false
+			shift
+		;;
+
+		--include-module)
+			shift
+			declare rs_process_$1=true
+			shift
+		;;
+
+		--include-arch)
+			shift
+			declare rs_arch_$1=true
 			shift
 		;;
 
