@@ -5,7 +5,7 @@ declare -A rs_sources=(
 )
 
 declare -A rs_sha256sums=(
-    ["bison.tar.gz"]=""
+    ["bison.tar.xz"]="4c17e99881978fa32c05933c5262457fa5b2b611668454f8dc2a695cd6b3720c"
 )
 
 rs_prepare() {

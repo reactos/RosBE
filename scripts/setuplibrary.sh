@@ -228,7 +228,6 @@ rs_yellowmsg()
 rs_sha256_compare()
 {
 	hash=`eval sha256sum -- "$1" | cut -d " " -f 1`
-	echo $hash
 	if [ "$hash" = "$2" ] ; then
 		return 0
 	fi

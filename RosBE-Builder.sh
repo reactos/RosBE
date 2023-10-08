@@ -392,9 +392,9 @@ for module in ${rs_modules[@]}; do
 
 		for file in ${!rs_sources[@]} ; do
 			rs_download_module "$rs_sourcedir" "${rs_sources[$file]}" "$file"
-			sha=`eval rs_sha256_compare "$rs_sourcedir/$file" "${rs_sha256sums[$file]}"`
+			rs_sha256_compare "$rs_sourcedir/$file" "${rs_sha256sums[$file]}"
 
-			if [ "$sha" = "1" ] ; then
+			if [ "$?" = "1" ] ; then
 				rs_redmsg "Invalid checksum for file $file, please check your internet connection and try again"
 				hash=`eval sha256sum -- "$rs_sourcedir/$file" | cut -d " " -f 1`
 				echo "Downloaded file checksum: $hash"
