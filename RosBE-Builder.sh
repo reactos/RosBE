@@ -41,17 +41,36 @@ export CXXFLAGS="$rs_host_cxxflags"
 cd `dirname $0`
 rs_rootdir="$PWD"
 rs_scriptdir="$rs_rootdir/scripts"
-rs_workdir="$rs_scriptdir/build"
-rs_sourcedir="$rs_scriptdir/toolchain/sources"
+rs_workdir="$rs_rootdir/build"
+rs_sourcedir="$rs_rootdir/toolchain/sources"
 rs_tooldir="$rs_rootdir/tools"
 
 # RosBE-Unix Constants
 DEFAULT_INSTALL_DIR="/usr/local/RosBE"
 ROSBE_VERSION="2.2.1"
-DEFAULT_TARGET_ARCH="i386"
-MODULES="flex bison cmake binutils mingw_w64 gcc ninja"
 
-source "$rs_scriptdir/rosbelibrary.sh"
+# binutils->target, gcc->target. flex,bison,cmake -> host
+declare -A MODULES=(
+	["flex"]=true
+	["bison"]=true
+	["cmake"]=true
+	["ninja"]=true
+	["binutils"]=true
+	["mingw_w64"]=true
+	["gcc"]=true
+)
+
+declare -A ARCH=( 
+	["i386"]=true
+	["amd64"]=true
+)
+
+declare -A GCC_TRIPLETS=(
+	["i386"]="i686-w64-mingw32"
+	["amd64"]="x86_64-w64-mingw32"
+)
+
+source "$rs_scriptdir/bash/rosbelibrary.sh"
 source "$rs_scriptdir/setuplibrary.sh"
 
 
@@ -69,32 +88,81 @@ echo "ReactOS."
 echo
 
 if [ "$1" = "-h" ] || [ "$1" = "-?" ] || [ "$1" = "--help" ]; then
-	echo "Syntax: ./RosBE-Builder.sh [installdir] [targetarch]"
-
-	for module in $MODULES; do
-		echo -n " [$module]"
-	done
-
+	echo "Syntax: ./RosBE-Builder.sh [options] [installdir]"
 	echo
-	echo " installdir - Optional parameter to specify an installation directory. If you"
-	echo "              do this, the script will check whether this directory does not"
-	echo "              yet exist and in this case, it will perform an unattended"
-	echo "              installation to this directory."
-	echo " targerarch - Optional parameter to specify which architecture RosBE should"
-	echo "              build the compiler. The default architecture is i386"
+	echo " installdir    - Optional parameter to specify an installation directory. If you"
+	echo "                 do this, the script will check whether this directory does not"
+	echo "                 yet exist and in this case, it will perform an unattended"
+	echo "                 installation to this directory."
+	echo
+	echo " options:"
+	echo "  -et  [module]   Exclude one module from the toolchain compilation"
+	echo "  -em  [arch]     Exclude one architecture from the toolchain compilation"
 	echo 
-	echo " List of available architectures:"
-	echo " i386 - Build the ReactOS toolchain for x86"
-	echo " amd64 - Build the ReactOS toolchain for x86_64"
+	echo " List of available modules:"
+	for module in $MODULES; do
+	echo "  $module"
+	done
 	echo
+	echo " List of available architectures:"
+	for arch in $TARGET_ARCH; do
+	echo "  $arch"
+	done
 	echo
 	echo "Usually, you just call the script without any parameters and it will guide you"
 	echo "through all possible installation options."
 	exit 0
 fi
 
+for var in "$@"; do
+	case "${var}" in
+		-em)
+			shift
+			if ! [[ ${MODULES[$1]} ]]; then
+				echo "Invalid module \"$1\" specified, the script will now exit."
+				exit 1
+			fi
+
+			MODULES[$1]=false
+			shift
+		;;
+
+		-et)
+			shift
+			if ! [[ ${ARCH[$1]} ]]; then
+				echo "Invalid arch \"$1\" specified, the script will now exit."
+				exit 1
+			fi
+
+			ARCH[$1]=false
+			shift
+		;;
+
+		-*)
+			echo "Invalid argument\"$1\" specified, ignoring..."
+			shift
+		;;
+	esac
+done
+
+
+if [ "$MSYSTEM" ] ; then
+	# Install required tools in MSYS2
+	rs_boldmsg "Running MSYS pacman..."
+	pacman -S --quiet --noconfirm --needed diffutils help2man make msys2-runtime-devel python texinfo tar | tee /tmp/buildtoolchain-pacman.log
+
+	if grep installation /tmp/buildtoolchain-pacman.log >& /dev/null; then
+		# See e.g. https://sourceforge.net/p/msys2/tickets/74/
+		echo
+		rs_boldmsg "Installed MSYS packages have changed!"
+		echo "For a successful toolchain build, this requires you to close all MSYS windows and run \"autorebase.bat\" in the MSYS installation directory."
+		echo "After you have done so, please rerun \"buildtoolchain-mingw32.sh\"."
+		exit 1
+	fi
+	echo
+
 # Only check for root on an interactive installation.
-if [ "$1" = "" ]; then
+elif [ "$1" = "" ]; then
 	check_root
 fi
 
@@ -107,7 +175,18 @@ fi
 
 reinstall=false
 update=false
-rs_quiet=false
+
+rs_boldmsg "Modules to compile: "
+for module in ${!MODULES[@]}; do
+	echo "$module: ${MODULES[$module]}"
+done
+echo
+
+rs_boldmsg "Architecture to target: "
+for module in ${!ARCH[@]}; do
+	echo "$module: ${ARCH[$module]}"
+done
+echo
 
 # Select the installation directory
 rs_boldmsg "Installation Directory"
@@ -158,6 +237,12 @@ if [ "$1" = "" ]; then
 			echo
 		fi
 	done
+
+	rs_boldmsg "Ready to start"
+
+	echo "Ready to build and install the ReactOS Build Environment."
+	echo "Press Return to continue or Ctrl+C to exit."
+	read
 else
 	installdir=`eval echo $1`
 
@@ -169,65 +254,10 @@ else
 	echo "Using \"$installdir\""
 	echo
 	shift
-	rs_quiet=true
 fi
 
-rs_boldmsg "Target architecture"
-
-if [ "$1" = "" ]; then
-	rs_target_arch= `eval echo $DEFAULT_TARGET_ARCH`
-else
-	rs_target_arch=`eval echo $1`
-
-	if [ "$rs_target_arch" = "i386" ]; then
-		rs_target="i686-w64-mingw32"
-	elif [ "$rs_target_arch" = "amd64" ]; then
-		rs_target="x86_64-w64-mingw32"
-	else
-		rs_redmsg "Invalid architecture \"$rs_target_arch\" specified, aborted!"
-		exit 1
-	fi
-
-	# This is a cross-compiler with prefix.
-	rs_target_tool_prefix="${rs_target}-"
-	shift
-fi
-
-echo "Using \"$rs_target_arch\""
-echo
-
-# Ready to start
-if [ $rs_quiet = true ]; then
-	rs_boldmsg "Ready to start"
-
-	echo "Ready to build and install the ReactOS Build Environment."
-	echo "Press Return to continue or Ctrl+C to exit."
-	read
-fi
-
-if [ "$MSYSTEM" ] ; then
-	# Install required tools in MSYS2
-	rs_boldmsg "Running MSYS pacman..."
-	pacman -S --quiet --noconfirm --needed diffutils help2man make msys2-runtime-devel python texinfo tar | tee /tmp/buildtoolchain-pacman.log
-
-	if grep installation /tmp/buildtoolchain-pacman.log >& /dev/null; then
-		# See e.g. https://sourceforge.net/p/msys2/tickets/74/
-		echo
-		rs_boldmsg "Installed MSYS packages have changed!"
-		echo "For a successful toolchain build, this requires you to close all MSYS windows and run \"autorebase.bat\" in the MSYS installation directory."
-		echo "After you have done so, please rerun \"buildtoolchain-mingw32.sh\"."
-		exit 1
-fi
-
-# Set the rs_process_* variables based on the parameters
-for module in $MODULES; do
-	if [ "$1" = "0" ]; then
-		eval "rs_process_$module=false"
-	else
-		eval "rs_process_$module=true"
-	fi
-
-	shift
+for module in ${!MODULES[@]}; do
+	declare rs_process_$module=${MODULES[$module]}
 done
 
 rs_process_scut=true
@@ -235,15 +265,21 @@ rs_process_cpucount=true
 
 rm -rf "$installdir" || exit 1
 mkdir -p "$installdir" || exit 1
+mkdir "$rs_workdir"
 
 rs_prefixdir="$installdir"
-rs_archprefixdir="$installdir/$rs_target_arch"
+#rs_archprefixdir="$installdir/$rs_target_arch"
 
 ##### BEGIN almost shared buildtoolchain/RosBE-Unix building part #############
 rs_boldmsg "Building..."
 
 mkdir -p "$rs_prefixdir/bin"
-mkdir -p "$rs_archprefixdir/$rs_target"
+
+for arch in ${!ARCH[@]}; do
+	if [ ${ARCH[$arch]} ]; then
+		mkdir -p "$installdir/$arch/${GCC_TRIPLETS[$arch]}"
+	fi
+done
 
 echo "Using CFLAGS=\"$CFLAGS\""
 echo "Using CXXFLAGS=\"$CXXFLAGS\""
@@ -280,72 +316,6 @@ if rs_prepare_module "cmake"; then
 	rs_clean_module "cmake"
 fi
 
-if rs_prepare_module "binutils"; then
-	rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
-	rs_clean_module "binutils"
-fi
-
-if rs_prepare_module "mingw_w64"; then
-	rs_do_command ../mingw_w64/mingw-w64-headers/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target"
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
-	rs_do_command ln -s -f $rs_archprefixdir/$rs_target $rs_archprefixdir/mingw
-	rs_clean_module "mingw_w64"
-fi
-
-if rs_prepare_module "gcc"; then
-	rs_extract_module gmp $PWD/../gcc
-	rs_extract_module mpc $PWD/../gcc
-	rs_extract_module mpfr $PWD/../gcc
-
-	cd ../gcc-build
-
-	export CFLAGS_FOR_TARGET="$rs_target_cflags"
-	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
-
-	rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="ReactOS" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
-	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
-	rs_do_command $rs_makecmd install-gcc
-	rs_do_command $rs_makecmd install-lto-plugin
-
-	if rs_prepare_module "mingw_w64"; then
-		export AR="$rs_archprefixdir/bin/${rs_target_tool_prefix}ar"
-		export AS="$rs_archprefixdir/bin/${rs_target_tool_prefix}as"
-		export CC="$rs_archprefixdir/bin/${rs_target_tool_prefix}gcc"
-		export CFLAGS="$rs_target_cflags"
-		export CXX="$rs_archprefixdir/bin/${rs_target_tool_prefix}g++"
-		export CXXFLAGS="$rs_target_cxxflags"
-		export DLLTOOL="$rs_archprefixdir/bin/${rs_target_tool_prefix}dlltool"
-		export RANLIB="$rs_archprefixdir/bin/${rs_target_tool_prefix}ranlib"
-		export STRIP="$rs_archprefixdir/bin/${rs_target_tool_prefix}strip"
-
-		rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir"
-		rs_do_command $rs_makecmd -j $rs_cpucount
-		rs_do_command $rs_makecmd install
-		rs_clean_module "mingw_w64"
-
-		unset AR
-		unset AS
-		export CC="$rs_host_cc"
-		export CFLAGS="$rs_host_cflags"
-		export CXX="$rs_host_cxx"
-		export CXXFLAGS="$rs_host_cxxflags"
-		unset DLLTOOL
-		unset RANLIB
-		unset STRIP
-	fi
-
-	cd "$rs_workdir/gcc-build"
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
-	rs_clean_module "gcc"
-
-	unset CFLAGS_FOR_TARGET
-	unset CXXFLAGS_FOR_TARGET
-fi
-
 if rs_prepare_module "ninja"; then
 	if [ "$MSYSTEM" ] ; then
 		$rs_ninja_args = "--platform mingw"
@@ -354,6 +324,82 @@ if rs_prepare_module "ninja"; then
 	rs_do_command install ninja "$rs_prefixdir/bin"
 	rs_clean_module "ninja"
 fi
+
+for arch in ${!ARCH[@]}; do
+	if [ ${ARCH[$arch]} ]; then
+		rs_target=${GCC_TRIPLETS[$arch]}
+		rs_archprefixdir="$installdir/$arch/$rs_target"
+
+		# This is a cross-compiler with prefix.
+		rs_target_tool_prefix="${rs_target}-"
+
+		if rs_prepare_module "binutils"; then
+			rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls
+			rs_do_command $rs_makecmd -j $rs_cpucount
+			rs_do_command $rs_makecmd install
+			rs_clean_module "binutils"
+		fi
+
+		if rs_prepare_module "mingw_w64"; then
+			rs_do_command ../mingw_w64/mingw-w64-headers/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target"
+			rs_do_command $rs_makecmd -j $rs_cpucount
+			rs_do_command $rs_makecmd install
+			rs_do_command ln -s -f $rs_archprefixdir/$rs_target $rs_archprefixdir/mingw
+			rs_clean_module "mingw_w64"
+		fi
+
+		if rs_prepare_module "gcc"; then
+			rs_extract_module gmp $PWD/../gcc
+			rs_extract_module mpc $PWD/../gcc
+			rs_extract_module mpfr $PWD/../gcc
+
+			cd ../gcc-build
+
+			export CFLAGS_FOR_TARGET="$rs_target_cflags"
+			export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
+
+			rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="ReactOS" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
+			rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
+			rs_do_command $rs_makecmd install-gcc
+			rs_do_command $rs_makecmd install-lto-plugin
+
+			if rs_prepare_module "mingw_w64"; then
+				export AR="$rs_archprefixdir/bin/${rs_target_tool_prefix}ar"
+				export AS="$rs_archprefixdir/bin/${rs_target_tool_prefix}as"
+				export CC="$rs_archprefixdir/bin/${rs_target_tool_prefix}gcc"
+				export CFLAGS="$rs_target_cflags"
+				export CXX="$rs_archprefixdir/bin/${rs_target_tool_prefix}g++"
+				export CXXFLAGS="$rs_target_cxxflags"
+				export DLLTOOL="$rs_archprefixdir/bin/${rs_target_tool_prefix}dlltool"
+				export RANLIB="$rs_archprefixdir/bin/${rs_target_tool_prefix}ranlib"
+				export STRIP="$rs_archprefixdir/bin/${rs_target_tool_prefix}strip"
+
+				rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir"
+				rs_do_command $rs_makecmd -j $rs_cpucount
+				rs_do_command $rs_makecmd install
+				rs_clean_module "mingw_w64"
+
+				unset AR
+				unset AS
+				export CC="$rs_host_cc"
+				export CFLAGS="$rs_host_cflags"
+				export CXX="$rs_host_cxx"
+				export CXXFLAGS="$rs_host_cxxflags"
+				unset DLLTOOL
+				unset RANLIB
+				unset STRIP
+			fi
+
+			cd "$rs_workdir/gcc-build"
+			rs_do_command $rs_makecmd -j $rs_cpucount
+			rs_do_command $rs_makecmd install
+			rs_clean_module "gcc"
+
+			unset CFLAGS_FOR_TARGET
+			unset CXXFLAGS_FOR_TARGET
+		fi
+	fi
+done
 
 # Final actions
 echo
@@ -364,9 +410,15 @@ cd "$rs_prefixdir"
 rm bin/yacc
 rm -rf doc man share/info share/man
 
-cd "$rs_archprefixdir"
-rm -rf $rs_target/doc $rs_target/share include info man mingw share
-rm -f lib/* >& /dev/null
+for arch in ${!ARCH[@]}; do
+	if [ ${ARCH[$arch]} ]; then
+		rs_target=${GCC_TRIPLETS[$arch]}
+		rs_archprefixdir="$installdir/$arch/$rs_target"
+		cd "$rs_archprefixdir"
+		rm -rf $rs_target/doc $rs_target/share include info man mingw share
+		rm -f lib/* >& /dev/null
+	fi
+done
 ##### END almost shared buildtoolchain/RosBE-Unix building part ###############
 
 # See: https://jira.reactos.org/browse/ROSBE-35
