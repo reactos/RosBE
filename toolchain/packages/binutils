@@ -1,0 +1,20 @@
+rs_version="2.34"
+rs_triplets=true
+
+declare -A rs_sources=(
+    ["binutils.tar.xz"]="https://ftp.gnu.org/gnu/binutils/binutils-${rs_version}.tar.xz"
+)
+
+declare -A rs_sha256sums=(
+    ["binutils.tar.xz"]=""
+)
+
+rs_prepare() {
+    rs_extract_module "binutils" "$rs_workdir/binutils" "tar.xz"
+}
+
+rs_build() {
+    rs_do_command "$rs_workdir/binutils/binutils-${rs_version}/configure" --prefix="$rs_prefix" --target="$rs_target" --with-sysroot="$rs_prefix" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls
+    rs_do_command $rs_makecmd -j $rs_cpucount
+    rs_do_command $rs_makecmd install
+}

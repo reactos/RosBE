@@ -1,0 +1,11 @@
+
+rs_prepare() {
+    rs_do_command git clone --depth=1 -b cmake-3.17.2-reactos "https://github.com/reactos/CMake" "$rs_workdir/cmake/cmake-ros"
+}
+
+
+rs_build() {
+	rs_do_command "$rs_workdir/cmake/cmake-ros/bootstrap" --prefix="$rs_prefixdir" --parallel=$rs_cpucount -- -DCMAKE_USE_OPENSSL=OFF
+	rs_do_command $rs_makecmd -j $rs_cpucount
+	rs_do_command $rs_makecmd install
+}

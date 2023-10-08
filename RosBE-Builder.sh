@@ -32,7 +32,7 @@ rs_host_strip="${STRIP:-strip}"
 rs_host_cflags="${CFLAGS:--pipe -O2 -g0 -march=native}"
 rs_host_cxx="${CXX:-g++}"
 rs_host_cxxflags="${CXXFLAGS:-$rs_host_cflags}"
-rs_needed_tools="as find $CC $CXX grep m4 makeinfo python tar wget patch libtool autoconf automake"        # GNU Make has a special check
+rs_needed_tools="as find $CC $CXX grep m4 makeinfo python tar wget patch libtool autoconf automake autopoint git"        # GNU Make has a special check
 rs_needed_libs="zlib"
 rs_target_cflags="-pipe -O2 -Wl,-S -g0"
 rs_target_cxxflags="$rs_target_cflags"
@@ -54,6 +54,7 @@ rs_sourcedir="$rs_workdir/sources"
 rs_patches="$rs_tcdir/patches"
 rs_pkgdir="$rs_tcdir/packages"
 rs_rm_installdir=true
+rs_process_tools=true
 
 # RosBE-Unix Constants
 DEFAULT_INSTALL_DIR="/usr/local/RosBE"
@@ -342,9 +343,9 @@ echo "Using CFLAGS=\"$CFLAGS\""
 echo "Using CXXFLAGS=\"$CXXFLAGS\""
 echo
 
-if $rs_process_tools ; then
+if [ $rs_process_tools = true ] ; then
 	for tool in ${rs_tools[@]} ; do
-		var=rs_process_$tool
+		var=rs_tool_$tool
 		if [ ${!var} ]; then
 			rs_do_command $CC -s -o "${rs_prefixdir}/bin/${tool}" "${rs_tooldir}/${tool}.c"
 			rs_do_command $STRIP "${rs_prefixdir}/bin/${tool}${rs_suffix}"
@@ -353,7 +354,7 @@ if $rs_process_tools ; then
 
 	if [ "$MSYSTEM" ] ; then
 		for tool in ${rs_tools_win[@]} ; do
-			var=rs_process_$tool
+			var=rs_tool_$tool
 			if [ ${!var} ]; then
 				if [ $tool = "flash" ] ; then
 					rs_do_command $CC -D_WIN32_WINNT=0x500 -s -o "$rs_prefixdir/bin/flash" "$rs_tooldir/windows/flash.c"
@@ -375,7 +376,12 @@ echo
 
 rs_cpucount=`$rs_prefixdir/bin/cpucount -x1`
 
+# Main compiler
 for module in ${rs_modules[@]}; do
+	# set the prefix directory again in case it was altered
+	rs_prefixdir="$installdir"
+
+
 	var=rs_process_$module
 	if [ ${!var} = true ]; then
 		rs_boldmsg "Building $module..."
@@ -385,11 +391,12 @@ for module in ${rs_modules[@]}; do
 			exit 1
 		fi
 
+		# Generate the build directory
 		source "$rs_pkgdir/$module"
-
 		rm -rf "$rs_workdir/$module"
 		mkdir -p "$rs_workdir/$module"
 
+		# Download and check the downloaded files
 		for file in ${!rs_sources[@]} ; do
 			rs_download_module "$rs_sourcedir" "${rs_sources[$file]}" "$file"
 			rs_sha256_compare "$rs_sourcedir/$file" "${rs_sha256sums[$file]}"
@@ -402,103 +409,38 @@ for module in ${rs_modules[@]}; do
 			fi
 		done
 
+		cd "$rs_workdir/$module"
+
+		# Prepare the source code (extract it and apply any patch)
 		rs_prepare
-		rs_build
+
+		mkdir -p "$rs_workdir/$module/build" 2>/dev/null
+
+		if [ "$rs_triplets" = true ] ; then
+			# Triplet based compilation, we have to iterate trough all the arches and build the specifics
+			for arch in ${rs_archs[@]} ; do
+				var=rs_arch_$arch
+				if [ ${!var} = true ] ; then
+					# set the target triplet and new prefix
+					rs_target=${rs_triplets[$arch]}
+					rs_prefixdir="$installdir/$rs_target"
+
+					# move to the arch-specific target directory
+					mkdir -p "$rs_workdir/$module/build-$arch"
+					cd "$rs_workdir/$module/build-$arch"
+
+					# Start the build for this triplet
+					rs_build
+				fi
+			done
+		else
+			# Do a normal build
+			cd "$rs_workdir/$module/build"
+			rs_build
+		fi
+
+		# Cleanup any build directory
 		rs_clean_module "$module"
-	fi
-done
-
-exit 0 # TODO
-
-if rs_prepare_module "cmake"; then
-	rs_do_command ../cmake/bootstrap --prefix="$rs_prefixdir" --parallel=$rs_cpucount -- -DCMAKE_USE_OPENSSL=OFF
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
-	rs_clean_module "cmake"
-fi
-
-if rs_prepare_module "ninja"; then
-	if [ "$MSYSTEM" ] ; then
-		$rs_ninja_args = "--platform mingw"
-	fi
-	rs_do_command python ../ninja/configure.py --bootstrap $rs_ninja_args
-	rs_do_command install ninja "$rs_prefixdir/bin"
-	rs_clean_module "ninja"
-fi
-
-for arch in ${!ARCH[@]}; do
-	if [ ${ARCH[$arch]} ]; then
-		rs_target=${GCC_TRIPLETS[$arch]}
-		rs_archprefixdir="$installdir/$arch/$rs_target"
-
-		# This is a cross-compiler with prefix.
-		rs_target_tool_prefix="${rs_target}-"
-
-		if rs_prepare_module "binutils"; then
-			rs_do_command ../binutils/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls
-			rs_do_command $rs_makecmd -j $rs_cpucount
-			rs_do_command $rs_makecmd install
-			rs_clean_module "binutils"
-		fi
-
-		if rs_prepare_module "mingw_w64"; then
-			rs_do_command ../mingw_w64/mingw-w64-headers/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target"
-			rs_do_command $rs_makecmd -j $rs_cpucount
-			rs_do_command $rs_makecmd install
-			rs_do_command ln -s -f $rs_archprefixdir/$rs_target $rs_archprefixdir/mingw
-			rs_clean_module "mingw_w64"
-		fi
-
-		if rs_prepare_module "gcc"; then
-			rs_extract_module gmp $PWD/../gcc
-			rs_extract_module mpc $PWD/../gcc
-			rs_extract_module mpfr $PWD/../gcc
-
-			cd ../gcc-build
-
-			export CFLAGS_FOR_TARGET="$rs_target_cflags"
-			export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
-
-			rs_do_command ../gcc/configure --prefix="$rs_archprefixdir" --target="$rs_target" --with-sysroot="$rs_archprefixdir" --with-pkgversion="ReactOS" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
-			rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
-			rs_do_command $rs_makecmd install-gcc
-			rs_do_command $rs_makecmd install-lto-plugin
-
-			if rs_prepare_module "mingw_w64"; then
-				export AR="$rs_archprefixdir/bin/${rs_target_tool_prefix}ar"
-				export AS="$rs_archprefixdir/bin/${rs_target_tool_prefix}as"
-				export CC="$rs_archprefixdir/bin/${rs_target_tool_prefix}gcc"
-				export CFLAGS="$rs_target_cflags"
-				export CXX="$rs_archprefixdir/bin/${rs_target_tool_prefix}g++"
-				export CXXFLAGS="$rs_target_cxxflags"
-				export DLLTOOL="$rs_archprefixdir/bin/${rs_target_tool_prefix}dlltool"
-				export RANLIB="$rs_archprefixdir/bin/${rs_target_tool_prefix}ranlib"
-				export STRIP="$rs_archprefixdir/bin/${rs_target_tool_prefix}strip"
-
-				rs_do_command ../mingw_w64/mingw-w64-crt/configure --prefix="$rs_archprefixdir/$rs_target" --host="$rs_target" --with-sysroot="$rs_archprefixdir"
-				rs_do_command $rs_makecmd -j $rs_cpucount
-				rs_do_command $rs_makecmd install
-				rs_clean_module "mingw_w64"
-
-				unset AR
-				unset AS
-				export CC="$rs_host_cc"
-				export CFLAGS="$rs_host_cflags"
-				export CXX="$rs_host_cxx"
-				export CXXFLAGS="$rs_host_cxxflags"
-				unset DLLTOOL
-				unset RANLIB
-				unset STRIP
-			fi
-
-			cd "$rs_workdir/gcc-build"
-			rs_do_command $rs_makecmd -j $rs_cpucount
-			rs_do_command $rs_makecmd install
-			rs_clean_module "gcc"
-
-			unset CFLAGS_FOR_TARGET
-			unset CXXFLAGS_FOR_TARGET
-		fi
 	fi
 done
 
@@ -511,10 +453,11 @@ cd "$rs_prefixdir"
 rm bin/yacc
 rm -rf doc man share/info share/man
 
-for arch in ${!ARCH[@]}; do
-	if [ ${ARCH[$arch]} ]; then
-		rs_target=${GCC_TRIPLETS[$arch]}
-		rs_archprefixdir="$installdir/$arch/$rs_target"
+for arch in ${rs_archs[@]}; do
+	var=rs_arch_$arch
+	if [ ${!$var} = true ]; then
+		rs_target=${rs_triplets[$arch]}
+		rs_archprefixdir="$installdir/$rs_target"
 		cd "$rs_archprefixdir"
 		rm -rf $rs_target/doc $rs_target/share include info man mingw share
 		rm -f lib/* >& /dev/null
@@ -544,9 +487,16 @@ fi
 if [ "$MSYSTEM" ]; then
 	echo "Copying additional dependencies from MSYS..."
 	cd "$rs_prefixdir/bin"
-	cp /mingw32/bin/libgcc_s_dw2-1.dll .
-	cp /mingw32/bin/libstdc++-6.dll .
-	cp /mingw32/bin/libwinpthread-1.dll .
+
+	if [ "$MSYSTEM" = "MINGW64" ] ; then
+		mingw_prefix = "mingw64"
+	else
+		mingw_prefix = "mingw32"
+	fi
+
+	cp /$mingw_prefix/bin/libgcc_s_dw2-1.dll .
+	cp /$mingw_prefix/bin/libstdc++-6.dll .
+	cp /$mingw_prefix/bin/libwinpthread-1.dll .
 else
 	echo "Copying scripts..."
 	cp -R "$rs_scriptdir/scripts/bash"* "$installdir"
@@ -559,7 +509,7 @@ fi
 # Finish
 rs_boldmsg "Finished successfully!"
 
-if [ -z "$MSYSTEM" ]; then
+if [ ! "$MSYSTEM" ]; then
 	echo "To create a shortcut to the Build Environment on the Desktop, please switch back to your"
 	echo "normal User Account (I assume you ran this script as \"root\")."
 	echo "Then execute the following command:"

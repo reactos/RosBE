@@ -1,0 +1,21 @@
+rs_version="v1.11.1"
+
+declare -A rs_sources = (
+    ["ninja.tar.gz"]="https://github.com/ninja-build/ninja/archive/refs/tags/${rs_version}.tar.gz"
+)
+
+declare -A rs_sha256sums = (
+    ["ninja.tar.gz"]=""
+)
+
+rs_prepare() {
+    rs_extract_module "ninja" "$rs_workdir/ninja" "tar.gz"
+}
+
+rs_build() {
+	if [ "$MSYSTEM" ] ; then
+		$rs_ninja_args = "--platform mingw"
+	fi
+	rs_do_command python "$rs_workdir/ninja/configure.py" --bootstrap $rs_ninja_args
+	rs_do_command install ninja "$rs_prefixdir/bin"
+}

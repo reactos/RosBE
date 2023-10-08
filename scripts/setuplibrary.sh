@@ -151,7 +151,6 @@ rs_clean_module()
 {
 	echo "Cleaning up $1..."
 	cd "$rs_workdir"
-	rm -rf "$1-build"
 	rm -rf "$1"
 }
 
@@ -181,7 +180,6 @@ rs_download_module()
 
 	if [ ! -f $file ] ; then
 		rs_do_command wget -O "$file" -q $url
-		rs_check_run 0
 	fi
 
 	return 0
