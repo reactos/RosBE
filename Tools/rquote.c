@@ -10,6 +10,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifndef _WIN32
+#define _strnicmp strncmp
+#endif
+
 int main(int argc, char* argv[])
 {
     int i = 0;

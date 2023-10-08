@@ -8,23 +8,13 @@
  */
 
 
-#include <windows.h>
+#include <time.h>
 #include <stdio.h>
 
 int main(void)
 {
-    SYSTEMTIME LocalSystemTime;
-    char CurrentDate[20];
-
-    GetSystemTime(&LocalSystemTime);
-    GetDateFormat(LOCALE_USER_DEFAULT,
-                  0,
-                  &LocalSystemTime,
-                  "MM/dd/yyyy",
-                  CurrentDate,
-                  20);
-
-    printf("%s", CurrentDate);
-
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    printf("%02d/%02d/%d", tm.tm_mon + 1, tm.tm_mday, tm.tm_year + 1900);
     return 0;
 }

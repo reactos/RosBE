@@ -20,10 +20,15 @@ if [ "$MSYSTEM" ] ; then
 
 	# Ensure similar error messages on all platforms, especially when we parse them (e.g. for pacman).
 	export LANG=C
+
+	rs_suffix=".exe"
+else
+	rs_suffix=""
 fi
 
 # RosBE Setup Variables
 rs_host_cc="${CC:-gcc}"
+rs_host_strip="${STRIP:-strip}"
 rs_host_cflags="${CFLAGS:--pipe -O2 -g0 -march=native}"
 rs_host_cxx="${CXX:-g++}"
 rs_host_cxxflags="${CXXFLAGS:-$rs_host_cflags}"
@@ -32,6 +37,7 @@ rs_needed_libs="zlib"
 rs_target_cflags="-pipe -O2 -Wl,-S -g0"
 rs_target_cxxflags="$rs_target_cflags"
 
+export STRIP="$rs_host_strip"
 export CC="$rs_host_cc"
 export CFLAGS="$rs_host_cflags"
 export CXX="$rs_host_cxx"
@@ -96,8 +102,8 @@ if [ "$1" = "-h" ] || [ "$1" = "-?" ] || [ "$1" = "--help" ]; then
 	echo "                 installation to this directory."
 	echo
 	echo " options:"
-	echo "  -et  [module]   Exclude one module from the toolchain compilation"
-	echo "  -em  [arch]     Exclude one architecture from the toolchain compilation"
+	echo "  -em  [module]   Exclude one module from the toolchain compilation"
+	echo "  -et  [arch]     Exclude one architecture from the toolchain compilation"
 	echo 
 	echo " List of available modules:"
 	for module in $MODULES; do
@@ -246,10 +252,10 @@ if [ "$1" = "" ]; then
 else
 	installdir=`eval echo $1`
 
-	if [ -e "$installdir" ]; then
-		rs_redmsg "Installation directory \"$installdir\" already exists, aborted!"
-		exit 1
-	fi
+	#if [ -e "$installdir" ]; then
+	#	rs_redmsg "Installation directory \"$installdir\" already exists, aborted!"
+	#	exit 1
+	#fi
 
 	echo "Using \"$installdir\""
 	echo
@@ -262,6 +268,16 @@ done
 
 rs_process_scut=true
 rs_process_cpucount=true
+rs_process_chknewer=true
+rs_process_chkslash=true
+rs_process_echoh=true
+rs_process_rquote=true
+rs_process_flash=true # broken entirely
+rs_process_getdate=true
+rs_process_tee=true
+rs_process_config=true
+rs_process_buildtime=true
+rs_process_playwav=true
 
 rm -rf "$installdir" || exit 1
 mkdir -p "$installdir" || exit 1
@@ -287,12 +303,67 @@ echo
 
 if $rs_process_cpucount; then
 	rs_do_command $CC -s -o "$rs_prefixdir/bin/cpucount" "$rs_tooldir/cpucount.c"
+	rs_do_command $STRIP "$rs_prefixdir/bin/cpucount$rs_suffix"
 fi
 
 rs_cpucount=`$rs_prefixdir/bin/cpucount -x1`
 
 if $rs_process_scut; then
 	rs_do_command $CC -s -o "$rs_prefixdir/bin/scut" "$rs_tooldir/scut.c"
+	rs_do_command $STRIP "$rs_prefixdir/bin/scut$rs_suffix"
+fi
+
+if $rs_process_chknewer; then
+	rs_do_command $CC -s -o "$rs_prefixdir/bin/chknewer" "$rs_tooldir/chknewer.c"
+	rs_do_command $STRIP "$rs_prefixdir/bin/chknewer$rs_suffix"
+fi
+
+if $rs_process_echoh; then
+	rs_do_command $CC -s -o "$rs_prefixdir/bin/echoh" "$rs_tooldir/echoh.c"
+	rs_do_command $STRIP "$rs_prefixdir/bin/echoh$rs_suffix"
+fi
+
+if $rs_process_rquote; then
+	rs_do_command $CC -s -o "$rs_prefixdir/bin/rquote" "$rs_tooldir/rquote.c"
+	rs_do_command $STRIP "$rs_prefixdir/bin/rquote$rs_suffix"
+fi
+
+if $rs_process_chkslash; then
+	rs_do_command $CC -s -o "$rs_prefixdir/bin/chkslash" "$rs_tooldir/chkslash.c"
+	rs_do_command $STRIP "$rs_prefixdir/bin/chkslash$rs_suffix"
+fi
+
+if $rs_process_getdate; then
+	rs_do_command $CC -s -o "$rs_prefixdir/bin/getdate" "$rs_tooldir/getdate.c"
+	rs_do_command $STRIP "$rs_prefixdir/bin/getdate$rs_suffix"
+fi
+
+if $rs_process_buildtime; then
+	rs_do_command $CC -s -o "$rs_prefixdir/bin/buildtime" "$rs_tooldir/buildtime.c"
+	rs_do_command $STRIP "$rs_prefixdir/bin/buildtime$rs_suffix"
+fi
+
+if [ "$MSYSTEM" ] ; then
+	# Windows exclusive tools
+
+	if $rs_process_flash; then
+		rs_do_command $CC -D_WIN32_WINNT=0x500 -s -o "$rs_prefixdir/bin/flash" "$rs_tooldir/windows/flash.c"
+		rs_do_command $STRIP "$rs_prefixdir/bin/flash$rs_suffix"
+	fi
+
+	if $rs_process_tee; then
+		rs_do_command $CC -s -o "$rs_prefixdir/bin/tee" "$rs_tooldir/windows/tee.c"
+		rs_do_command $STRIP "$rs_prefixdir/bin/tee$rs_suffix"
+	fi
+
+	if $rs_process_playwav; then
+		rs_do_command $CXX -D_UNICODE -s -o "$rs_prefixdir/bin/playwav" "$rs_tooldir/windows/playwav.cpp" -lwinmm -municode
+		rs_do_command $STRIP "$rs_prefixdir/bin/playwav$rs_suffix"
+	fi
+
+	if $rs_process_config; then
+		rs_do_command $rs_makecmd -C "$rs_tooldir/windows/config"
+	fi
 fi
 
 if rs_prepare_module "bison"; then

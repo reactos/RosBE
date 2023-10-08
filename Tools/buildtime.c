@@ -9,10 +9,12 @@
  *
  */
 
-#include <windows.h>
 #include <time.h>
 #include <stdio.h>
 #include <ctype.h>
+
+#ifdef _WIN32
+#include <windows.h>
 
 static PWSTR SkipSelfArgument(PWSTR lpszCommandLine)
 {
@@ -100,3 +102,68 @@ int main()
 
     return ExitCode;
 }
+
+#else
+
+#include <unistd.h>
+#include <spawn.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <errno.h>
+
+extern char **environ;
+
+int main(int argc, char** argv)
+{
+    pid_t pid;
+    int status;
+    time_t StartTime, FinishTime;
+    double TotalTime;
+    int Second, Minute, Hour;
+
+    // If nothing is on the command-line exit
+    if (argv[1] == 0)
+    {
+        fprintf(stderr, "buildtime: required parameter not specified\n");
+        return 1;
+    }
+
+    // Grab the starting timestamp.
+    time(&StartTime);
+
+    if (posix_spawn(&pid, argv[1], NULL, NULL, argv + 1, environ) != 0)
+    {
+        fprintf(stderr, "buildtime: posix_spawn() failed: %s\n", strerror(errno));
+        return 1;
+    }
+
+    do
+    {
+        if (waitpid(pid, &status, 0) == -1)
+        {
+            fprintf(stderr, "buildtime: waitpid() failed: %s\n", strerror(errno));
+            return 1;
+        }
+    }
+    while (!WIFEXITED(status) && !WIFSIGNALED(status));
+
+    // Grab the finishing timestamp.
+    time(&FinishTime);
+
+    // Get the elapsed time.
+    TotalTime = difftime(FinishTime, StartTime);
+
+    // Convert the elapsed time to a human readable format.
+    Second = (int)TotalTime % 60;
+    TotalTime = TotalTime / 60;
+    Minute = (int)TotalTime % 60;
+    Hour = TotalTime / 60;
+
+    // Print the total build time.
+    printf("\nTotal Build Time: %02d:%02d:%02d", Hour, Minute, Second);
+
+    return WEXITSTATUS(status);
+}
+
+
+#endif

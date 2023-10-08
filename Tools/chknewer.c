@@ -13,6 +13,22 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifndef _WIN32
+#define _strnicmp strncmp
+
+static char *_strlwr(char *str)
+{
+  unsigned char *p = (unsigned char *)str;
+
+  while (*p) {
+     *p = tolower((unsigned char)*p);
+      p++;
+  }
+
+  return str;
+}
+#endif
+
 time_t
 getfmodtime(
     char* filename
