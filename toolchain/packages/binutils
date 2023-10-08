@@ -6,7 +6,7 @@ declare -A rs_sources=(
 )
 
 declare -A rs_sha256sums=(
-    ["binutils.tar.xz"]=""
+    ["binutils.tar.xz"]="f00b0e8803dc9bab1e2165bd568528135be734df3fabf8d0161828cd56028952"
 )
 
 rs_prepare() {
@@ -14,7 +14,7 @@ rs_prepare() {
 }
 
 rs_build() {
-    rs_do_command "$rs_workdir/binutils/binutils-${rs_version}/configure" --prefix="$rs_prefix" --target="$rs_target" --with-sysroot="$rs_prefix" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls
+    rs_do_command "$rs_workdir/binutils/binutils-${rs_version}/configure" --prefix="$rs_prefixdir" --target="$rs_target" --with-sysroot="$rs_prefixdir" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls
     rs_do_command $rs_makecmd -j $rs_cpucount
     rs_do_command $rs_makecmd install
 }

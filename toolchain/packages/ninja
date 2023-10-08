@@ -1,11 +1,11 @@
-rs_version="v1.11.1"
+rs_version="1.11.1"
 
-declare -A rs_sources = (
-    ["ninja.tar.gz"]="https://github.com/ninja-build/ninja/archive/refs/tags/${rs_version}.tar.gz"
+declare -A rs_sources=(
+    ["ninja.tar.gz"]="https://github.com/ninja-build/ninja/archive/refs/tags/v${rs_version}.tar.gz"
 )
 
-declare -A rs_sha256sums = (
-    ["ninja.tar.gz"]=""
+declare -A rs_sha256sums=(
+    ["ninja.tar.gz"]="31747ae633213f1eda3842686f83c2aa1412e0f5691d1c14dbbcc67fe7400cea"
 )
 
 rs_prepare() {
@@ -16,6 +16,6 @@ rs_build() {
 	if [ "$MSYSTEM" ] ; then
 		$rs_ninja_args = "--platform mingw"
 	fi
-	rs_do_command python "$rs_workdir/ninja/configure.py" --bootstrap $rs_ninja_args
+	rs_do_command python "$rs_workdir/ninja/ninja-${rs_version}/configure.py" --bootstrap $rs_ninja_args
 	rs_do_command install ninja "$rs_prefixdir/bin"
 }

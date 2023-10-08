@@ -2,12 +2,12 @@
 mingw_version="11.0.1"
 rs_triplets=true
 
-declare -A rs_sources = (
+declare -A rs_sources=(
     ["mingw-w64.tar.bz2"]="https://downloads.sourceforge.net/project/mingw-w64/mingw-w64/mingw-w64-release/mingw-w64-v${mingw_version}.tar.bz2"
 )
 
-declare -A rs_sha256sums = (
-    ["mingw-w64.tar.bz2"]=""
+declare -A rs_sha256sums=(
+    ["mingw-w64.tar.bz2"]="3f66bce069ee8bed7439a1a13da7cb91a5e67ea6170f21317ac7f5794625ee10"
 )
 
 mingw_prepare() {
