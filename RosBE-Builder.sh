@@ -32,7 +32,7 @@ rs_host_strip="${STRIP:-strip}"
 rs_host_cflags="${CFLAGS:--pipe -O2 -g0 -march=native}"
 rs_host_cxx="${CXX:-g++}"
 rs_host_cxxflags="${CXXFLAGS:-$rs_host_cflags}"
-rs_needed_tools="as bzip2 find $CC $CXX grep m4 makeinfo python tar"        # GNU Make has a special check
+rs_needed_tools="as find $CC $CXX grep m4 makeinfo python tar wget patch libtool autoconf automake"        # GNU Make has a special check
 rs_needed_libs="zlib"
 rs_target_cflags="-pipe -O2 -Wl,-S -g0"
 rs_target_cxxflags="$rs_target_cflags"
@@ -48,33 +48,73 @@ cd `dirname $0`
 rs_rootdir="$PWD"
 rs_scriptdir="$rs_rootdir/scripts"
 rs_workdir="$rs_rootdir/build"
-rs_sourcedir="$rs_rootdir/toolchain/sources"
+rs_tcdir="$rs_rootdir/toolchain"
 rs_tooldir="$rs_rootdir/tools"
+rs_sourcedir="$rs_workdir/sources"
+rs_patches="$rs_tcdir/patches"
+rs_pkgdir="$rs_tcdir/packages"
+rs_rm_installdir=true
 
 # RosBE-Unix Constants
 DEFAULT_INSTALL_DIR="/usr/local/RosBE"
-ROSBE_VERSION="2.2.1"
+ROSBE_VERSION="merge-fork (2.2.1)"
 
-# binutils->target, gcc->target. flex,bison,cmake -> host
-declare -A MODULES=(
-	["flex"]=true
-	["bison"]=true
-	["cmake"]=true
-	["ninja"]=true
-	["binutils"]=true
-	["mingw_w64"]=true
-	["gcc"]=true
+rs_modules=( # note: dependency order
+	"bison"
+	"flex"
+	"cmake"
+	"ninja"
+	# target specific
+	"binutils"
+	"mingw_w64"
+	"gcc"
 )
 
-declare -A ARCH=( 
-	["i386"]=true
-	["amd64"]=true
+rs_archs=( 
+	"i386"
+	"amd64"
 )
 
-declare -A GCC_TRIPLETS=(
+rs_tools=(
+	"scut"
+	"cpucount"
+	"chknewer"
+	"chkslash"
+	"echoh"
+	"rquote"
+	"getdate"
+	"buildtime"
+)
+
+rs_tools_win=(
+	"flash" # unix have the bash script
+	"tee" # unix have it already
+	"config"
+	"playwav" # unix have the bash script
+)
+
+declare -A rs_triplets=(
 	["i386"]="i686-w64-mingw32"
 	["amd64"]="x86_64-w64-mingw32"
 )
+
+for module in ${rs_modules[@]}; do
+	declare rs_process_$module=true
+done
+
+for arch in ${rs_archs[@]}; do
+	declare rs_arch_$arch=true
+done
+
+for tool in ${rs_tools[@]}; do
+	declare rs_tool_$tool=true
+done
+
+for tool in ${rs_tools_win[@]}; do
+	declare rs_tool_$tool=true
+done
+
+rs_xp=false
 
 source "$rs_scriptdir/bash/rosbelibrary.sh"
 source "$rs_scriptdir/setuplibrary.sh"
@@ -85,7 +125,7 @@ echo "*                          ReactOS Build Environment                      
 echo "*                      Builder Tool for the Base package                      *"
 echo "*                      by Colin Finck <colin@reactos.org>                     *"
 echo "*                                                                             *"
-echo "*                                 Version $ROSBE_VERSION                               *"
+echo "*                           Version $ROSBE_VERSION                               *"
 echo "*******************************************************************************"
 
 echo
@@ -102,16 +142,19 @@ if [ "$1" = "-h" ] || [ "$1" = "-?" ] || [ "$1" = "--help" ]; then
 	echo "                 installation to this directory."
 	echo
 	echo " options:"
-	echo "  -em  [module]   Exclude one module from the toolchain compilation"
-	echo "  -et  [arch]     Exclude one architecture from the toolchain compilation"
+	echo "  --exclude-module  [module]   Exclude one module from the toolchain compilation"
+	echo "  --exclude-arch    [arch]     Exclude one architecture from the toolchain compilation"
+	echo "  --exclude-tools              Exclude building of all provided tools"
+	echo "  --enable-xp-mode             Build RosBe with XP-host compatible host"
+	echo "  --resume                     Resumes the compilation of Rosbe, this can be usefull with passing different commands to continue building the environment"
 	echo 
 	echo " List of available modules:"
-	for module in $MODULES; do
+	for module in ${rs_modules[@]}; do
 	echo "  $module"
 	done
 	echo
 	echo " List of available architectures:"
-	for arch in $TARGET_ARCH; do
+	for arch in ${rs_archs[@]}; do
 	echo "  $arch"
 	done
 	echo
@@ -122,26 +165,31 @@ fi
 
 for var in "$@"; do
 	case "${var}" in
-		-em)
+		--exclude-module)
 			shift
-			if ! [[ ${MODULES[$1]} ]]; then
-				echo "Invalid module \"$1\" specified, the script will now exit."
-				exit 1
-			fi
-
-			MODULES[$1]=false
+			declare rs_process_$1=false
 			shift
 		;;
 
-		-et)
+		--exclude-arch)
 			shift
-			if ! [[ ${ARCH[$1]} ]]; then
-				echo "Invalid arch \"$1\" specified, the script will now exit."
-				exit 1
-			fi
+			declare rs_arch_$1=false
+			shift
+		;;
 
-			ARCH[$1]=false
+		--exclude-tools)
 			shift
+			rs_process_tools=false
+		;;
+
+		--enable-xp-mode)
+			shift
+			rs_xp=true
+		;;
+
+		--resume)
+			shift
+			rs_rm_installdir=false
 		;;
 
 		-*)
@@ -151,24 +199,30 @@ for var in "$@"; do
 	esac
 done
 
-
+# temp...
 if [ "$MSYSTEM" ] ; then
 	# Install required tools in MSYS2
-	rs_boldmsg "Running MSYS pacman..."
-	pacman -S --quiet --noconfirm --needed diffutils help2man make msys2-runtime-devel python texinfo tar | tee /tmp/buildtoolchain-pacman.log
-
-	if grep installation /tmp/buildtoolchain-pacman.log >& /dev/null; then
-		# See e.g. https://sourceforge.net/p/msys2/tickets/74/
-		echo
-		rs_boldmsg "Installed MSYS packages have changed!"
-		echo "For a successful toolchain build, this requires you to close all MSYS windows and run \"autorebase.bat\" in the MSYS installation directory."
-		echo "After you have done so, please rerun \"buildtoolchain-mingw32.sh\"."
-		exit 1
-	fi
+#	rs_boldmsg "Running MSYS pacman..."
+#	pacman -S --quiet --noconfirm --needed diffutils help2man make msys2-runtime-devel python texinfo tar | tee /tmp/buildtoolchain-pacman.log
+#
+#	if grep installation /tmp/buildtoolchain-pacman.log >& /dev/null; then
+#		# See e.g. https://sourceforge.net/p/msys2/tickets/74/
+#		echo
+#		rs_boldmsg "Installed MSYS packages have changed!"
+#		echo "For a successful toolchain build, this requires you to close all MSYS windows and run \"autorebase.bat\" in the MSYS installation directory."
+#		echo "After you have done so, please rerun \"buildtoolchain-mingw32.sh\"."
+#		exit 1
+#	fi
+#
+#	if [ "$MSYSTEM" = "MINGW64" ] ; then
+#		pacman -S --quiet --noconfirm --needed mingw-w64-x86_64-libsystre | tee /tmp/buildtoolchain-pacman.log
+#	elif [ "$MSYSTEM" = "MINGW32" ] ; then
+#		pacman -S --quiet --noconfirm --needed mingw-w64-i686-libsystre | tee /tmp/buildtoolchain-pacman.log
+#	fi
 	echo
 
 # Only check for root on an interactive installation.
-elif [ "$1" = "" ]; then
+elif [ "$1" = "" ] ; then
 	check_root
 fi
 
@@ -183,14 +237,16 @@ reinstall=false
 update=false
 
 rs_boldmsg "Modules to compile: "
-for module in ${!MODULES[@]}; do
-	echo "$module: ${MODULES[$module]}"
+for module in ${rs_modules[@]}; do
+	var=rs_process_$module
+	echo "$module: ${!var}"
 done
 echo
 
-rs_boldmsg "Architecture to target: "
-for module in ${!ARCH[@]}; do
-	echo "$module: ${ARCH[$module]}"
+rs_boldmsg "Architectures to target: "
+for arch in ${rs_archs[@]}; do
+	var=rs_arch_$arch
+	echo "$arch: ${!var}"
 done
 echo
 
@@ -252,133 +308,107 @@ if [ "$1" = "" ]; then
 else
 	installdir=`eval echo $1`
 
-	#if [ -e "$installdir" ]; then
-	#	rs_redmsg "Installation directory \"$installdir\" already exists, aborted!"
-	#	exit 1
-	#fi
+	if [ -e "$installdir" ] && [ $rs_rm_installdir = true ]; then
+		rs_redmsg "Installation directory \"$installdir\" already exists, aborted!"
+		exit 1
+	fi
 
 	echo "Using \"$installdir\""
 	echo
 	shift
 fi
 
-for module in ${!MODULES[@]}; do
-	declare rs_process_$module=${MODULES[$module]}
-done
+if [ $rs_rm_installdir = true ]; then
+	rm -rf "$installdir" || exit 1
+fi
 
-rs_process_scut=true
-rs_process_cpucount=true
-rs_process_chknewer=true
-rs_process_chkslash=true
-rs_process_echoh=true
-rs_process_rquote=true
-rs_process_flash=true # broken entirely
-rs_process_getdate=true
-rs_process_tee=true
-rs_process_config=true
-rs_process_buildtime=true
-rs_process_playwav=true
-
-rm -rf "$installdir" || exit 1
-mkdir -p "$installdir" || exit 1
-mkdir "$rs_workdir"
+mkdir -p "$installdir" 2>/dev/null || exit 1
+mkdir "$rs_workdir" 2>/dev/null
 
 rs_prefixdir="$installdir"
-#rs_archprefixdir="$installdir/$rs_target_arch"
 
 ##### BEGIN almost shared buildtoolchain/RosBE-Unix building part #############
 rs_boldmsg "Building..."
 
-mkdir -p "$rs_prefixdir/bin"
+mkdir -p "$rs_prefixdir/bin" 2>/dev/null
 
-for arch in ${!ARCH[@]}; do
-	if [ ${ARCH[$arch]} ]; then
-		mkdir -p "$installdir/$arch/${GCC_TRIPLETS[$arch]}"
-	fi
-done
+#for arch in ${!ARCH[@]}; do
+#	if [ ${ARCH[$arch]} ]; then
+#		mkdir -p "$installdir/$arch/${GCC_TRIPLETS[$arch]}"
+#	fi
+#done
 
 echo "Using CFLAGS=\"$CFLAGS\""
 echo "Using CXXFLAGS=\"$CXXFLAGS\""
 echo
 
-if $rs_process_cpucount; then
-	rs_do_command $CC -s -o "$rs_prefixdir/bin/cpucount" "$rs_tooldir/cpucount.c"
-	rs_do_command $STRIP "$rs_prefixdir/bin/cpucount$rs_suffix"
+if $rs_process_tools ; then
+	for tool in ${rs_tools[@]} ; do
+		var=rs_process_$tool
+		if [ ${!var} ]; then
+			rs_do_command $CC -s -o "${rs_prefixdir}/bin/${tool}" "${rs_tooldir}/${tool}.c"
+			rs_do_command $STRIP "${rs_prefixdir}/bin/${tool}${rs_suffix}"
+		fi
+	done
+
+	if [ "$MSYSTEM" ] ; then
+		for tool in ${rs_tools_win[@]} ; do
+			var=rs_process_$tool
+			if [ ${!var} ]; then
+				if [ $tool = "flash" ] ; then
+					rs_do_command $CC -D_WIN32_WINNT=0x500 -s -o "$rs_prefixdir/bin/flash" "$rs_tooldir/windows/flash.c"
+				elif [ $tool = "playwav" ] ; then
+					rs_do_command $CXX -D_UNICODE -s -o "$rs_prefixdir/bin/playwav" "$rs_tooldir/windows/playwav.cpp" -lwinmm -municode
+				elif [ $tool = "config" ] ; then
+					rs_do_command $rs_makecmd -C "$rs_tooldir/windows/config" install
+				else
+					rs_do_command $CC -s -o "${rs_prefixdir}/bin/${tool}" "$rs_tooldir/windows/${tool}.c"
+				fi
+
+				rs_do_command $STRIP "${rs_prefixdir}/bin/${tool}${rs_suffix}"
+			fi
+		done
+	fi
 fi
+
+echo
 
 rs_cpucount=`$rs_prefixdir/bin/cpucount -x1`
 
-if $rs_process_scut; then
-	rs_do_command $CC -s -o "$rs_prefixdir/bin/scut" "$rs_tooldir/scut.c"
-	rs_do_command $STRIP "$rs_prefixdir/bin/scut$rs_suffix"
-fi
+for module in ${rs_modules[@]}; do
+	var=rs_process_$module
+	if [ ${!var} = true ]; then
+		rs_boldmsg "Building $module..."
 
-if $rs_process_chknewer; then
-	rs_do_command $CC -s -o "$rs_prefixdir/bin/chknewer" "$rs_tooldir/chknewer.c"
-	rs_do_command $STRIP "$rs_prefixdir/bin/chknewer$rs_suffix"
-fi
+		if [ ! -e "$rs_pkgdir/$module" ] ; then
+			rs_redmsg "Unable to find package definition for the module!"
+			exit 1
+		fi
 
-if $rs_process_echoh; then
-	rs_do_command $CC -s -o "$rs_prefixdir/bin/echoh" "$rs_tooldir/echoh.c"
-	rs_do_command $STRIP "$rs_prefixdir/bin/echoh$rs_suffix"
-fi
+		source "$rs_pkgdir/$module"
 
-if $rs_process_rquote; then
-	rs_do_command $CC -s -o "$rs_prefixdir/bin/rquote" "$rs_tooldir/rquote.c"
-	rs_do_command $STRIP "$rs_prefixdir/bin/rquote$rs_suffix"
-fi
+		rm -rf "$rs_workdir/$module"
+		mkdir -p "$rs_workdir/$module"
 
-if $rs_process_chkslash; then
-	rs_do_command $CC -s -o "$rs_prefixdir/bin/chkslash" "$rs_tooldir/chkslash.c"
-	rs_do_command $STRIP "$rs_prefixdir/bin/chkslash$rs_suffix"
-fi
+		for file in ${!rs_sources[@]} ; do
+			rs_download_module "$rs_sourcedir" "${rs_sources[$file]}" "$file"
+			sha=`eval rs_sha256_compare "$rs_sourcedir/$file" "${rs_sha256sums[$file]}"`
 
-if $rs_process_getdate; then
-	rs_do_command $CC -s -o "$rs_prefixdir/bin/getdate" "$rs_tooldir/getdate.c"
-	rs_do_command $STRIP "$rs_prefixdir/bin/getdate$rs_suffix"
-fi
+			if [ "$sha" = "1" ] ; then
+				rs_redmsg "Invalid checksum for file $file, please check your internet connection and try again"
+				hash=`eval sha256sum -- "$rs_sourcedir/$file" | cut -d " " -f 1`
+				echo "Downloaded file checksum: $hash"
+				exit 1
+			fi
+		done
 
-if $rs_process_buildtime; then
-	rs_do_command $CC -s -o "$rs_prefixdir/bin/buildtime" "$rs_tooldir/buildtime.c"
-	rs_do_command $STRIP "$rs_prefixdir/bin/buildtime$rs_suffix"
-fi
-
-if [ "$MSYSTEM" ] ; then
-	# Windows exclusive tools
-
-	if $rs_process_flash; then
-		rs_do_command $CC -D_WIN32_WINNT=0x500 -s -o "$rs_prefixdir/bin/flash" "$rs_tooldir/windows/flash.c"
-		rs_do_command $STRIP "$rs_prefixdir/bin/flash$rs_suffix"
+		rs_prepare
+		rs_build
+		rs_clean_module "$module"
 	fi
+done
 
-	if $rs_process_tee; then
-		rs_do_command $CC -s -o "$rs_prefixdir/bin/tee" "$rs_tooldir/windows/tee.c"
-		rs_do_command $STRIP "$rs_prefixdir/bin/tee$rs_suffix"
-	fi
-
-	if $rs_process_playwav; then
-		rs_do_command $CXX -D_UNICODE -s -o "$rs_prefixdir/bin/playwav" "$rs_tooldir/windows/playwav.cpp" -lwinmm -municode
-		rs_do_command $STRIP "$rs_prefixdir/bin/playwav$rs_suffix"
-	fi
-
-	if $rs_process_config; then
-		rs_do_command $rs_makecmd -C "$rs_tooldir/windows/config"
-	fi
-fi
-
-if rs_prepare_module "bison"; then
-	rs_do_command ../bison/configure --prefix="$rs_prefixdir" --disable-nls
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
-	rs_clean_module "bison"
-fi
-
-if rs_prepare_module "flex"; then
-	rs_do_command ../flex/configure --prefix="$rs_prefixdir" --disable-nls
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
-	rs_clean_module "flex"
-fi
+exit 0 # TODO
 
 if rs_prepare_module "cmake"; then
 	rs_do_command ../cmake/bootstrap --prefix="$rs_prefixdir" --parallel=$rs_cpucount -- -DCMAKE_USE_OPENSSL=OFF

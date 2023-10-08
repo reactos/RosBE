@@ -165,22 +165,42 @@ rs_do_command()
 	rs_check_run
 }
 
+# Downloads a module
+# Return 0 if it was downloaded, otherwise 1.
+#   Parameter 1: The directory to download the module to
+#   Parameter 2: The URL of the module
+#   Parameter 3: The file name of the module
+rs_download_module()
+{
+	local target_dir=$1
+	local url=$2
+	local file=$3
+
+	mkdir -p "$target_dir" 2>/dev/null
+	cd "$target_dir"
+
+	if [ ! -f $file ] ; then
+		rs_do_command wget -O "$file" -q $url
+		rs_check_run 0
+	fi
+
+	return 0
+}
+
 # Checks whether the given module needs to be processed and if so, extracts it.
 # Returns 0 if it needs to be processed, otherwise 1.
 #   Parameter 1: The module name
 #   Parameter 2: The directory to extract the module to
+#	Parameter 3: The extension of the archive
 rs_extract_module()
 {
 	local module=$1
 	local target_dir=$2
+	local ext=$3
 
 	cd "$target_dir"
 
-	echo -n "Extracting $module... "
-
-	# Extract with bunzip2 and tar instead of "tar xjf" due to https://github.com/msys2/MSYS2-packages/issues/1548
-	bunzip2 --decompress --stdout "$rs_sourcedir/$module.tar.bz2" | tar -x --file=- >& "$rs_workdir/build.log"
-	rs_check_run 0
+	rs_do_command tar -xf "$rs_sourcedir/$module.$ext"
 
 	return 0
 }
@@ -201,25 +221,19 @@ rs_yellowmsg()
 	echo -e $2 "\033[33m$1\033[0m"
 }
 
-# Checks whether the given module needs to be processed and if so, extracts it into a dedicated build directory
-# Returns 0 if it needs to be built, otherwise 1.
-#   Parameter 1: The module name
-rs_prepare_module()
+# Compares the sha256 of a file with an hash
+#	Parameter 1: Name of the file to calculate the hash
+#	Parameter 2: Hash to compare
+#	Return 0 if everything was ok, otherwise it returns 1
+rs_sha256_compare()
 {
-	local module=$1
-
-	if ! `eval echo \\$rs_process_$module`; then
-		return 1
+	hash=`eval sha256sum -- "$1" | cut -d " " -f 1`
+	echo $hash
+	if [ "$hash" = "$2" ] ; then
+		return 0
 	fi
-
-	rm -rf "$rs_workdir/$module"
-	rs_extract_module "$module" "$rs_workdir"
-
-	rm -rf "$module-build"
-	mkdir "$module-build"
-	cd "$module-build"
-
-	return 0
+	
+	return 1
 }
 
 # Print a message in red color

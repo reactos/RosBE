@@ -1,0 +1,24 @@
+rs_version="2.6.4"
+
+declare -A rs_sources=(
+	["flex.tar.gz"]="https://github.com/westes/flex/releases/download/v${rs_version}/flex-${rs_version}.tar.gz",
+	["flex-msys2.patch"]="https://raw.githubusercontent.com/msys2/MSYS2-packages/master/flex/flex-2.5.38-msys2.patch"
+)
+
+declare -A rs_sha256sums=(
+	["flex.tar.gz"]="e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995"
+	["flex-msys2.patch"]="6ffcb831faa9c29c44b717825744887ea5b3945605153831339e0b8a37cbe5c3"
+)
+
+rs_prepare() {
+	rs_extract_module "flex" "$rs_workdir/flex" "tar.gz"
+	cd "$rs_workdir/flex/flex-${rs_version}"
+	rs_do_command patch -p1 -i "$rs_sourcedir/flex-msys2.patch"
+	rs_do_command ./autogen.sh
+}
+
+rs_build() {
+	rs_do_command "$rs_workdir/flex/flex-${rs_version}/configure" --prefix="$rs_prefix" --without-libiconv-prefix --without-libintl-prefix --enable-static --disable-shared --disable-nls
+	rs_do_command $rs_makecmd -j $rs_cpucount
+	rs_do_command $rs_makecmd install
+}

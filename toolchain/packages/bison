@@ -1,0 +1,21 @@
+rs_version="3.5.4"
+
+declare -A rs_sources=(
+    ["bison.tar.xz"]="https://ftp.gnu.org/gnu/bison/bison-${rs_version}.tar.xz"
+)
+
+declare -A rs_sha256sums=(
+    ["bison.tar.gz"]=""
+)
+
+rs_prepare() {
+    rs_extract_module "bison" "$rs_workdir/bison" "tar.xz"
+    cd "$rs_workdir/bison/bison-${rs_version}"
+    rs_do_command patch -p1 -i "$rs_patches/bison-3.5-reactos-fix-win32-build.patch"
+}
+
+rs_build() {
+	rs_do_command "$rs_workdir/bison/bison-${rs_version}/configure" --prefix="$rs_prefixdir" --disable-nls
+	rs_do_command $rs_makecmd -j $rs_cpucount
+	rs_do_command $rs_makecmd install
+}
