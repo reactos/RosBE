@@ -1,19 +1,15 @@
                            ReactOS Build Environment
-                 Version 2.2.1 for Unix-based operating systems
-                      Base package and i386 build tools
+                                Version 2.2.1
 
 Introduction
 -------------
   The ReactOS Build Environment ("RosBE") is the official build environment
-for compiling ReactOS. This version is targeted at Unix-based operating systems
-such as Linux, FreeBSD or macOS.
+for compiling ReactOS.
   The installation process is divided into two parts: First a script builds and
 installs the needed compiler tools for your operating system. Therefore you need
 the "gcc" compiler for your system and some other build tools.
-  Afterwards, you can create a desktop shortcut using another script. This
-shortcut opens a Terminal window and prepares all environment settings for
-building ReactOS.
-
+  Afterwards, you can create a package of the build environment to install on your
+ or other machines, or directly a shortcut to your desktop (Unix only)
 
 Needed Applications and Libraries
 ----------------------------------
@@ -50,9 +46,18 @@ system. They are needed to build the ReactOS Build Environment. The
     The library file is generally called "libz.so". Package names vary, one
     example for Debian-based Linux distributions is "zlib1g-dev".
 
+  * autotools (autoconf, automake, libtool)
+    You will need the following components for configurating several tools that
+    uses custom patches
 
-Installation
--------------
+  * patch
+    You will need this program to apply patches to the existing source codes.
+
+  * wget
+    This executable allows you to download source codes to build directly from the internet.
+
+Installation for Unix
+------------------------
   The Installation of RosBE is very simple as there are scripts that do most of
 the work for you. Follow these steps to compile and install RosBE for your
 operating system:
@@ -75,22 +80,51 @@ operating system:
 the shortcut.
 
 
-Uninstallation
----------------
+Uninstallation for Unix
+--------------------------
   If you want to uninstall RosBE, just delete the entire installation directory
 and any shortcuts you have created.
 
+Installation for Windows
+--------------------------
+  The recommended way to get RosBE for Windows is downloading the last version
+of the installer from https://reactos.org/wiki/Build_Environment, follow this steps
+only if you need to build a customized version of RosBE. 
+Keep in mind that this procedure is only recommended for advanced users and might be
+subject to bugs that might not get fixed by the ReactOS team, please consider this before
+submitting a bug.
+  The Installation of RosBE doesn't differ that much from the one for Unix,
+you will need to download and install MSYS2 before starting.
+
+  1. Download and install MSYS2 (https://www.msys2.org/)
+
+  2. Run the command "pacman -Syu" under an "MSYS2 MSYS" terminal to allow MSYS to fully update it's repositories and
+core component, once done, when it asks you to close the window type "y" and then restart 
+an "MSYS2 MSYS" terminal
+
+  3. Run the script "bash MSYS-Setup.sh" and it will setup the remaining components of MSYS2.
+
+  4. Call under a "MSYS2 MSYS" terminal "bash RosBE-Builder.sh"
+
+  5. Follow the directions on the screen until the script ends with "Finished
+     successfully!"
+
+  Afterwards, you can begin using your custom build of the Build Environment, the following steps
+after this part are optional and only required if you wish to build your own installer for the Build
+Environment, keep in mind that we provide no support for custom installers or builds of ReactOS Build Environment.
 
 Version Information
 --------------------
-  This version of RosBE for Unix-based operating systems uses the following
+  This version of RosBE uses the following
 components:
 
   * GNU Binutils v2.34
     compiled for i686-w64-mingw32
+    compiled for x86_64-w64-mingw32
 
   * GCC, The GNU Compiler Collection v8.4.0
     compiled for i686-w64-mingw32
+    compiled for x86_64-w64-mingw32
     NOTE: This GCC version only supports C and C++
 
   * Bison 3.5.4
@@ -100,16 +134,15 @@ components:
   * CMake 3.17.2-ReactOS
     (revision 07c58033d74bad5466775fb2dad7d84494a846bd from https://github.com/reactos/CMake/tree/cmake-3.17.2-reactos)
 
-  * Flex 2.6.4+ (revision 8b1fbf674f2e038df9cf1fe7725617e3837ae2a9)
-
-  * GMP 6.2.0
+  * Flex 2.6.4
     patched with:
-      - https://raw.githubusercontent.com/reactos/RosBE/e87b00c8f8732ed3fa393b9b05a12093ae5942e8/Patches/GMP-6.2.0-C89-fixes.patch
+      - https://raw.githubusercontent.com/msys2/MSYS2-packages/master/flex/flex-2.5.38-msys2.patch
 
+  * GMP 6.3.0
   * Mingw-w64 6.0.0
-  * MPC 1.1.0
-  * MPFR 4.0.2
-  * Ninja 1.10.0
+  * MPC 1.3.0
+  * MPFR 4.2.1
+  * Ninja 1.11.1
 
 
 Tested Operating Systems
@@ -158,8 +191,6 @@ Credits
 Colin Finck (colin@reactos.org)
 Pierre Schweitzer (pierre@reactos.org)
 Victor Perevertkin (victor.perevertkin@reactos.org)
-
-Thanks go also to the members of the RosBE-Windows team, namely:
 Daniel Reimer (daniel.reimer@reactos.org)
 Peter Ward (dralnix@gmail.com)
 

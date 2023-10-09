@@ -29,13 +29,17 @@ rs_prepare() {
 	rs_extract_module "mpc" "$rs_workdir/gcc/gcc-${gcc_version}" "tar.gz"
 	rs_extract_module "mpfr" "$rs_workdir/gcc/gcc-${gcc_version}" "tar.bz2"
 	mingw_prepare "gcc"
+	# rename to allow autoconf to find it
+	mv "$rs_workdir/gcc/gcc-${gcc_version}/mpfr-${mpfr_version}" "$rs_workdir/gcc/gcc-${gcc_version}/mpfr"
+	mv "$rs_workdir/gcc/gcc-${gcc_version}/gmp-${gmp_version}" "$rs_workdir/gcc/gcc-${gcc_version}/gmp" 
+	mv "$rs_workdir/gcc/gcc-${gcc_version}/mpc-${mpc_version}" "$rs_workdir/gcc/gcc-${gcc_version}/mpc" 
 }
 
 rs_build() {
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
 
-	rs_do_command "$rs_workdir/gcc/gcc-${gcc_version}/configure" --prefix="$rs_prefixdir" --target="$rs_target" --with-sysroot="$rs_prefixdir" --with-pkgversion="ReactOS Build Environment" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
+	rs_do_command "$rs_workdir/gcc/gcc-${gcc_version}/configure" --prefix="$rs_prefixdir" --target="$rs_target" --with-sysroot="$rs_prefixdir" --with-pkgversion="RosBE" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
 	rs_do_command $rs_makecmd install-lto-plugin
