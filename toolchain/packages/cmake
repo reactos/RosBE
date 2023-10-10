@@ -1,11 +1,34 @@
 
+declare -A rs_sources=(
+	["cmake.zip"]="https://github.com/reactos/CMake/archive/refs/heads/cmake-3.17.2-reactos.zip"
+)
+
+declare -A rs_sha256sums=(
+	["cmake.zip"]="2546353287f6b73abb390de36696936397d6f7fd7e9dab2ba4c2986f97fd7b8a"
+)
+
+
 rs_prepare() {
-    rs_do_command git clone --depth=1 -b cmake-3.17.2-reactos "https://github.com/reactos/CMake" "$rs_workdir/cmake/cmake-ros"
+	rs_extract_module "cmake" "$rs_workdir/cmake" "zip"
 }
 
 
 rs_build() {
-	rs_do_command "$rs_workdir/cmake/cmake-ros/bootstrap" --prefix="$rs_prefixdir" --parallel=$rs_cpucount -- -DCMAKE_USE_OPENSSL=OFF
+	rs_do_command "$rs_workdir/cmake/CMake-cmake-3.17.2-reactos/bootstrap" --prefix="$rs_prefixdir" --parallel=$rs_cpucount -- -DCMAKE_USE_OPENSSL=OFF
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
+}
+
+rs_check() {
+    if [ -e "$rs_prefixdir/bin/cmake$rs_suffix" ] ; then
+        return 1
+    fi
+    return 0
+}
+
+rs_prepare_check() {
+	if [ -e "$rs_workdir/cmake/CMake-cmake-3.17.2-reactos" ] ; then
+		return 1
+	fi
+	return 0
 }

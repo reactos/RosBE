@@ -1,4 +1,5 @@
 rs_version="2.6.4"
+rs_msys=true
 
 declare -A rs_sources=(
 	["flex.tar.gz"]="https://github.com/westes/flex/releases/download/v${rs_version}/flex-${rs_version}.tar.gz"
@@ -21,4 +22,18 @@ rs_build() {
 	rs_do_command "$rs_workdir/flex/flex-${rs_version}/configure" --prefix="$rs_prefixdir" --without-libiconv-prefix --without-libintl-prefix --enable-static --disable-shared --disable-nls
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
+}
+
+rs_check() {
+    if [ -e "$rs_prefixdir/bin/flex$rs_suffix" ] ; then
+        return 1
+    fi
+    return 0
+}
+
+rs_prepare_check() {
+	if [ -e "$rs_workdir/flex/flex-${rs_version}" ] ; then
+		return 1
+	fi
+	return 0
 }

@@ -19,3 +19,17 @@ rs_build() {
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 }
+
+rs_check() {
+    if [ -e "$rs_prefixdir/bin/bison$rs_suffix" ] ; then
+        return 1
+    fi
+    return 0
+}
+
+rs_prepare_check() {
+	if [ -e "$rs_workdir/bison/bison-${rs_version}" ] ; then
+		return 1
+	fi
+	return 0
+}

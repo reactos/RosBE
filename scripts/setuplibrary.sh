@@ -160,7 +160,11 @@ rs_clean_module()
 rs_do_command()
 {
 	echo -n "Running \"$*\"... "
-	$* >& "$rs_workdir/build.log"
+	if [ "$rs_msys" = true ] ; then
+		/msys2_shell.cmd -no-start -msys2 -here $* >& "$rs_workdir/build.log"
+	else
+		$* >& "$rs_workdir/build.log"
+	fi
 	rs_check_run
 }
 
@@ -198,7 +202,11 @@ rs_extract_module()
 
 	cd "$target_dir"
 
-	rs_do_command tar -xf "$rs_sourcedir/$module.$ext"
+	if [ "$ext" = "zip" ] ; then
+		rs_do_command unzip "$rs_sourcedir/$module.$ext"
+	else
+		rs_do_command tar -xf "$rs_sourcedir/$module.$ext"
+	fi
 
 	return 0
 }

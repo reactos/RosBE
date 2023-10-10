@@ -75,3 +75,17 @@ rs_build() {
 	unset CFLAGS_FOR_TARGET
 	unset CXXFLAGS_FOR_TARGET
 }
+
+rs_check() {
+    if [ -e "$rs_prefixdir/bin/$rs_target-gcc$rs_suffix" ] ; then
+        return 1
+    fi
+    return 0
+}
+
+rs_prepare_check() {
+	if [ -e "$rs_workdir/gcc/gcc-${gcc_version}" ] ; then
+		return 1
+	fi
+	return 0
+}

@@ -27,3 +27,6 @@ $(RC:.rc=.coff):
 clean:
 	-@del $(TARGET)
 	-@del $(OBJS)
+
+install: $(TARGET)
+	cp -f $(TARGET) $(PREFIX)/bin/$(TARGET)

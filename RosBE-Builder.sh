@@ -27,21 +27,31 @@ else
 fi
 
 # RosBE Setup Variables
-rs_host_cc="${CC:-gcc}"
-rs_host_strip="${STRIP:-strip}"
 rs_host_cflags="${CFLAGS:--pipe -O2 -g0 -march=native}"
-rs_host_cxx="${CXX:-g++}"
 rs_host_cxxflags="${CXXFLAGS:-$rs_host_cflags}"
-rs_needed_tools="as find $CC $CXX grep m4 makeinfo python tar wget patch libtool autoconf automake autopoint git"        # GNU Make has a special check
+
+rs_host_ar="${AR:-ar}"
+rs_host_as="${AS:-as}"
+rs_host_cc="${CC:-gcc}"
+rs_host_cxx="${CXX:-g++}"
+rs_host_dlltool="${DLLTOOL:-dlltool}"
+rs_host_ranlib="${RANLIB:-ranlib}"
+rs_host_strip="${STRIP:-strip}"
+
+rs_needed_tools="as find $CC $CXX grep m4 makeinfo python tar wget patch libtool autoconf automake autopoint unzip"        # GNU Make has a special check
 rs_needed_libs="zlib"
 rs_target_cflags="-pipe -O2 -Wl,-S -g0"
 rs_target_cxxflags="$rs_target_cflags"
 
-export STRIP="$rs_host_strip"
+export AR="$rs_host_ar"
+export AS="$rs_host_as"
 export CC="$rs_host_cc"
 export CFLAGS="$rs_host_cflags"
 export CXX="$rs_host_cxx"
 export CXXFLAGS="$rs_host_cxxflags"
+export DLLTOOL="$rs_host_dlltool"
+export RANLIB="$rs_host_ranlib"
+export STRIP="$rs_host_strip"
 
 # Get the absolute path to the script directory
 cd `dirname $0`
@@ -53,8 +63,9 @@ rs_tooldir="$rs_rootdir/tools"
 rs_sourcedir="$rs_workdir/sources"
 rs_patches="$rs_tcdir/patches"
 rs_pkgdir="$rs_tcdir/packages"
-rs_rm_installdir=true
+rs_resume=false
 rs_process_tools=true
+rs_cpucount=0
 
 # RosBE-Unix Constants
 DEFAULT_INSTALL_DIR="/usr/local/RosBE"
@@ -90,7 +101,7 @@ rs_tools=(
 rs_tools_win=(
 	"flash" # unix have the bash script
 	"tee" # unix have it already
-	"config"
+	"options"
 	"playwav" # unix have the bash script
 )
 
@@ -150,6 +161,7 @@ if [ "$1" = "-h" ] || [ "$1" = "-?" ] || [ "$1" = "--help" ]; then
 	echo "  --include-module  [module]   Include one module from the toolchain compilation"
 	echo "  --enable-xp-mode             Build RosBe with XP-host compatible host"
 	echo "  --resume                     Resumes the compilation of Rosbe, this can be usefull with passing different commands to continue building the environment"
+	echo "  --jobs [jobs]                Override jobs compilation"
 	echo 
 	echo " List of available modules:"
 	for module in ${rs_modules[@]}; do
@@ -204,7 +216,13 @@ for var in "$@"; do
 
 		--resume)
 			shift
-			rs_rm_installdir=false
+			rs_resume=true
+		;;
+
+		--jobs)
+			shift
+			rs_cpucount=$1
+			shift
 		;;
 
 		-*)
@@ -214,30 +232,13 @@ for var in "$@"; do
 	esac
 done
 
-# temp...
-if [ "$MSYSTEM" ] ; then
-	# Install required tools in MSYS2
-#	rs_boldmsg "Running MSYS pacman..."
-#	pacman -S --quiet --noconfirm --needed diffutils help2man make msys2-runtime-devel python texinfo tar | tee /tmp/buildtoolchain-pacman.log
-#
-#	if grep installation /tmp/buildtoolchain-pacman.log >& /dev/null; then
-#		# See e.g. https://sourceforge.net/p/msys2/tickets/74/
-#		echo
-#		rs_boldmsg "Installed MSYS packages have changed!"
-#		echo "For a successful toolchain build, this requires you to close all MSYS windows and run \"autorebase.bat\" in the MSYS installation directory."
-#		echo "After you have done so, please rerun \"buildtoolchain-mingw32.sh\"."
-#		exit 1
-#	fi
-#
-#	if [ "$MSYSTEM" = "MINGW64" ] ; then
-#		pacman -S --quiet --noconfirm --needed mingw-w64-x86_64-libsystre | tee /tmp/buildtoolchain-pacman.log
-#	elif [ "$MSYSTEM" = "MINGW32" ] ; then
-#		pacman -S --quiet --noconfirm --needed mingw-w64-i686-libsystre | tee /tmp/buildtoolchain-pacman.log
-#	fi
-	echo
+if [ "$MSYSTEM" = "MSYS" ] ; then
+	rs_redmsg "This script cannot be executed from an MSYS command line"
+	exit 1
+fi
 
 # Only check for root on an interactive installation.
-elif [ "$1" = "" ] ; then
+if [ "$1" = "" ] && [ ! "$MSYSTEM" ] ; then
 	check_root
 fi
 
@@ -246,6 +247,7 @@ rs_check_requirements
 if [ $rs_abi = 32 ]; then
 	# Append i686 cflags on 32-bit x86
 	rs_host_cflags= "$rs_host_cflags -march=pentium -mtune=i686"
+
 fi
 
 reinstall=false
@@ -323,7 +325,7 @@ if [ "$1" = "" ]; then
 else
 	installdir=`eval echo $1`
 
-	if [ -e "$installdir" ] && [ $rs_rm_installdir = true ]; then
+	if [ -e "$installdir" ] && [ $rs_resume = false ]; then
 		rs_redmsg "Installation directory \"$installdir\" already exists, aborted!"
 		exit 1
 	fi
@@ -333,7 +335,7 @@ else
 	shift
 fi
 
-if [ $rs_rm_installdir = true ]; then
+if [ $rs_resume = false ]; then
 	rm -rf "$installdir" || exit 1
 fi
 
@@ -361,8 +363,10 @@ if [ $rs_process_tools = true ] ; then
 	for tool in ${rs_tools[@]} ; do
 		var=rs_tool_$tool
 		if [ ${!var} ]; then
-			rs_do_command $CC -s -o "${rs_prefixdir}/bin/${tool}" "${rs_tooldir}/${tool}.c"
-			rs_do_command $STRIP "${rs_prefixdir}/bin/${tool}${rs_suffix}"
+			if [ ! -f "${rs_prefixdir}/bin/${tool}" ] || [ $rs_resume = false ]; then
+				rs_do_command $CC -s -o "${rs_prefixdir}/bin/${tool}" "${rs_tooldir}/${tool}.c"
+				rs_do_command $STRIP "${rs_prefixdir}/bin/${tool}${rs_suffix}"
+			fi
 		fi
 	done
 
@@ -370,17 +374,20 @@ if [ $rs_process_tools = true ] ; then
 		for tool in ${rs_tools_win[@]} ; do
 			var=rs_tool_$tool
 			if [ ${!var} ]; then
-				if [ $tool = "flash" ] ; then
-					rs_do_command $CC -D_WIN32_WINNT=0x500 -s -o "$rs_prefixdir/bin/flash" "$rs_tooldir/windows/flash.c"
-				elif [ $tool = "playwav" ] ; then
-					rs_do_command $CXX -D_UNICODE -s -o "$rs_prefixdir/bin/playwav" "$rs_tooldir/windows/playwav.cpp" -lwinmm -municode
-				elif [ $tool = "config" ] ; then
-					rs_do_command $rs_makecmd -C "$rs_tooldir/windows/config" install
-				else
-					rs_do_command $CC -s -o "${rs_prefixdir}/bin/${tool}" "$rs_tooldir/windows/${tool}.c"
-				fi
+				if [ ! -f "${rs_prefixdir}/bin/${tool}" ] || [ $rs_resume = false ]; then
+					if [ $tool = "flash" ] ; then
+						rs_do_command $CC -D_WIN32_WINNT=0x500 -s -o "$rs_prefixdir/bin/flash" "$rs_tooldir/windows/flash.c"
+					elif [ $tool = "playwav" ] ; then
+						rs_do_command $CXX -D_UNICODE -s -o "$rs_prefixdir/bin/playwav" "$rs_tooldir/windows/playwav.cpp" -lwinmm -municode
+					elif [ $tool = "options" ] ; then
+						export PREFIX=$rs_prefixdir
+						rs_do_command $rs_makecmd -C "$rs_tooldir/windows/config" install
+					else
+						rs_do_command $CC -s -o "${rs_prefixdir}/bin/${tool}" "$rs_tooldir/windows/${tool}.c"
+					fi
 
-				rs_do_command $STRIP "${rs_prefixdir}/bin/${tool}${rs_suffix}"
+					rs_do_command $STRIP "${rs_prefixdir}/bin/${tool}${rs_suffix}"
+				fi
 			fi
 		done
 	fi
@@ -388,45 +395,97 @@ fi
 
 echo
 
-rs_cpucount=`$rs_prefixdir/bin/cpucount -x1`
+if [ "$rs_cpucount" = "0" ] ; then
+	rs_cpucount=`$rs_prefixdir/bin/cpucount -x1`
+fi
 
 # Main compiler
 for module in ${rs_modules[@]}; do
 	# set the prefix directory again in case it was altered
 	rs_prefixdir="$installdir"
-
+	rs_msys=false
+	skip_prepare=false
+	is_ok="0"
 
 	var=rs_process_$module
 	if [ ${!var} = true ]; then
-		rs_boldmsg "Building $module..."
-
 		if [ ! -e "$rs_pkgdir/$module" ] ; then
 			rs_redmsg "Unable to find package definition for the module!"
 			exit 1
 		fi
 
-		# Generate the build directory
+		# Load the package build directives
 		source "$rs_pkgdir/$module"
-		rm -rf "$rs_workdir/$module"
-		mkdir -p "$rs_workdir/$module"
 
-		# Download and check the downloaded files
-		for file in ${!rs_sources[@]} ; do
-			rs_download_module "$rs_sourcedir" "${rs_sources[$file]}" "$file"
-			rs_sha256_compare "$rs_sourcedir/$file" "${rs_sha256sums[$file]}"
+		# Do not build the module if it was already built and we are running in resume mode
 
-			if [ "$?" = "1" ] ; then
-				rs_redmsg "Invalid checksum for file $file, please check your internet connection and try again"
-				hash=`eval sha256sum -- "$rs_sourcedir/$file" | cut -d " " -f 1`
-				echo "Downloaded file checksum: $hash"
-				exit 1
-			fi
-		done
+		if [ "$rs_triplets" = true ] ; then
+			# Triplet based compilation, we have to iterate trough all the arches and see if all of them were built properly
+			for arch in ${rs_archs[@]} ; do
+				var=rs_arch_$arch
+				if [ ${!var} = true ] ; then
+					# set the target triplet and new prefix for checking data
+					rs_target=${rs_triplets[$arch]}
+					rs_prefixdir="$installdir/$rs_target"
+					rs_check
 
-		cd "$rs_workdir/$module"
+					is_ok="$?"
 
-		# Prepare the source code (extract it and apply any patch)
-		rs_prepare
+					# if the function returns 0, then one arch was not built so we have to start the build process
+					if [ "$is_ok" = "0" ] ; then
+						break
+					fi
+				fi
+			done
+		else
+			# Simple, one check, for projects that doesn't need more than one target arch
+			rs_check
+			is_ok=$?
+		fi
+
+
+		if [ "$is_ok" = "1" ] && [ "$rs_resume" = true ]; then
+			continue
+		fi
+
+		# Disable msys forward if you are not running under Windows
+		if [ ! "$MSYSTEM" ] ; then
+			rs_msys=false
+		fi
+
+		# Check if we should preparing the sources again or just skip that part
+		rs_prepare_check
+		status=$?
+
+		if [ "$rs_resume" = false ] ; then
+			rm -rf "$rs_workdir/$module"
+		elif [ "$status" = "1" ] ; then
+			skip_prepare=true
+		fi
+
+		if [ "$skip_prepare" = false ] ; then
+			rs_boldmsg "Preparing source for $module..."
+
+			# Download and check the downloaded files
+			for file in ${!rs_sources[@]} ; do
+				rs_download_module "$rs_sourcedir" "${rs_sources[$file]}" "$file"
+				rs_sha256_compare "$rs_sourcedir/$file" "${rs_sha256sums[$file]}"
+				status=$?
+				if [ "$status" = "1" ] ; then
+					rs_redmsg "Invalid checksum for file $file, please check your internet connection and try again"
+					hash=`eval sha256sum -- "$rs_sourcedir/$file" | cut -d " " -f 1`
+					echo "Downloaded file checksum: $hash"
+					rm "$rs_sourcedir/$file"
+					exit 1
+				fi
+			done
+
+			mkdir -p "$rs_workdir/$module"
+			cd "$rs_workdir/$module"
+
+			# Prepare the source code (extract it and apply any patch)
+			rs_prepare
+		fi
 
 		mkdir -p "$rs_workdir/$module/build" 2>/dev/null
 
@@ -439,6 +498,14 @@ for module in ${rs_modules[@]}; do
 					rs_target=${rs_triplets[$arch]}
 					rs_prefixdir="$installdir/$rs_target"
 
+					# Check again to skip target-specific
+					rs_check
+					if [ "$?" = "1" ] && [ "$rs_resume" = true ]; then
+						continue
+					fi
+
+					rs_boldmsg "Building $module for $arch..."
+
 					# move to the arch-specific target directory
 					mkdir -p "$rs_workdir/$module/build-$arch"
 					cd "$rs_workdir/$module/build-$arch"
@@ -449,6 +516,7 @@ for module in ${rs_modules[@]}; do
 			done
 		else
 			# Do a normal build
+			rs_boldmsg "Building $module..."
 			cd "$rs_workdir/$module/build"
 			rs_build
 		fi
