@@ -18,33 +18,10 @@ mingw_headers_build() {
     rs_do_command "$rs_workdir/$1/mingw-w64-v${mingw_version}/mingw-w64-headers/configure" --prefix="$rs_prefixdir" --host="$rs_target"
     rs_do_command $rs_makecmd -j $rs_cpucount
     rs_do_command $rs_makecmd install
-    rs_do_command ln -s -f $rs_prefixdir $rs_prefixdir/mingw
 }
 
 mingw_crt_build() {
     rs_do_command "$rs_workdir/$1/mingw-w64-v${mingw_version}/mingw-w64-crt/configure" --prefix="$rs_prefixdir" --host="$rs_target"
     rs_do_command $rs_makecmd -j $rs_cpucount
     rs_do_command $rs_makecmd install
-}
-
-rs_prepare() {
-    mingw_prepare "mingw"
-}
-
-rs_build() {
-    mingw_headers_build "mingw"
-}
-
-rs_check() {
-    #if [ -e "$rs_prefixdir/bin/$rs_target-gcc$rs_suffix" ] ; then
-    #    return 1
-    #fi
-    return 0
-}
-
-rs_prepare_check() {
-	if [ -e "$rs_workdir/mingw/mingw-w64-v${mingw_version}" ] ; then
-		return 1
-	fi
-	return 0
 }

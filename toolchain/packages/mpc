@@ -1,0 +1,31 @@
+mpc_version="1.1.0"
+
+declare -A rs_sources=(
+	["mpc.tar.gz"]="https://ftp.gnu.org/gnu/mpc/mpc-${mpc_version}.tar.gz"
+)
+
+declare -A rs_sha256 sums=(
+	["mpc.tar.gz"]="6985c538143c1208dcb1ac42cedad6ff52e267b47e5f970183a3e75125b43c2e"
+)
+
+rs_prepare() {
+	rs_extract_module "mpc" "$rs_workdir/mpc" "tar.gz"
+}
+
+rs_build() {
+    rs_do_command "$rs_workdir/mpc/mpc-${mpc_version}/configure" --disable-shared --enable-static --prefix="$rs_prefixdir" --with-gmp="$rs_prefixdir/gmp" $rs_host_autoconf
+    rs_do_command $rs_makecmd -j $rs_cpucount
+    rs_do_command $rs_makecmd install
+}
+
+rs_prepare_check() {
+	if [ -e "$rs_workdir/mpc/mpc-${mpc_version}" ] ; then
+		return 1
+	fi
+	return 0
+}
+
+rs_check() {
+
+    return 0
+}

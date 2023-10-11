@@ -1,6 +1,6 @@
-diff -Naur ./gmp/mpn/generic/compute_powtab.c ./gmp-new/mpn/generic/compute_powtab.c
---- ./gmp/mpn/generic/compute_powtab.c	2020-01-17 07:44:49.000000000 -0600
-+++ ./gmp-new/mpn/generic/compute_powtab.c	2020-05-01 15:54:26.834552991 -0500
+diff -Naur ./mpn/generic/compute_powtab.c ./mpn/generic/compute_powtab.c
+--- ./mpn/generic/compute_powtab.c	2020-01-17 07:44:49.000000000 -0600
++++ ./mpn/generic/compute_powtab.c	2020-05-01 15:54:26.834552991 -0500
 @@ -70,6 +70,7 @@
    mp_limb_t cy;
    long start_idx;

@@ -1,0 +1,31 @@
+mpfr_version="4.0.2"
+
+declare -A rs_sources=(
+	["mpfr.tar.bz2"]="https://ftp.gnu.org/gnu/mpfr/mpfr-${mpfr_version}.tar.bz2"
+)
+
+declare -A rs_sha256sums=(
+	["mpfr.tar.bz2"]="c05e3f02d09e0e9019384cdd58e0f19c64e6db1fd6f5ecf77b4b1c61ca253acc"
+)
+
+rs_prepare() {
+	rs_extract_module "mpfr" "$rs_workdir/mpfr" "tar.gz"
+}
+
+rs_build() {
+    rs_do_command "$rs_workdir/mpfr/mpfr-${mpfr_version}/configure" --disable-shared --enable-static --prefix="$rs_prefixdir" --with-mpc="$rs_prefixdir/mpc" $rs_host_autoconf
+    rs_do_command $rs_makecmd -j $rs_cpucount
+    rs_do_command $rs_makecmd install
+}
+
+rs_prepare_check() {
+	if [ -e "$rs_workdir/mpfr/mpfr-${mpfr_version}" ] ; then
+		return 1
+	fi
+	return 0
+}
+
+rs_check() {
+
+    return 0
+}

@@ -1,0 +1,25 @@
+# this script can be imported by other runtimes
+source "$rs_tcdir/mingw.sh"
+
+rs_prepare() {
+    mingw_prepare "mingw_headers"
+}
+
+rs_build() {
+    mingw_headers_build "mingw_headers"
+    rs_do_command ln -s -f $rs_prefixdir $rs_prefixdir/mingw
+}
+
+rs_check() {
+    if [ -d "$rs_prefixdir/mingw" ] ; then
+        return 1
+    fi
+    return 0
+}
+
+rs_prepare_check() {
+	if [ -e "$rs_workdir/mingw_headers/mingw-w64-v${mingw_version}" ] ; then
+		return 1
+	fi
+	return 0
+}

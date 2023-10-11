@@ -1,74 +1,26 @@
 # allow to build mingw runtime
-source "$rs_pkgdir/mingw_w64"
-
 gcc_version="8.4.0"
-gmp_version="6.3.0"
-mpfr_version="4.2.1"
-mpc_version="1.3.1"
-
-unset rs_sources
-unset rs_sha256sums
 
 declare -A rs_sources=(
-	["mpfr.tar.bz2"]="https://www.mpfr.org/mpfr-current/mpfr-${mpfr_version}.tar.bz2"
-	["gmp.tar.xz"]="https://gmplib.org/download/gmp/gmp-${gmp_version}.tar.xz"
-	["mpc.tar.gz"]="https://ftp.gnu.org/gnu/mpc/mpc-${mpc_version}.tar.gz"
 	["gcc.tar.xz"]="https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/gcc-${gcc_version}.tar.xz"
 )
 
 declare -A rs_sha256sums=(
-	["mpfr.tar.bz2"]="b9df93635b20e4089c29623b19420c4ac848a1b29df1cfd59f26cab0d2666aa0"
-	["gmp.tar.xz"]="a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898"
-	["mpc.tar.gz"]="ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8"
 	["gcc.tar.xz"]="e30a6e52d10e1f27ed55104ad233c30bd1e99cfb5ff98ab022dc941edd1b2dd4"
 )
 
 rs_prepare() {
 	rs_extract_module "gcc" "$rs_workdir/gcc" "tar.xz"
-	rs_extract_module "gmp" "$rs_workdir/gcc/gcc-${gcc_version}" "tar.xz"
-	rs_extract_module "mpc" "$rs_workdir/gcc/gcc-${gcc_version}" "tar.gz"
-	rs_extract_module "mpfr" "$rs_workdir/gcc/gcc-${gcc_version}" "tar.bz2"
-	mingw_prepare "gcc"
-	# rename to allow autoconf to find it
-	mv "$rs_workdir/gcc/gcc-${gcc_version}/mpfr-${mpfr_version}" "$rs_workdir/gcc/gcc-${gcc_version}/mpfr"
-	mv "$rs_workdir/gcc/gcc-${gcc_version}/gmp-${gmp_version}" "$rs_workdir/gcc/gcc-${gcc_version}/gmp" 
-	mv "$rs_workdir/gcc/gcc-${gcc_version}/mpc-${mpc_version}" "$rs_workdir/gcc/gcc-${gcc_version}/mpc" 
 }
 
 rs_build() {
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
 
-	rs_do_command "$rs_workdir/gcc/gcc-${gcc_version}/configure" --prefix="$rs_prefixdir" --target="$rs_target" --with-sysroot="$rs_prefixdir" --with-pkgversion="RosBE" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose
+	rs_do_command "$rs_workdir/gcc/gcc-${gcc_version}/configure" --prefix="$rs_prefixdir" --target="$rs_target" --with-sysroot="$rs_prefixdir" --with-pkgversion="RosBE" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose $rs_host_autoconf
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
 	rs_do_command $rs_makecmd install-lto-plugin
-
-	# bootstrap mingw-crt
-
-	export AR="$rs_prefixdir/bin/${rs_target_tool_prefix}ar"
-	export AS="$rs_prefixdir/bin/${rs_target_tool_prefix}as"
-	export CC="$rs_prefixdir/bin/${rs_target_tool_prefix}gcc"
-	export CFLAGS="$rs_target_cflags"
-	export CXX="$rs_prefixdir/bin/${rs_target_tool_prefix}g++"
-	export CXXFLAGS="$rs_target_cxxflags"
-	export DLLTOOL="$rs_prefixdir/bin/${rs_target_tool_prefix}dlltool"
-	export RANLIB="$rs_prefixdir/bin/${rs_target_tool_prefix}ranlib"
-	export STRIP="$rs_prefixdir/bin/${rs_target_tool_prefix}strip"
-	
-	mingw_crt_build "gcc"
-
-	unset AR
-	unset AS
-	export CC="$rs_host_cc"
-	export CFLAGS="$rs_host_cflags"
-	export CXX="$rs_host_cxx"
-	export CXXFLAGS="$rs_host_cxxflags"
-	unset DLLTOOL
-	unset RANLIB
-	unset STRIP
-
-	# final creation of gcc
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 

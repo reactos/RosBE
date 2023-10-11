@@ -1,0 +1,35 @@
+gmp_version="6.2.0"
+
+declare -A rs_sources=(
+	["gmp.tar.xz"]="https://gmplib.org/download/gmp/gmp-${gmp_version}.tar.xz"
+)
+
+declare -A rs_sha256sums=(
+	["gmp.tar.xz"]="258e6cd51b3fbdfc185c716d55f82c08aff57df0c6fbd143cf6ed561267a1526"
+)
+
+rs_prepare() {
+	rs_extract_module "gmp" "$rs_workdir/gmp" "tar.xz"
+	# rename to allow autoconf to find it
+	cd "$rs_workdir/gmp/gmp-${gmp_version}"
+	rs_do_command patch -p1 -i "$rs_patches/GMP-6.2.0-C89-fixes.patch"
+}
+
+rs_build() {
+    rs_do_command "$rs_workdir/gmp/gmp-${gmp_version}/configure" --disable-shared --enable-static --prefix="$rs_prefixdir" $rs_host_autoconf
+    rs_do_command $rs_makecmd -j $rs_cpucount
+    rs_do_command $rs_makecmd check
+    rs_do_command $rs_makecmd install
+}
+
+rs_prepare_check() {
+	if [ -e "$rs_workdir/gmp/gmp-${gmp_version}" ] ; then
+		return 1
+	fi
+	return 0
+}
+
+rs_check() {
+
+    return 0
+}

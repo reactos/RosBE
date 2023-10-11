@@ -28,7 +28,6 @@ fi
 
 # RosBE Setup Variables
 rs_host_cflags="${CFLAGS:--pipe -O2 -g0 -march=native}"
-rs_host_cxxflags="${CXXFLAGS:-$rs_host_cflags}"
 
 rs_host_ar="${AR:-ar}"
 rs_host_as="${AS:-as}"
@@ -46,9 +45,7 @@ rs_target_cxxflags="$rs_target_cflags"
 export AR="$rs_host_ar"
 export AS="$rs_host_as"
 export CC="$rs_host_cc"
-export CFLAGS="$rs_host_cflags"
 export CXX="$rs_host_cxx"
-export CXXFLAGS="$rs_host_cxxflags"
 export DLLTOOL="$rs_host_dlltool"
 export RANLIB="$rs_host_ranlib"
 export STRIP="$rs_host_strip"
@@ -78,8 +75,13 @@ rs_modules=( # note: dependency order
 	"ninja"
 	# target specific
 	"binutils"
-	"mingw_w64"
+	"mingw_headers"
+	# gcc specific
+	"gmp"
+	"mpc"
+	"mpfr"
 	"gcc"
+	"mingw_crt"
 )
 
 rs_archs=( 
@@ -126,7 +128,7 @@ for tool in ${rs_tools_win[@]}; do
 	declare rs_tool_$tool=true
 done
 
-rs_xp=false
+rs_arch_amd64=false # amd64 seems broken
 
 source "$rs_scriptdir/bash/rosbelibrary.sh"
 source "$rs_scriptdir/setuplibrary.sh"
@@ -159,8 +161,7 @@ if [ "$1" = "-h" ] || [ "$1" = "-?" ] || [ "$1" = "--help" ]; then
 	echo "  --exclude-tools              Exclude building of all provided tools"
 	echo "  --include-arch    [arch]     Include one architecture from the toolchain compilation"
 	echo "  --include-module  [module]   Include one module from the toolchain compilation"
-	echo "  --enable-xp-mode             Build RosBe with XP-host compatible host"
-	echo "  --resume                     Resumes the compilation of Rosbe, this can be usefull with passing different commands to continue building the environment"
+	echo "  --resume                     Resumes the compilation of RosBE, this can be usefull with passing different commands to continue building the environment"
 	echo "  --jobs [jobs]                Override jobs compilation"
 	echo 
 	echo " List of available modules:"
@@ -244,11 +245,25 @@ fi
 
 rs_check_requirements
 
+# update c and cxxflags here
+
 if [ $rs_abi = 32 ]; then
 	# Append i686 cflags on 32-bit x86
 	rs_host_cflags= "$rs_host_cflags -march=pentium -mtune=i686"
-
 fi
+
+# gmp fails to build under MINGW/MSYS if we don't specify host and target
+if [ "$MSYSTEM" = "MINGW32" ] ; then
+	rs_host_autoconf="--host=i686-w64-mingw32 --build=i686-w64-mingw32"
+elif [ "$MSYSTEM" = "MINGW64" ] ; then
+	rs_host_autoconf="--host=x86_64-w64-mingw32 --build=x86_64-w64-mingw32"
+else
+	rs_host_autoconf=""
+fi
+
+rs_host_cxxflags="${CXXFLAGS:-$rs_host_cflags}"
+export CXXFLAGS="$rs_host_cxxflags"
+export CFLAGS="$rs_host_cflags"
 
 reinstall=false
 update=false
@@ -256,16 +271,21 @@ update=false
 rs_boldmsg "Modules to compile: "
 for module in ${rs_modules[@]}; do
 	var=rs_process_$module
-	echo "$module: ${!var}"
+	echo -n "$module: "
+	rs_boldmsg "${!var}"
 done
 echo
 
 rs_boldmsg "Architectures to target: "
 for arch in ${rs_archs[@]}; do
 	var=rs_arch_$arch
-	echo "$arch: ${!var}"
+	echo -n "$arch: " 
+	rs_boldmsg "${!var}"
 done
 echo
+
+echo -n "Compile tools: "
+rs_boldmsg "$rs_process_tools"
 
 # Select the installation directory
 rs_boldmsg "Installation Directory"
@@ -405,6 +425,7 @@ for module in ${rs_modules[@]}; do
 	rs_prefixdir="$installdir"
 	rs_msys=false
 	skip_prepare=false
+	rs_triplets=false
 	is_ok="0"
 
 	var=rs_process_$module
@@ -449,6 +470,7 @@ for module in ${rs_modules[@]}; do
 		fi
 
 		# Disable msys forward if you are not running under Windows
+		## We need this msys division because flex doesn't work under MINGW64 due to missing POSIX compatibilty
 		if [ ! "$MSYSTEM" ] ; then
 			rs_msys=false
 		fi
@@ -487,8 +509,6 @@ for module in ${rs_modules[@]}; do
 			rs_prepare
 		fi
 
-		mkdir -p "$rs_workdir/$module/build" 2>/dev/null
-
 		if [ "$rs_triplets" = true ] ; then
 			# Triplet based compilation, we have to iterate trough all the arches and build the specifics
 			for arch in ${rs_archs[@]} ; do
@@ -507,7 +527,7 @@ for module in ${rs_modules[@]}; do
 					rs_boldmsg "Building $module for $arch..."
 
 					# move to the arch-specific target directory
-					mkdir -p "$rs_workdir/$module/build-$arch"
+					mkdir -p "$rs_workdir/$module/build-$arch" 2>/dev/null
 					cd "$rs_workdir/$module/build-$arch"
 
 					# Start the build for this triplet
@@ -517,6 +537,7 @@ for module in ${rs_modules[@]}; do
 		else
 			# Do a normal build
 			rs_boldmsg "Building $module..."
+			mkdir -p "$rs_workdir/$module/build" 2>/dev/null
 			cd "$rs_workdir/$module/build"
 			rs_build
 		fi
@@ -581,7 +602,7 @@ if [ "$MSYSTEM" ]; then
 	cp /$mingw_prefix/bin/libwinpthread-1.dll .
 else
 	echo "Copying scripts..."
-	cp -R "$rs_scriptdir/scripts/bash"* "$installdir"
+	cp -R "$rs_scriptdir/bash"* "$installdir"
 
 	echo "Writing version..."
 	echo "$ROSBE_VERSION" > "$installdir/RosBE-Version"

@@ -1,0 +1,48 @@
+# this script can be imported by other runtimes
+source "$rs_tcdir/mingw.sh"
+
+rs_prepare() {
+    mingw_prepare "mingw_crt"
+}
+
+rs_build() {
+	export CFLAGS_FOR_TARGET="$rs_target_cflags"
+	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
+	export AR="$rs_prefixdir/bin/${rs_target_tool_prefix}ar"
+	export AS="$rs_prefixdir/bin/${rs_target_tool_prefix}as"
+	export CC="$rs_prefixdir/bin/${rs_target_tool_prefix}gcc"
+	export CFLAGS="$rs_target_cflags"
+	export CXX="$rs_prefixdir/bin/${rs_target_tool_prefix}g++"
+	export CXXFLAGS="$rs_target_cxxflags"
+	export DLLTOOL="$rs_prefixdir/bin/${rs_target_tool_prefix}dlltool"
+	export RANLIB="$rs_prefixdir/bin/${rs_target_tool_prefix}ranlib"
+	export STRIP="$rs_prefixdir/bin/${rs_target_tool_prefix}strip"
+	
+    mingw_crt_build "mingw_crt"
+
+	unset AR
+	unset AS
+	export CC="$rs_host_cc"
+	export CFLAGS="$rs_host_cflags"
+	export CXX="$rs_host_cxx"
+	export CXXFLAGS="$rs_host_cxxflags"
+	unset DLLTOOL
+	unset RANLIB
+	unset STRIP
+	unset CFLAGS_FOR_TARGET
+	unset CXXFLAGS_FOR_TARGET
+}
+
+rs_check() {
+    #if [ -d "$rs_prefixdir/mingw" ] ; then
+    #    return 1
+    #fi
+    return 0
+}
+
+rs_prepare_check() {
+	if [ -e "$rs_workdir/mingw_crt/mingw-w64-v${mingw_version}" ] ; then
+		return 1
+	fi
+	return 0
+}
