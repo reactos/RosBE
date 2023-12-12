@@ -10,11 +10,13 @@ ifeq ($(word 1,$(shell gcc -dumpmachine)),mingw32)
 	# Windows host
 	RM := del /f
 	SUFFIX := .exe
+	LDFLAGS += -lshell32
 else
     ifeq ($(word 1,$(shell gcc -dumpmachine)),i686-w64-mingw32)
 	    # Windows host
 	    RM := del /f
 	    SUFFIX := .exe
+	    LDFLAGS += -lshell32
     else
 	    # Unix host
 	    RM := rm -f
@@ -29,7 +31,7 @@ cpucount:  cpucount.c
 	$(STRIP) cpucount$(SUFFIX)
 
 scut:  scut.c
-	${CC} ${CFLAGS} scut$(SUFFIX) scut.c
+	${CC} ${CFLAGS} scut$(SUFFIX) scut.c $(LDFLAGS)
 	$(STRIP) scut$(SUFFIX)
 
 clean:
