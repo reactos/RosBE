@@ -13,7 +13,7 @@ rs_updated=false
 
 # Install required tools in MSYS2
 rs_boldmsg "Running MSYS pacman..."
-pacman -S --quiet --noconfirm --needed diffutils help2man make msys2-runtime-devel python texinfo tar autoconf automake gcc zlib | tee /tmp/buildtoolchain-pacman.log
+pacman -S --quiet --noconfirm --needed diffutils help2man make msys2-runtime-devel python texinfo tar autoconf automake gcc zlib gettext-devel | tee /tmp/buildtoolchain-pacman.log
 
 if grep installation /tmp/buildtoolchain-pacman.log >& /dev/null; then
     rs_updated=true

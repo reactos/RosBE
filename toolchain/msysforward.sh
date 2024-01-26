@@ -24,4 +24,6 @@ export MAKE="make"
 
 # Call the command
 
+echo "$MSYSTEM debug: $*"
+
 $*

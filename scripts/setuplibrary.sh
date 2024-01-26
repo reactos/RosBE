@@ -160,13 +160,26 @@ rs_clean_module()
 rs_do_command()
 {
 	echo -n "Running \"$*\"... "
+	$* >& "$rs_workdir/build.log"
+	rs_check_run
+}
+
+# Executes a building command and checks whether it succeeded.
+# Terminates the building process in case of failure.
+#   Parameters: The command to execute including parameters
+rs_do_msys_command()
+{
 	if [ "$rs_msys" = true ] ; then
-		/msys2_shell.cmd -no-start -msys2 -here $* >& "$rs_workdir/build.log"
+		echo -n "Running (MSYS2) \"$*\"... "
+		# NOTE: the " $*" was done in this way so we avoid the windows cmd to automatically resolve the paths to Windows paths (F:/ C:/ rather than /f/ /c/)
+		/msys2_shell.cmd -no-start -msys2 -defterm -here "$rs_tcdir/msysforward.sh" " $*" >& "$rs_workdir/build.log"
 	else
+		echo -n "Running \"$*\"... "
 		$* >& "$rs_workdir/build.log"
 	fi
 	rs_check_run
 }
+
 
 # Downloads a module
 # Return 0 if it was downloaded, otherwise 1.
