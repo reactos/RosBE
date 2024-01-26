@@ -89,8 +89,8 @@ rs_modules=( # note: dependency order
 	"mingw_headers"
 	# gcc specific
 	"gmp"
-	"mpc"
 	"mpfr"
+	"mpc"
 	"gcc"
 	"mingw_crt"
 )

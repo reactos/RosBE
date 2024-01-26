@@ -9,11 +9,12 @@ declare -A rs_sha256sums=(
 )
 
 rs_prepare() {
-	rs_extract_module "mpfr" "$rs_workdir/mpfr" "tar.gz"
+	rs_extract_module "mpfr" "$rs_workdir/mpfr" "tar.bz2"
 }
 
 rs_build() {
-    rs_do_command "$rs_workdir/mpfr/mpfr-${mpfr_version}/configure" --disable-shared --enable-static --prefix="$rs_prefixdir" --with-mpc="$rs_prefixdir/mpc" $rs_host_autoconf
+	reldir=$(realpath --relative-to="." "$rs_workdir/mpfr/mpfr-${mpfr_version}")
+    rs_do_command "$reldir/configure" --disable-shared --enable-static --prefix="$rs_prefixdir" --with-gmp="$rs_prefixdir" $rs_host_autoconf
     rs_do_command $rs_makecmd -j $rs_cpucount
     rs_do_command $rs_makecmd install
 }
@@ -26,6 +27,8 @@ rs_prepare_check() {
 }
 
 rs_check() {
-
+    if [ -e "$rs_prefixdir/lib/libmpfr.a" ] ; then
+        return 1
+    fi
     return 0
 }
