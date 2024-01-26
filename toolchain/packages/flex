@@ -14,14 +14,18 @@ declare -A rs_sha256sums=(
 rs_prepare() {
 	rs_extract_module "flex" "$rs_workdir/flex" "tar.gz"
 	cd "$rs_workdir/flex/flex-${rs_version}"
-	rs_do_command patch -p1 -i "$rs_sourcedir/flex-msys2.patch"
-	rs_do_command ./autogen.sh
+	rs_do_command patch -p1 -i "$rs_sources/flex-msys2.patch"
+	rs_do_msys_command ./autogen.sh
 }
 
 rs_build() {
-	rs_do_command "$rs_workdir/flex/flex-${rs_version}/configure" --prefix="$rs_prefixdir" --without-libiconv-prefix --without-libintl-prefix --enable-static --disable-shared --disable-nls
-	rs_do_command $rs_makecmd -j $rs_cpucount
-	rs_do_command $rs_makecmd install
+	if [ "$MSYSTEM" ] ; then
+		autoconf_args="--build=x86_64-pc-msys"
+	fi
+
+	rs_do_msys_command "$rs_workdir/flex/flex-${rs_version}/configure" --prefix="$rs_prefixdir" --without-libiconv-prefix --without-libintl-prefix --enable-static --disable-shared --disable-nls $autoconf_args
+	rs_do_msys_command $rs_makecmd -j $rs_cpucount
+	rs_do_msys_command $rs_makecmd install
 }
 
 rs_check() {

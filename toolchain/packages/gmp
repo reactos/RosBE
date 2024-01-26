@@ -1,18 +1,16 @@
-gmp_version="6.2.0"
+gmp_version="6.3.0"
 
 declare -A rs_sources=(
 	["gmp.tar.xz"]="https://gmplib.org/download/gmp/gmp-${gmp_version}.tar.xz"
 )
 
 declare -A rs_sha256sums=(
-	["gmp.tar.xz"]="258e6cd51b3fbdfc185c716d55f82c08aff57df0c6fbd143cf6ed561267a1526"
+	["gmp.tar.xz"]="a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898"
 )
 
 rs_prepare() {
 	rs_extract_module "gmp" "$rs_workdir/gmp" "tar.xz"
 	# rename to allow autoconf to find it
-	cd "$rs_workdir/gmp/gmp-${gmp_version}"
-	rs_do_command patch -p1 -i "$rs_patches/GMP-6.2.0-C89-fixes.patch"
 }
 
 rs_build() {
@@ -30,6 +28,5 @@ rs_prepare_check() {
 }
 
 rs_check() {
-
     return 0
 }
