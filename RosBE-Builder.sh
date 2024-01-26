@@ -10,6 +10,17 @@ if [ -z "$BASH_VERSION" ]; then
     exec bash "$0"
 fi
 
+# test for bash4 (avoid macosx default vesion to be used)
+declare -A test=(
+  ["a"]="test"
+  ["b"]="test2"
+)
+
+if ! [ "${test["a"]}" = "test" ]; then
+  echo "This script requires bash 4.0 or greater"
+  exit 0
+fi
+
 # MSYS2 specific values
 if [ "$MSYSTEM" ] ; then
 	# Hardcoded values for buildtoolchain/MSYS2
@@ -37,7 +48,7 @@ rs_host_dlltool="${DLLTOOL:-dlltool}"
 rs_host_ranlib="${RANLIB:-ranlib}"
 rs_host_strip="${STRIP:-strip}"
 
-rs_needed_tools="as find $CC $CXX grep m4 makeinfo python tar wget patch libtool autoconf automake autopoint unzip"        # GNU Make has a special check
+rs_needed_tools="as find $CC $CXX grep m4 makeinfo python tar wget patch libtool autoconf automake autopoint unzip sha256sum"        # GNU Make has a special check
 rs_needed_libs="zlib"
 rs_target_cflags="-pipe -O2 -Wl,-S -g0"
 rs_target_cxxflags="$rs_target_cflags"
@@ -286,6 +297,7 @@ echo
 
 echo -n "Compile tools: "
 rs_boldmsg "$rs_process_tools"
+echo
 
 # Select the installation directory
 rs_boldmsg "Installation Directory"
@@ -314,7 +326,7 @@ if [ "$1" = "" ]; then
 			installdir=""
 		elif [ -d "$installdir" ]; then
 			# Check if the directory is empty
-			if [ ! "`ls $installdir`" = "" ]; then
+			if [ ! "`ls $installdir`" = "" ] && [ $rs_resume = false ]; then
 				if [ -f "$installdir/RosBE-Version" ]; then
 					installed_version=`cat "$installdir/RosBE-Version"`
 					echo "ReactOS Build Environment $installed_version is already installed in this directory."

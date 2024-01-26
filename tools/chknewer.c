@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 #ifndef _WIN32
 #define _strnicmp strncmp
