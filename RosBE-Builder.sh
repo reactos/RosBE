@@ -92,7 +92,6 @@ rs_modules=( # note: dependency order
 	"mpfr"
 	"mpc"
 	"gcc"
-	"mingw_crt"
 )
 
 rs_archs=( 
@@ -459,7 +458,7 @@ for module in ${rs_modules[@]}; do
 				if [ ${!var} = true ] ; then
 					# set the target triplet and new prefix for checking data
 					rs_target=${rs_triplets[$arch]}
-					rs_prefixdir="$installdir/$rs_target"
+					#rs_prefixdir="$installdir/$rs_target"
 					rs_check
 
 					is_ok="$?"
@@ -528,7 +527,7 @@ for module in ${rs_modules[@]}; do
 				if [ ${!var} = true ] ; then
 					# set the target triplet and new prefix
 					rs_target=${rs_triplets[$arch]}
-					rs_prefixdir="$installdir/$rs_target"
+					#rs_prefixdir="$installdir/$rs_target"
 
 					# Check again to skip target-specific
 					rs_check
