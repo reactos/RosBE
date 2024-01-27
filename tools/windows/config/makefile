@@ -25,8 +25,8 @@ $(RC:.rc=.coff):
 
 .PHONY: clean
 clean:
-	-@del $(TARGET)
-	-@del $(OBJS)
+	rm -fr $(TARGET)
+	rm -fr $(OBJS)
 
 install: $(TARGET)
 	cp -f $(TARGET) $(PREFIX)/bin/$(TARGET)
