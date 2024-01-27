@@ -2,6 +2,8 @@
 gcc_version="8.4.0"
 rs_triplets=true
 
+source "$rs_tcdir/mingw.sh"
+
 declare -A rs_sources=(
 	["gcc.tar.xz"]="https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/gcc-${gcc_version}.tar.xz"
 )
@@ -11,18 +13,70 @@ declare -A rs_sha256sums=(
 )
 
 rs_prepare() {
+	# prepare gcc
 	rs_extract_module "gcc" "$rs_workdir/gcc" "tar.xz"
+	cd "$rs_workdir/gcc/gcc-${gcc_version}"
+	rs_do_command patch -p1 -i "$rs_patches/GCC-Always-define-WIN32_LEAN_AND_MEAN-before-Windows_h.patch"
+
+	# prepare libc
+	mingw_prepare "gcc"
 }
 
-rs_build() {
+gcc_mingw_crt()
+{
+	export CFLAGS_FOR_TARGET="$rs_target_cflags"
+	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
+	export AR="$rs_prefixdir/bin/${rs_target_tool_prefix}ar"
+	export AS="$rs_prefixdir/bin/${rs_target_tool_prefix}as"
+	export CC="$rs_prefixdir/bin/${rs_target_tool_prefix}gcc"
+	export CFLAGS="$rs_target_cflags"
+	export CXX="$rs_prefixdir/bin/${rs_target_tool_prefix}g++"
+	export CXXFLAGS="$rs_target_cxxflags"
+	export DLLTOOL="$rs_prefixdir/bin/${rs_target_tool_prefix}dlltool"
+	export RANLIB="$rs_prefixdir/bin/${rs_target_tool_prefix}ranlib"
+	export STRIP="$rs_prefixdir/bin/${rs_target_tool_prefix}strip"
+	
+	if [ ! -d "$rs_workdir/gcc/mingw_crt" ]; then
+		mkdir "$rs_workdir/gcc/mingw_crt"
+    fi
+	cd "$rs_workdir/gcc/mingw_crt"
+	mingw_crt_build "gcc"
+	cd ../
+
+	unset AR
+	unset AS
+	export CC="$rs_host_cc"
+	export CFLAGS="$rs_host_cflags"
+	export CXX="$rs_host_cxx"
+	export CXXFLAGS="$rs_host_cxxflags"
+	unset DLLTOOL
+	unset RANLIB
+	unset STRIP
+	unset CFLAGS_FOR_TARGET
+	unset CXXFLAGS_FOR_TARGET
+}
+
+gcc_stage1() {
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
 
+	# stage 1: bootstrap gcc
 	reldir=$(realpath --relative-to="." "$rs_workdir/gcc/gcc-${gcc_version}")
-	rs_do_command "$reldir/configure" --with-gmp="$rs_prefixdir/.." --with-mpc="$rs_prefixdir/.." --with-mpfr="$rs_prefixdir/.." --prefix="$rs_prefixdir" --target="$rs_target" --with-sysroot="$rs_prefixdir" --with-pkgversion="RosBE" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose $rs_host_autoconf
+	if [ ! -e "$rs_workdir/gcc/build-${rs_target}/Makefile"]; then
+		rs_do_command "$reldir/configure" --with-gmp="$rs_prefixdir/.." --with-mpc="$rs_prefixdir/.." --with-mpfr="$rs_prefixdir/.." --prefix="$rs_prefixdir" --target="$rs_target" --with-sysroot="$rs_prefixdir" --with-pkgversion="RosBE" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose --enable-static $rs_host_autoconf
+	fi
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
 	rs_do_command $rs_makecmd install-gcc
 	rs_do_command $rs_makecmd install-lto-plugin
+
+	unset CFLAGS_FOR_TARGET
+	unset CXXFLAGS_FOR_TARGET
+}
+
+gcc_stage2() {
+	export CFLAGS_FOR_TARGET="$rs_target_cflags"
+	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
+
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 
@@ -30,10 +84,16 @@ rs_build() {
 	unset CXXFLAGS_FOR_TARGET
 }
 
+rs_build() {
+
+	if [ ! -e "$rs_prefixdir/bin/$rs_target-gcc$rs_suffix" ] ; then
+		gcc_stage1
+	fi
+	gcc_mingw_crt
+	gcc_stage2
+}
+
 rs_check() {
-    if [ -e "$rs_prefixdir/bin/$rs_target-gcc$rs_suffix" ] ; then
-        return 1
-    fi
     return 0
 }
 
