@@ -26,22 +26,22 @@ gcc_mingw_crt()
 {
 	export CFLAGS_FOR_TARGET="$rs_target_cflags"
 	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
-	export AR="$rs_prefixdir/bin/${rs_target_tool_prefix}ar"
-	export AS="$rs_prefixdir/bin/${rs_target_tool_prefix}as"
-	export CC="$rs_prefixdir/bin/${rs_target_tool_prefix}gcc"
+	export AR="$rs_prefixdir/bin/${rs_target}-ar"
+	export AS="$rs_prefixdir/bin/${rs_target}-as"
+	export CC="$rs_prefixdir/bin/${rs_target}-gcc"
 	export CFLAGS="$rs_target_cflags"
-	export CXX="$rs_prefixdir/bin/${rs_target_tool_prefix}g++"
+	export CXX="$rs_prefixdir/bin/${rs_target}-g++"
 	export CXXFLAGS="$rs_target_cxxflags"
-	export DLLTOOL="$rs_prefixdir/bin/${rs_target_tool_prefix}dlltool"
-	export RANLIB="$rs_prefixdir/bin/${rs_target_tool_prefix}ranlib"
-	export STRIP="$rs_prefixdir/bin/${rs_target_tool_prefix}strip"
+	export DLLTOOL="$rs_prefixdir/bin/${rs_target}-dlltool"
+	export RANLIB="$rs_prefixdir/bin/${rs_target}-ranlib"
+	export STRIP="$rs_prefixdir/bin/${rs_target}-strip"
 	
 	if [ ! -d "$rs_workdir/gcc/mingw_crt" ]; then
 		mkdir "$rs_workdir/gcc/mingw_crt"
     fi
 	cd "$rs_workdir/gcc/mingw_crt"
 	mingw_crt_build "gcc"
-	cd ../
+	cd ../build-${rs_target}
 
 	unset AR
 	unset AS
@@ -89,7 +89,9 @@ rs_build() {
 	if [ ! -e "$rs_prefixdir/bin/$rs_target-gcc$rs_suffix" ] ; then
 		gcc_stage1
 	fi
-	gcc_mingw_crt
+	if [ ! -e "$rs_prefixdir/lib/libd3dx9.a" ]; then
+		gcc_mingw_crt
+	fi
 	gcc_stage2
 }
 
