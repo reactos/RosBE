@@ -84,13 +84,14 @@ rs_modules=( # note: dependency order
 	"flex"
 	"cmake"
 	"ninja"
+	# gmp, mpfr and mpc are built before mingw_headers so we avoid prefix configuration issues with mpfr under linux
+	"gmp"
+	"mpfr"
+	"mpc"
 	# target specific
 	"binutils"
 	"mingw_headers"
 	# gcc specific
-	"gmp"
-	"mpfr"
-	"mpc"
 	"gcc"
 )
 
