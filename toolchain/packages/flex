@@ -14,7 +14,7 @@ declare -A rs_sha256sums=(
 rs_prepare() {
 	rs_extract_module "flex" "$rs_workdir/flex" "tar.gz"
 	cd "$rs_workdir/flex/flex-${rs_version}"
-	rs_do_command patch -p1 -i "$rs_sources/flex-msys2.patch"
+	rs_do_command patch -p1 -i "$rs_sourcedir/flex-msys2.patch"
 	rs_do_msys_command ./autogen.sh
 }
 
