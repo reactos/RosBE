@@ -23,7 +23,9 @@ rs_build() {
 		autoconf_args="--build=x86_64-pc-msys"
 	fi
 
-	rs_do_msys_command "$rs_workdir/flex/flex-${rs_version}/configure" --prefix="$rs_prefixdir" --without-libiconv-prefix --without-libintl-prefix --enable-static --disable-shared --disable-nls $autoconf_args
+	if [ ! -e "$rs_workdir/flex/build/Makefile" ]; then
+		rs_do_msys_command "$rs_workdir/flex/flex-${rs_version}/configure" --prefix="$rs_prefixdir" --without-libiconv-prefix --without-libintl-prefix --enable-static --disable-shared --disable-nls $autoconf_args
+	fi
 	rs_do_msys_command $rs_makecmd -j $rs_cpucount
 	rs_do_msys_command $rs_makecmd install
 }

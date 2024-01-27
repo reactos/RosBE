@@ -14,7 +14,10 @@ rs_prepare() {
 }
 
 rs_build() {
-    rs_do_command "$rs_workdir/binutils/binutils-${rs_version}/configure" --prefix="$rs_prefixdir" --target="$rs_target" --with-sysroot="$rs_prefixdir" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls $rs_host_autoconf
+	reldir=$(realpath --relative-to="." "$rs_workdir/binutils/binutils-${rs_version}")
+    if [ ! -e "$rs_workdir/binutils/build-${rs_target}/Makefile" ]; then
+        rs_do_command "$reldir/configure" --prefix="$rs_prefixdir" --target="$rs_target" --with-sysroot="$rs_prefixdir" --disable-multilib --disable-werror --enable-lto --enable-plugins --with-zlib=yes --disable-nls $rs_host_autoconf
+    fi
     rs_do_command $rs_makecmd -j $rs_cpucount
     rs_do_command $rs_makecmd install
 }

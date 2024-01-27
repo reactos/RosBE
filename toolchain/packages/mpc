@@ -14,8 +14,11 @@ rs_prepare() {
 
 rs_build() {
 	reldir=$(realpath --relative-to="." "$rs_workdir/mpc/mpc-${mpc_version}")
-    rs_do_command "$reldir/configure" --disable-shared --enable-static --with-mpfr="$rs_prefixdir" --with-gmp="$rs_prefixdir" --prefix="$rs_prefixdir" $rs_host_autoconf
-    rs_do_command $rs_makecmd -j $rs_cpucount
+
+	if [ ! -e "$rs_workdir/mpc/build/Makefile" ]; then
+	    rs_do_command "$reldir/configure" --disable-shared --enable-static --with-mpfr="$rs_prefixdir" --with-gmp="$rs_prefixdir" --prefix="$rs_prefixdir" $rs_host_autoconf
+    fi
+	rs_do_command $rs_makecmd -j $rs_cpucount
     rs_do_command $rs_makecmd install
 }
 

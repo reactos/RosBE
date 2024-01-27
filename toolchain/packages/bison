@@ -15,7 +15,9 @@ rs_prepare() {
 }
 
 rs_build() {
-	rs_do_command "$rs_workdir/bison/bison-${rs_version}/configure" --prefix="$rs_prefixdir" --disable-nls $rs_host_autoconf
+    if [ ! -e "$rs_workdir/bison/build/Makefile" ]; then
+    	rs_do_command "$rs_workdir/bison/bison-${rs_version}/configure" --prefix="$rs_prefixdir" --disable-nls $rs_host_autoconf
+    fi
 	rs_do_command $rs_makecmd -j $rs_cpucount
 	rs_do_command $rs_makecmd install
 }
