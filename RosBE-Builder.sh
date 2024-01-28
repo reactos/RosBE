@@ -459,7 +459,7 @@ for module in ${rs_modules[@]}; do
 				if [ ${!var} = true ] ; then
 					# set the target triplet and new prefix for checking data
 					rs_target=${rs_triplets[$arch]}
-					rs_prefixdir="$installdir/$rs_target"
+					rs_prefixdir="$installdir/$arch"
 					rs_check
 
 					is_ok="$?"
@@ -528,7 +528,7 @@ for module in ${rs_modules[@]}; do
 				if [ ${!var} = true ] ; then
 					# set the target triplet and new prefix
 					rs_target=${rs_triplets[$arch]}
-					rs_prefixdir="$installdir/$rs_target"
+					rs_prefixdir="$installdir/$arch"
 
 					# Check again to skip target-specific
 					rs_check
@@ -564,18 +564,16 @@ echo
 rs_boldmsg "Final actions"
 
 echo "Removing unneeded files..."
-cd "$rs_prefixdir"
-rm bin/yacc
-rm -rf doc man share/info share/man
+rm "$rs_prefixdir/bin/yacc"
+rm -rf "$rs_prefixdir/doc" "$rs_prefixdir/man" "$rs_prefixdir/share/doc" "$rs_prefixdir/share/info" "$rs_prefixdir/share/man"
 
 for arch in ${rs_archs[@]}; do
 	var=rs_arch_$arch
 	if [ ${!$var} = true ]; then
+		rs_archprefixdir="$installdir/$arch"
 		rs_target=${rs_triplets[$arch]}
-		rs_archprefixdir="$installdir/$rs_target"
-		cd "$rs_archprefixdir"
-		rm -rf $rs_target/doc $rs_target/share include info man mingw share
-		rm -f lib/* >& /dev/null
+		rm -rf "$rs_archprefixdir/$rs_target/doc" "$rs_archprefixdir/$rs_target/share" "$rs_archprefixdir/info" "$rs_archprefixdir/man" "$rs_archprefixdir/mingw" "$rs_archprefixdir/share" "$rs_archprefixdir/include"
+		rm -f "$rs_archprefixdir/lib/*" >& /dev/null
 	fi
 done
 ##### END almost shared buildtoolchain/RosBE-Unix building part ###############
