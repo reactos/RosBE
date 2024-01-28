@@ -615,13 +615,13 @@ if [ "$MSYSTEM" ]; then
 		mingw_prefix="mingw32"
 	fi
 
-	cp /$mingw_prefix/bin/libgcc_s_dw2-1.dll . 2>/dev/null # compatibiliy with older mingw
-	cp /$mingw_prefix/bin/libgcc_s_seh-1.dll . 2>/dev/null
-	cp /$mingw_prefix/bin/libstdc++-6.dll .
-	cp /$mingw_prefix/bin/libwinpthread-1.dll .
+	#cp /$mingw_prefix/bin/libgcc_s_dw2-1.dll . 2>/dev/null # compatibiliy with older mingw
+	#cp /$mingw_prefix/bin/libgcc_s_seh-1.dll . 2>/dev/null
+	#cp /$mingw_prefix/bin/libstdc++-6.dll .
+	#cp /$mingw_prefix/bin/libwinpthread-1.dll .
 else
 	echo "Copying scripts..."
-	cp -R "$rs_scriptdir/bash"* "$installdir"
+	cp -R "$rs_scriptdir/bash/*" "$installdir"
 
 	echo "Writing version..."
 	echo "$ROSBE_VERSION" > "$installdir/RosBE-Version"
