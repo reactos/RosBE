@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# ReactOS Build Environment for Unix-based Operating Systems - Builder Tool for the Base package
+# ReactOS Build Environment - Builder Tool for the Base package
 # Copyright 2007-2020 Colin Finck <colin@reactos.org>
 # partially based on the BuildMingwCross script (http://www.mingw.org/MinGWiki/index.php/BuildMingwCross)
 #
