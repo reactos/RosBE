@@ -38,7 +38,8 @@ else
 fi
 
 # RosBE Setup Variables
-rs_host_cflags="${CFLAGS:--pipe -O2 -g0 -march=native}"
+rs_host_cflags="${CFLAGS:--pipe -O2 -g0 -march=native -static}"
+rs_host_ldflags="${LDFLAGS:--static}"
 
 rs_host_ar="${AR:-ar}"
 rs_host_as="${AS:-as}"
@@ -52,6 +53,7 @@ rs_needed_tools="as find $CC $CXX grep m4 makeinfo python tar wget patch libtool
 rs_needed_libs="zlib"
 rs_target_cflags="-pipe -O2 -Wl,-S -g0"
 rs_target_cxxflags="$rs_target_cflags"
+rs_target_ldflags=""
 
 export AR="$rs_host_ar"
 export AS="$rs_host_as"
@@ -273,7 +275,9 @@ else
 fi
 
 rs_host_cxxflags="${CXXFLAGS:-$rs_host_cflags}"
+rs_host_ldflags="${LDFLAGS:-$rs_host_ldflags}"
 export CXXFLAGS="$rs_host_cxxflags"
+export LDFLAGS="$rs_host_ldflags"
 export CFLAGS="$rs_host_cflags"
 
 reinstall=false
@@ -389,6 +393,7 @@ mkdir -p "$rs_prefixdir/bin" 2>/dev/null
 
 echo "Using CFLAGS=\"$CFLAGS\""
 echo "Using CXXFLAGS=\"$CXXFLAGS\""
+echo "Using LDFLAGS=\"$LDFLAGS\""
 echo
 
 if [ $rs_process_tools = true ] ; then
