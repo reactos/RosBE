@@ -564,19 +564,22 @@ echo
 rs_boldmsg "Final actions"
 
 echo "Removing unneeded files..."
-rm "$rs_prefixdir/bin/yacc"
-rm -rf "$rs_prefixdir/doc" "$rs_prefixdir/man" "$rs_prefixdir/share/doc" "$rs_prefixdir/share/info" "$rs_prefixdir/share/man"
+rs_prefixdir="$installdir"
+cd "$rs_prefixdir"
+rm -rf "bin/yacc"
+rm -rf "doc" "$man" "$share/doc" "$share/info" "$share/man"
 
 for arch in ${rs_archs[@]}; do
 	var=rs_arch_$arch
-	if [ ${!$var} = true ]; then
+	if [ ${!var} = true ]; then
 		rs_archprefixdir="$installdir/$arch"
 		rs_target=${rs_triplets[$arch]}
-		rm -rf "$rs_archprefixdir/$rs_target/doc" "$rs_archprefixdir/$rs_target/share" "$rs_archprefixdir/info" "$rs_archprefixdir/man" "$rs_archprefixdir/mingw" "$rs_archprefixdir/share" "$rs_archprefixdir/include"
-		rm -f "$rs_archprefixdir/lib/*" >& /dev/null
+		cd "$rs_archprefixdir/"
+		rm -rf "$rs_target/doc" "$rs_target/share" "info" "man" "mingw" "share" "include"
+		rm -f lib/* >& /dev/null
 	fi
 done
-##### END almost shared buildtoolchain/RosBE-Unix building part ###############
+
 
 # See: https://jira.reactos.org/browse/ROSBE-35
 osname=`uname`
@@ -602,12 +605,13 @@ if [ "$MSYSTEM" ]; then
 	cd "$rs_prefixdir/bin"
 
 	if [ "$MSYSTEM" = "MINGW64" ] ; then
-		mingw_prefix = "mingw64"
+		mingw_prefix="mingw64"
 	else
-		mingw_prefix = "mingw32"
+		mingw_prefix="mingw32"
 	fi
 
-	cp /$mingw_prefix/bin/libgcc_s_dw2-1.dll .
+	cp /$mingw_prefix/bin/libgcc_s_dw2-1.dll . 2>/dev/null # compatibiliy with older mingw
+	cp /$mingw_prefix/bin/libgcc_s_seh-1.dll . 2>/dev/null
 	cp /$mingw_prefix/bin/libstdc++-6.dll .
 	cp /$mingw_prefix/bin/libwinpthread-1.dll .
 else

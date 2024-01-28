@@ -41,7 +41,7 @@ gcc_mingw_crt()
     fi
 	cd "$rs_workdir/gcc/mingw_crt"
 	mingw_crt_build "gcc"
-	cd ../build-${rs_target}
+	cd "$rs_workdir/gcc/build-${arch}"
 
 	unset AR
 	unset AS
@@ -85,18 +85,22 @@ gcc_stage2() {
 }
 
 rs_build() {
-
 	if [ ! -e "$rs_prefixdir/bin/$rs_target-gcc$rs_suffix" ] ; then
 		gcc_stage1
 	fi
-	if [ ! -e "$rs_prefixdir/lib/libd3dx9.a" ]; then
+	if [ ! -e "$rs_prefixdir/$rs_target/lib/crt1.o" ]; then
 		gcc_mingw_crt
 	fi
-	gcc_stage2
+	if [ ! -e "$rs_prefixdir/lib/$rs_target/$tgcc_version/libgcc.a" ]; then
+		gcc_stage2
+	fi
 }
 
 rs_check() {
-    return 0
+	if [ -e "$rs_prefixdir/lib/gcc/$rs_target/$gcc_version/libgcc.a" ]; then
+	    return 1
+	fi
+	return 0
 }
 
 rs_prepare_check() {
