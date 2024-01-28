@@ -64,7 +64,7 @@ gcc_stage1() {
 
 	# stage 1: bootstrap gcc
 	reldir=$(realpath --relative-to="." "$rs_workdir/gcc/gcc-${gcc_version}")
-	if [ ! -e "$rs_workdir/gcc/build-${rs_target}/Makefile" ]; then
+	if [ ! -e "$rs_workdir/gcc/build-${arch}/Makefile" ]; then
 		rs_do_command "$reldir/configure" --with-gmp="$rs_prefixdir/.." --with-mpc="$rs_prefixdir/.." --with-mpfr="$rs_prefixdir/.." --prefix="$rs_prefixdir" --target="$rs_target" --with-sysroot="$rs_prefixdir" --with-pkgversion="ReactOS Build Environment $ROSBE_VERSION" --with-bugurl="https://www.github.com/lakor64/rosbe/issues/" --with-changes-root-url="https://www.github.com/lakor64/rosbe/" --with-documentation-root-url="https://www.github.com/lakor64/rosbe/" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose --enable-static --program-prefix="" $rs_host_autoconf
 	fi
 	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
