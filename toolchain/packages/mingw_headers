@@ -7,11 +7,11 @@ rs_prepare() {
 
 rs_build() {
     mingw_headers_build "mingw_headers"
-    rs_do_command ln -s -f $rs_prefixdir $rs_prefixdir/mingw
+    rs_do_command ln -s -f "$rs_prefixdir/$rs_target" $rs_prefixdir/mingw
 }
 
 rs_check() {
-    if [ -d "$rs_prefixdir/mingw" ] ; then
+    if [ -e "$rs_prefixdir/$rs_target/include/d3d8.h" ] ; then
         return 1
     fi
     return 0
