@@ -2,14 +2,21 @@ rs_version="1.11.1"
 
 declare -A rs_sources=(
     ["ninja.tar.gz"]="https://github.com/ninja-build/ninja/archive/refs/tags/v${rs_version}.tar.gz"
+	["001-Handle-ERROR_DIRECTORY-when-calling-FindFirstFileExA.patch"]="https://patch-diff.githubusercontent.com/raw/ninja-build/ninja/pull/2160.patch"
+	["002-Flush-output-after-each-line.patch"]="https://patch-diff.githubusercontent.com/raw/ninja-build/ninja/pull/2143.patch"
 )
 
 declare -A rs_sha256sums=(
     ["ninja.tar.gz"]="31747ae633213f1eda3842686f83c2aa1412e0f5691d1c14dbbcc67fe7400cea"
+	["001-Handle-ERROR_DIRECTORY-when-calling-FindFirstFileExA.patch"]="855623ffb3199ed5a0a0f750a05f67a9d3285129c1b8e66d045c56bd7d471838"
+	["002-Flush-output-after-each-line.patch"]="cfa34091d79aebd6722cd2fc3a36f609295414d8e50d428e2104467ef4062163"
 )
 
 rs_prepare() {
     rs_extract_module "ninja" "$rs_workdir/ninja" "tar.gz"
+	cd "$rs_workdir/ninja/ninja-${rs_version}"
+	rs_do_command patch -p1 -i "$rs_sourcedir/001-Handle-ERROR_DIRECTORY-when-calling-FindFirstFileExA.patch"
+	rs_do_command patch -p1 -i "$rs_sourcedir/002-Flush-output-after-each-line.patch"
 }
 
 rs_build() {
