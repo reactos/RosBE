@@ -21,6 +21,7 @@ export DLLTOOL="$rs_host_dlltool"
 export RANLIB="$rs_host_ranlib"
 export STRIP="$rs_host_strip"
 export MAKE="make"
+export ACLOCAL_PATH="/usr/share/aclocal/"
 
 # Call the command
 
