@@ -1,0 +1,113 @@
+# allow to build mingw runtime
+gcc_version="8.4.0"
+rs_triplets=true
+
+source "$rs_tcdir/mingw.sh"
+
+declare -A rs_sources=(
+	["gcc.tar.xz"]="https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/gcc-${gcc_version}.tar.xz"
+)
+
+declare -A rs_sha256sums=(
+	["gcc.tar.xz"]="e30a6e52d10e1f27ed55104ad233c30bd1e99cfb5ff98ab022dc941edd1b2dd4"
+)
+
+rs_prepare() {
+	# prepare gcc
+	rs_extract_module "gcc" "$rs_workdir/gcc" "tar.xz"
+	cd "$rs_workdir/gcc/gcc-${gcc_version}"
+	rs_do_command patch -p1 -i "$rs_patches/GCC-Always-define-WIN32_LEAN_AND_MEAN-before-Windows_h.patch"
+
+	# prepare libc
+	mingw_prepare "gcc"
+}
+
+gcc_mingw_crt()
+{
+	export CFLAGS_FOR_TARGET="$rs_target_cflags"
+	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
+	export AR="$rs_prefixdir/bin/${rs_target}-ar"
+	export AS="$rs_prefixdir/bin/${rs_target}-as"
+	export CC="$rs_prefixdir/bin/${rs_target}-gcc"
+	export CFLAGS="$rs_target_cflags"
+	export CXX="$rs_prefixdir/bin/${rs_target}-g++"
+	export CXXFLAGS="$rs_target_cxxflags"
+	export DLLTOOL="$rs_prefixdir/bin/${rs_target}-dlltool"
+	export RANLIB="$rs_prefixdir/bin/${rs_target}-ranlib"
+	export STRIP="$rs_prefixdir/bin/${rs_target}-strip"
+	export LDFLAGS="$rs_target_ldflags"
+	
+	if [ ! -d "$rs_workdir/gcc/mingw_crt" ]; then
+		mkdir "$rs_workdir/gcc/mingw_crt"
+    fi
+	cd "$rs_workdir/gcc/mingw_crt"
+	mingw_crt_build "gcc"
+	cd "$rs_workdir/gcc/build-${arch}"
+
+	unset AR
+	unset AS
+	export CC="$rs_host_cc"
+	export CFLAGS="$rs_host_cflags"
+	export CXX="$rs_host_cxx"
+	export CXXFLAGS="$rs_host_cxxflags"
+	export LDFLAGS="$rs_host_ldflags"
+	unset DLLTOOL
+	unset RANLIB
+	unset STRIP
+	unset CFLAGS_FOR_TARGET
+	unset CXXFLAGS_FOR_TARGET
+}
+
+gcc_stage1() {
+	export CFLAGS_FOR_TARGET="$rs_target_cflags"
+	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
+
+	# stage 1: bootstrap gcc
+	reldir=$(realpath --relative-to="." "$rs_workdir/gcc/gcc-${gcc_version}")
+	if [ ! -e "$rs_workdir/gcc/build-${arch}/Makefile" ]; then
+		rs_do_command "$reldir/configure" --with-gmp="$rs_prefixdir/.." --with-mpc="$rs_prefixdir/.." --with-mpfr="$rs_prefixdir/.." --prefix="$rs_prefixdir" --target="$rs_target" --with-sysroot="$rs_prefixdir" --with-pkgversion="ReactOS Build Environment $ROSBE_VERSION" --with-bugurl="https://www.github.com/lakor64/rosbe/issues/" --with-changes-root-url="https://www.github.com/lakor64/rosbe/" --with-documentation-root-url="https://www.github.com/lakor64/rosbe/" --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --disable-shared --disable-multilib --disable-nls --disable-werror --disable-win32-registry --enable-sjlj-exceptions --disable-libstdcxx-verbose --enable-static --program-prefix="" $rs_host_autoconf
+	fi
+	rs_do_command $rs_makecmd -j $rs_cpucount all-gcc
+	rs_do_command $rs_makecmd install-gcc
+	rs_do_command $rs_makecmd install-lto-plugin
+
+	unset CFLAGS_FOR_TARGET
+	unset CXXFLAGS_FOR_TARGET
+}
+
+gcc_stage2() {
+	export CFLAGS_FOR_TARGET="$rs_target_cflags"
+	export CXXFLAGS_FOR_TARGET="$rs_target_cxxflags"
+
+	rs_do_command $rs_makecmd -j $rs_cpucount
+	rs_do_command $rs_makecmd install
+
+	unset CFLAGS_FOR_TARGET
+	unset CXXFLAGS_FOR_TARGET
+}
+
+rs_build() {
+	if [ ! -e "$rs_prefixdir/bin/$rs_target-gcc$rs_suffix" ] ; then
+		gcc_stage1
+	fi
+	if [ ! -e "$rs_prefixdir/$rs_target/lib/crt1.o" ]; then
+		gcc_mingw_crt
+	fi
+	if [ ! -e "$rs_prefixdir/lib/$rs_target/$tgcc_version/libgcc.a" ]; then
+		gcc_stage2
+	fi
+}
+
+rs_check() {
+	if [ -e "$rs_prefixdir/lib/gcc/$rs_target/$gcc_version/libgcc.a" ]; then
+	    return 1
+	fi
+	return 0
+}
+
+rs_prepare_check() {
+	if [ -e "$rs_workdir/gcc/gcc-${gcc_version}" ] ; then
+		return 1
+	fi
+	return 0
+}
