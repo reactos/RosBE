@@ -54,7 +54,10 @@ Function .onInit
         Abort
 
     ${If} $INSTDIR == "" ; InstallDirRegKey not valid?
-        StrCpy $0 $ProgramFiles 1
+        StrCpy $0 $SysDir 1
+        ${If} $0 == "\"
+            StrCpy $0 'C'
+        ${EndIf}
         StrCpy $INSTDIR "$0:\RosBE"
     ${EndIf}
 
