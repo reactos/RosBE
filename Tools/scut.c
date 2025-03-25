@@ -22,6 +22,8 @@
 #   define pgetcwd(buffer, maxlen)  _getcwd(buffer, maxlen)
 #   define pmkdir(path)             _mkdir(path)
 #   define pstricmp(str1, str2)     _stricmp(str1, str2)
+
+#   include <shlobj.h>
 #else
 #   include <sys/stat.h>
 #   include <unistd.h>
@@ -66,17 +68,35 @@ int writeshortcuts(PSHORTCUT head);
 int main(int argc, char* argv[])
 {
     PSHORTCUT shortcuts = NULL, current = NULL;
-    char name[260], path[260];
+    char name[260], path[260], *str;
     int removed = 0;
     programname = argv[0];
 
 #if defined(WIN32)
-    strncpy(rosbeappdata, getenv("APPDATA"), 241);
+    str = getenv("APPDATA");
+    if (str && *str)
+    {
+        strncpy(rosbeappdata, str, 241);
+    }
+    else if (!SHGetSpecialFolderPathA(NULL, rosbeappdata, CSIDL_APPDATA, TRUE))
+    {
+        fprintf(stderr, "%s: Error no config directory.\n", programname);
+        return -1;
+    }
     strcat(rosbeappdata, "\\RosBE");
     strcpy(shortcutfile, rosbeappdata);
     strcat(shortcutfile, "\\srclist.txt");
 #else
-    strncpy(rosbeappdata, getenv("HOME"), 244);
+    str = getenv("HOME");
+    if (str && *str)
+    {
+        strncpy(rosbeappdata, str, 244);
+    }
+    else
+    {
+        fprintf(stderr, "%s: Error no config directory.\n", programname);
+        return -1;
+    }
     strcat(rosbeappdata, "/.RosBE");
     strcpy(shortcutfile, rosbeappdata);
     strcat(shortcutfile, "/srclist");
