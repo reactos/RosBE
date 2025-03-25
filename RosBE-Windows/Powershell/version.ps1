@@ -25,6 +25,6 @@ $run = "$_ROSBE_TARGET_MINGWPATH\bin\$_ROSBE_PREFIX" + "ld.exe"
 # Bison, Flex and Make
 & "$_ROSBE_BASEDIR\bin\bison.exe" --version | select-string "GNU Bison"
 & "$_ROSBE_BASEDIR\bin\flex.exe" --version
-& "$_ROSBE_BASEDIR\bin\mingw32-make.exe" -v | select-string "GNU Make"
+& "mingw32-make.exe" -v | select-string "GNU Make"
 "Ninja $_ROSBE_NINJAVER"
 & "$_ROSBE_BASEDIR\bin\cmake.exe" --version | select-string "version"
