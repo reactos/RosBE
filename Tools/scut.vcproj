@@ -64,6 +64,7 @@
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
+				AdditionalDependencies="shell32.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -139,6 +140,7 @@
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
+				AdditionalDependencies="shell32.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"

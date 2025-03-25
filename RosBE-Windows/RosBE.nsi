@@ -47,12 +47,20 @@ Function .onInit
     ReadRegStr $R3 HKLM \
     "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentVersion
     StrCpy $R4 $R3 3
-    System::Call 'kernel32::CreateMutexA(i 0, i 0, t "RosBE-v${PRODUCT_VERSION}-Installer") i .r1 ?e'
+    System::Call 'kernel32::CreateMutex(i 0, i 0, t "RosBE-v${PRODUCT_VERSION}-Installer")p.r1 ?e'
     Pop $R0
     StrCmp $R0 0 +3
         MessageBox MB_OK|MB_ICONEXCLAMATION "The ${PRODUCT_NAME} v${PRODUCT_VERSION} installer is already running."
         Abort
-    StrCpy $INSTDIR "C:\RosBE"
+
+    ${If} $INSTDIR == "" ; InstallDirRegKey not valid?
+        StrCpy $0 $SysDir 1
+        ${If} $0 == "\"
+            StrCpy $0 'C'
+        ${EndIf}
+        StrCpy $INSTDIR "$0:\RosBE"
+    ${EndIf}
+
     Call UninstallPrevious
     !insertmacro INSTALLOPTIONS_EXTRACT "RosSourceDir.ini"
 FunctionEnd
@@ -111,6 +119,7 @@ Section -BaseFiles SEC01
 
     ;; Make the directory "$INSTDIR" read write accessible by all users
     AccessControl::SetOnFile "$INSTDIR" "(BU)" "FullAccess"
+    Pop $0 ; "error" on errors
 
     SetOutPath "$INSTDIR"
     SetOverwrite try
@@ -216,6 +225,7 @@ SectionEnd
 Section /o "Add BIN folder to PATH variable (MSVC users)" SEC04
     EnVar::SetHKCU
     EnVar::AddValue "PATH" "$INSTDIR\bin"
+    Pop $0
 SectionEnd
 
 Section /o "PowerShell Version" SEC05
@@ -251,7 +261,7 @@ Section -StartMenuShortcuts SEC06
     ;;
     ;; Add our start menu shortcuts.
     ;;
-    IfFileExists "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +18 0
+    ${If} ${FileExists} "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk"
         !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
             CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
             SetOutPath $REACTOS_SOURCE_DIRECTORY
@@ -271,7 +281,8 @@ Section -StartMenuShortcuts SEC06
                            "$INSTDIR\README.pdf"
             CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Options.lnk" \
                            "$INSTDIR\bin\options.exe"
-    !insertmacro MUI_STARTMENU_WRITE_END
+        !insertmacro MUI_STARTMENU_WRITE_END
+    ${EndIf}
 SectionEnd
 
 Section /o "Desktop Shortcuts" SEC07
@@ -279,7 +290,7 @@ Section /o "Desktop Shortcuts" SEC07
     ;;
     ;; Add our desktop shortcuts.
     ;;
-    IfFileExists "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +11 0
+    ${If} ${FileExists} "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk"
         SetOutPath $REACTOS_SOURCE_DIRECTORY
         IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
             CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
@@ -290,6 +301,7 @@ Section /o "Desktop Shortcuts" SEC07
                 CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0B /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
             IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
                 CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
+    ${EndIf}
 SectionEnd
 
 Section /o "Quick Launch Shortcuts" SEC08
@@ -297,7 +309,7 @@ Section /o "Quick Launch Shortcuts" SEC08
     ;;
     ;; Add our quick launch shortcuts.
     ;;
-    IfFileExists "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" +11 0
+    ${If} ${FileExists} "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk"
         SetOutPath $REACTOS_SOURCE_DIRECTORY
         IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
             CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
@@ -308,6 +320,7 @@ Section /o "Quick Launch Shortcuts" SEC08
                 CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0B /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
             IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
                 CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
+    ${EndIf}
 SectionEnd
 
 Section -Post SEC09
@@ -355,7 +368,8 @@ Section Uninstall
     ;;
     EnVar::SetHKCU
     EnVar::DeleteValue "PATH" "$INSTDIR\bin"
-
+    Pop $0
+    
     ;;
     ;; Clean up installed files.
     ;;
