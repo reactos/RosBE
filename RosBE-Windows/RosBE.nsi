@@ -69,13 +69,13 @@ FunctionEnd
 ;; MUI Settings
 ;;
 !define MUI_ABORTWARNING
-!define MUI_ICON "Icons\rosbe.ico"
-!define MUI_UNICON "Icons\uninstall.ico"
+!define MUI_ICON "RosBE\rosbe.ico"
+!define MUI_UNICON "RosBE\uninstall.ico"
 !define MUI_COMPONENTSPAGE_NODESC
 
 !define MUI_WELCOMEPAGE_TITLE_3LINES
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "Root\License.txt"
+!insertmacro MUI_PAGE_LICENSE "RosBE\License.txt"
 !insertmacro MUI_PAGE_DIRECTORY
 
 ;;
@@ -123,103 +123,109 @@ Section -BaseFiles SEC01
 
     SetOutPath "$INSTDIR"
     SetOverwrite try
-    File /r Icons\rosbe.ico
-    File /r Root\Basedir.cmd
-    File /r Root\Build-Shared.cmd
-    File /r Root\changelog.txt
-    File /r Root\charch.cmd
-    File /r Root\chdefdir.cmd
-    File /r Root\chdefgcc.cmd
-    File /r Root\Clean.cmd
-    File /r Root\Help.cmd
-    File /r Root\kdbg.cmd
-    File /r Root\LICENSE.txt
-    File /r Root\Make.cmd
-    File /r Root\Makex.cmd
-    File /r Root\options.cmd
-    File /r Root\raddr2line.cmd
-    File /r Root\raddr2lineNW.cmd
-    File /r Root\README.pdf
-    File /r Root\Remake.cmd
-    File /r Root\Remakex.cmd
-    File /r Root\Renv.cmd
-    File /r Root\RosBE.cmd
-    File /r Root\rosbe-gcc-env.cmd
-    File /r Root\scut.cmd
-    File /r Root\TimeDate.cmd
-    File /r Root\update.cmd
-    File /r Root\version.cmd
+    File /r RosBE\rosbe.ico
+    File /r RosBE\Basedir.cmd
+    File /r RosBE\Build-Shared.cmd
+    File /r RosBE\changelog.txt
+    File /r RosBE\charch.cmd
+    File /r RosBE\chdefdir.cmd
+    File /r RosBE\chdefgcc.cmd
+    File /r RosBE\Clean.cmd
+    File /r RosBE\Help.cmd
+    File /r RosBE\kdbg.cmd
+    File /r RosBE\LICENSE.txt
+    File /r RosBE\Make.cmd
+    File /r RosBE\Makex.cmd
+    File /r RosBE\options.cmd
+    File /r RosBE\raddr2line.cmd
+    File /r RosBE\raddr2lineNW.cmd
+    File /r RosBE\README.pdf
+    File /r RosBE\Remake.cmd
+    File /r RosBE\Remakex.cmd
+    File /r RosBE\Renv.cmd
+    File /r RosBE\RosBE.cmd
+    File /r RosBE\rosbe-gcc-env.cmd
+    File /r RosBE\scut.cmd
+    File /r RosBE\TimeDate.cmd
+    File /r RosBE\update.cmd
+    File /r RosBE\version.cmd
     SetOutPath "$INSTDIR\include"
     SetOverwrite try
-    File /r Root\include\*.*
+    File /r RosBE\include\*.*
     SetOutPath "$INSTDIR\lib"
     SetOverwrite try
-    File /r Root\lib\*.*
+    File /r RosBE\lib\*.*
     SetOutPath "$INSTDIR\share"
     SetOverwrite try
-    File /r Root\share\*.*
+    File /r RosBE\share\*.*
     SetOutPath "$INSTDIR\bin"
     SetOverwrite try
-    File /r Components\bin\7z.exe
-	File /r Components\bin\7z.dll
-    File /r Components\bin\bison.exe
-    File /r Components\bin\buildtime.exe
-    File /r Components\bin\ccache.exe
-    File /r Components\bin\chknewer.exe
-    File /r Components\bin\chkslash.exe
-    File /r Components\bin\cmake.exe
-    File /r Components\bin\cmcldeps.exe
-    File /r Components\bin\cmp.exe
-    File /r Components\bin\cpack.exe
-    File /r Components\bin\cpucount.exe
-    File /r Components\bin\ctest.exe
-    File /r Components\bin\diff.exe
-    File /r Components\bin\diff3.exe
-    File /r Components\bin\echoh.exe
-    File /r Components\bin\flash.exe
-    File /r Components\bin\flex.exe
-    File /r Components\bin\flex++.exe
-    File /r Components\bin\gdb.exe
-    File /r Components\bin\gdbserver.exe
-    File /r Components\bin\getdate.exe
-    File /r Components\bin\libgcc_s_dw2-1.dll
-    File /r Components\bin\libstdc++-6.dll
-    File /r Components\bin\libwinpthread-1.dll
-    File /r Components\bin\log2lines.exe
-    File /r Components\bin\m4.exe
-    File /r Components\bin\mingw32-make.exe
-    File /r Components\bin\msys-2.0.dll
-    File /r Components\bin\msys-gcc_s-1.dll
-    File /r Components\bin\msys-iconv-2.dll
-    File /r Components\bin\msys-intl-8.dll
-    File /r Components\bin\ninja.exe
-    File /r Components\bin\options.exe
-    File /r Components\bin\patch.exe
-    File /r Components\bin\patch.exe.manifest
-    File /r Components\bin\pexports.exe
-    File /r Components\bin\piperead.exe
-    File /r Components\bin\playwav.exe
-    File /r Components\bin\rquote.exe
-    File /r Components\bin\scut.exe
-    File /r Components\bin\sdiff.exe
-    File /r Components\bin\tee.exe
-    File /r Components\bin\wget.exe
-    File /r Components\bin\zlib1.dll
+    File /r RosBE\bin\7z.exe
+    File /r RosBE\bin\7z.dll
+    File /r RosBE\bin\bison.exe
+    File /r RosBE\bin\buildtime.exe
+    File /r RosBE\bin\ccache.exe
+    File /r RosBE\bin\chknewer.exe
+    File /r RosBE\bin\chkslash.exe
+    File /r RosBE\bin\cmake.exe
+    ;File /r RosBE\bin\cmcldeps.exe
+    File /r RosBE\bin\cmp.exe
+    ;File /r RosBE\bin\cpack.exe
+    File /r RosBE\bin\cpucount.exe
+    ;File /r RosBE\bin\ctest.exe
+    File /r RosBE\bin\diff.exe
+    File /r RosBE\bin\diff3.exe
+    File /r RosBE\bin\echoh.exe
+    File /r RosBE\bin\flash.exe
+    File /r RosBE\bin\flex.exe
+    File /r RosBE\bin\flex++.exe
+    ;File /r RosBE\bin\gdb.exe
+    ;File /r RosBE\bin\gdbserver.exe
+    File /r RosBE\bin\getdate.exe
+    ;File /r RosBE\bin\libgcc_s_dw2-1.dll
+    ;File /r RosBE\bin\libstdc++-6.dll
+    ;File /r RosBE\bin\libwinpthread-1.dll
+    ;File /r RosBE\bin\log2lines.exe
+    File /r RosBE\bin\m4.exe
+    ;File /r RosBE\bin\mingw32-make.exe
+    File /r RosBE\bin\msys-2.0.dll
+    File /r RosBE\bin\msys-gnutls-30.dll
+    File /r RosBE\bin\msys-iconv-2.dll
+    File /r RosBE\bin\msys-idn2-0.dll
+    File /r RosBE\bin\msys-intl-8.dll
+    File /r RosBE\bin\msys-nettle-8.dll
+    File /r RosBE\bin\msys-pcre2-8-0.dll
+    File /r RosBE\bin\msys-psl-5.dll
+    File /r RosBE\bin\msys-uuid-1.dll
+    File /r RosBE\bin\msys-z.dll
+    File /r RosBE\bin\ninja.exe
+    File /r RosBE\bin\options.exe
+    File /r RosBE\bin\patch.exe
+    File /r RosBE\bin\patch.exe.manifest
+    ;File /r RosBE\bin\pexports.exe
+    ;File /r RosBE\bin\piperead.exe
+    File /r RosBE\bin\playwav.exe
+    File /r RosBE\bin\rquote.exe
+    File /r RosBE\bin\scut.exe
+    File /r RosBE\bin\sdiff.exe
+    File /r RosBE\bin\tee.exe
+    File /r RosBE\bin\wget.exe
+    ;File /r RosBE\bin\zlib1.dll
     SetOutPath "$INSTDIR\samples"
     SetOverwrite try
-    File /r Components\samples\*.*
+    File /r RosBE\samples\*.*
 SectionEnd
 
 Section -MinGWGCC SEC02
     SetOutPath "$INSTDIR\i386"
     SetOverwrite try
-    File /r Components\i386\*.*
+    File /r RosBE\i386\*.*
 SectionEnd
 
 Section /o "AMD64 Compiler" SEC03
     SetOutPath "$INSTDIR\amd64"
     SetOverwrite try
-    File /r Components\amd64\*.*
+    File /r RosBE\amd64\*.*
 SectionEnd
 
 Section /o "Add BIN folder to PATH variable (MSVC users)" SEC04
@@ -231,27 +237,27 @@ SectionEnd
 Section /o "PowerShell Version" SEC05
     SetOutPath "$INSTDIR"
     SetOverwrite try
-    File /r Components\Powershell\Build.ps1
-    File /r Components\Powershell\charch.ps1
-    File /r Components\Powershell\chdefdir.ps1
-    File /r Components\Powershell\chdefgcc.ps1
-    File /r Components\Powershell\Clean.ps1
-    File /r Components\Powershell\Help.ps1
-    File /r Components\Powershell\kdbg.ps1
-    File /r Components\Powershell\options.ps1
-    File /r Components\Powershell\playwav.ps1
-    File /r Components\Powershell\reladdr2line.ps1
-    File /r Components\Powershell\reladdr2lineNW.ps1
-    File /r Components\Powershell\Remake.ps1
-    File /r Components\Powershell\Remakex.ps1
-    File /r Components\Powershell\RosBE.ps1
-    File /r Components\Powershell\rosbe-gcc-env.ps1
-    File /r Components\Powershell\scut.ps1
-    File /r Components\Powershell\update.ps1
-    File /r Components\Powershell\version.ps1
+    File /r RosBE\Build.ps1
+    File /r RosBE\charch.ps1
+    File /r RosBE\chdefdir.ps1
+    File /r RosBE\chdefgcc.ps1
+    File /r RosBE\Clean.ps1
+    File /r RosBE\Help.ps1
+    File /r RosBE\kdbg.ps1
+    File /r RosBE\options.ps1
+    File /r RosBE\playwav.ps1
+    File /r RosBE\reladdr2line.ps1
+    File /r RosBE\reladdr2lineNW.ps1
+    File /r RosBE\Remake.ps1
+    File /r RosBE\Remakex.ps1
+    File /r RosBE\RosBE.ps1
+    File /r RosBE\rosbe-gcc-env.ps1
+    File /r RosBE\scut.ps1
+    File /r RosBE\update.ps1
+    File /r RosBE\version.ps1
     SetOutPath "$DESKTOP"
     SetOverwrite try
-    File /r "Components\Powershell\RosBE PS - PostInstall.reg"
+    File /r "RosBE\RosBE PS - PostInstall.reg"
     MessageBox MB_ICONINFORMATION|MB_OK \
                "A REG-File was generated on your desktop. Please use it with Admin Rights to set Powershell's execution rights correctly if your RosBE Powershell Version fails to run after install. Otherwise, just delete it."
 SectionEnd
@@ -261,28 +267,26 @@ Section -StartMenuShortcuts SEC06
     ;;
     ;; Add our start menu shortcuts.
     ;;
-    ${If} ${FileExists} "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk"
-        !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-            CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
-            SetOutPath $REACTOS_SOURCE_DIRECTORY
+    !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+        CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
+        SetOutPath $REACTOS_SOURCE_DIRECTORY
+        IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
+            CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
+        IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
+            CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
+        IfFileExists "$INSTDIR\amd64\*" 0 +5
             IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
-                CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
+                CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0B /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
             IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
-                CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
-            IfFileExists "$INSTDIR\amd64\*" 0 +5
-                IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
-                    CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0B /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
-                IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
-                    CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
-            SetOutPath $INSTDIR
-            CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Uninstall RosBE.lnk" \
-                           "$INSTDIR\Uninstall.exe"
-            CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Readme.lnk" \
-                           "$INSTDIR\README.pdf"
-            CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Options.lnk" \
-                           "$INSTDIR\bin\options.exe"
-        !insertmacro MUI_STARTMENU_WRITE_END
-    ${EndIf}
+                CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
+        SetOutPath $INSTDIR
+        CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Uninstall RosBE.lnk" \
+                       "$INSTDIR\Uninstall.exe"
+        CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Readme.lnk" \
+                       "$INSTDIR\README.pdf"
+        CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Options.lnk" \
+                       "$INSTDIR\bin\options.exe"
+    !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
 Section /o "Desktop Shortcuts" SEC07
@@ -290,18 +294,16 @@ Section /o "Desktop Shortcuts" SEC07
     ;;
     ;; Add our desktop shortcuts.
     ;;
-    ${If} ${FileExists} "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk"
-        SetOutPath $REACTOS_SOURCE_DIRECTORY
+    SetOutPath $REACTOS_SOURCE_DIRECTORY
+    IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
+        CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
+    IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
+        CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
+    IfFileExists "$INSTDIR\amd64\*" 0 +5
         IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
-            CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
+            CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0B /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
         IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
-            CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
-        IfFileExists "$INSTDIR\amd64\*" 0 +5
-            IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
-                CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0B /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
-            IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
-                CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
-    ${EndIf}
+            CreateShortCut "$DESKTOP\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
 SectionEnd
 
 Section /o "Quick Launch Shortcuts" SEC08
@@ -309,18 +311,16 @@ Section /o "Quick Launch Shortcuts" SEC08
     ;;
     ;; Add our quick launch shortcuts.
     ;;
-    ${If} ${FileExists} "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk"
-        SetOutPath $REACTOS_SOURCE_DIRECTORY
+    SetOutPath $REACTOS_SOURCE_DIRECTORY
+    IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
+        CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
+    IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
+        CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
+    IfFileExists "$INSTDIR\amd64\*" 0 +5
         IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
-            CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION}.lnk" "$SYSDIR\cmd.exe" '/t:0A /k "$INSTDIR\RosBE.cmd"' "$INSTDIR\rosbe.ico"
+            CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0B /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
         IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
-            CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1'" "$INSTDIR\rosbe.ico"
-        IfFileExists "$INSTDIR\amd64\*" 0 +5
-            IfFileExists "$INSTDIR\RosBE.cmd" 0 +2
-                CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64.lnk" "$SYSDIR\cmd.exe" '/t:0B /k "$INSTDIR\RosBE.cmd" amd64' "$INSTDIR\rosbe.ico"
-            IfFileExists "$INSTDIR\RosBE.ps1" 0 +2
-                CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
-    ${EndIf}
+            CreateShortCut "$QUICKLAUNCH\ReactOS Build Environment ${PRODUCT_VERSION} AMD64 - PS.lnk" "$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" "-noexit &'$INSTDIR\RosBE.ps1' amd64" "$INSTDIR\rosbe.ico"
 SectionEnd
 
 Section -Post SEC09

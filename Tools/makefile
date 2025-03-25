@@ -13,7 +13,12 @@ ifeq ($(word 1,$(shell gcc -dumpmachine)),mingw32)
 	LDFLAGS += -lshell32
 else
     ifeq ($(word 1,$(shell gcc -dumpmachine)),i686-w64-mingw32)
-	    # Windows host
+	    # Windows host 32 Bit
+	    RM := del /f
+	    SUFFIX := .exe
+	    LDFLAGS += -lshell32
+    ifeq ($(word 1,$(shell gcc -dumpmachine)),x86_64-w64-mingw32)
+	    # Windows host 64 Bit
 	    RM := del /f
 	    SUFFIX := .exe
 	    LDFLAGS += -lshell32
