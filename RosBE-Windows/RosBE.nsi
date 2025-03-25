@@ -47,7 +47,7 @@ Function .onInit
     ReadRegStr $R3 HKLM \
     "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentVersion
     StrCpy $R4 $R3 3
-    System::Call 'kernel32::CreateMutexA(i 0, i 0, t "RosBE-v${PRODUCT_VERSION}-Installer") i .r1 ?e'
+    System::Call 'kernel32::CreateMutex(i 0, i 0, t "RosBE-v${PRODUCT_VERSION}-Installer")p.r1 ?e'
     Pop $R0
     StrCmp $R0 0 +3
         MessageBox MB_OK|MB_ICONEXCLAMATION "The ${PRODUCT_NAME} v${PRODUCT_VERSION} installer is already running."
@@ -119,6 +119,7 @@ Section -BaseFiles SEC01
 
     ;; Make the directory "$INSTDIR" read write accessible by all users
     AccessControl::SetOnFile "$INSTDIR" "(BU)" "FullAccess"
+    Pop $0 ; "error" on errors
 
     SetOutPath "$INSTDIR"
     SetOverwrite try
@@ -223,6 +224,7 @@ SectionEnd
 Section /o "Add BIN folder to PATH variable (MSVC users)" SEC04
     EnVar::SetHKCU
     EnVar::AddValue "PATH" "$INSTDIR\bin"
+    Pop $0
 SectionEnd
 
 Section /o "PowerShell Version" SEC05
@@ -365,7 +367,8 @@ Section Uninstall
     ;;
     EnVar::SetHKCU
     EnVar::DeleteValue "PATH" "$INSTDIR\bin"
-
+    Pop $0
+    
     ;;
     ;; Clean up installed files.
     ;;
