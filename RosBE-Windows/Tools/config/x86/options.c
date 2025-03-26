@@ -26,9 +26,9 @@ BOOL CreateDir(HWND hwnd, WCHAR* dir)
 {
     WCHAR msgerror[256];
 
-    if (0 > (LONG)GetFileAttributes(dir))
+    if (0 > (LONG)GetFileAttributesW(dir))
     {
-        if (CreateDirectory(dir, NULL) == 0)
+        if (CreateDirectoryW(dir, NULL) == 0)
         {
             LoadStringW(hInstance, MSG_DIREFAILED, msgerror, 256);
             MessageBoxW(hwnd, msgerror, NULL, MB_ICONERROR);
@@ -512,7 +512,7 @@ BrowseProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
         {
             WCHAR ActualPath[MAX_PATH];
             GetDlgItemTextW(hwndParent, (INT) lParam, ActualPath, MAX_PATH);
-            SendMessage(Dlg, BFFM_SETSELECTION, TRUE, (LPARAM)ActualPath);
+            SendMessageW(Dlg, BFFM_SETSELECTION, TRUE, (LPARAM)ActualPath);
             break;
         }
         case BFFM_VALIDATEFAILED:
@@ -530,7 +530,7 @@ BrowseProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
                     {
                         wcsset((LPWSTR)wParam+(PathLen-1), '\0');
                     }
-                    if (CreateDirectory((LPWSTR)wParam, NULL) == 0)
+                    if (CreateDirectoryW((LPWSTR)wParam, NULL) == 0)
                     {
                         LoadStringW(hInstance, MSG_DIREFAILED, BoxMsg, 256);
                         MessageBoxW(Dlg, BoxMsg, NULL, MB_ICONERROR);
@@ -551,7 +551,7 @@ static VOID
 AssociateToolWithControl(POPTIONS_DLG infoPtr, int ControlId, UINT StringId)
 {
     HWND hwndControl;
-    TOOLINFO ti;
+    TTTOOLINFOW ti;
 
     hwndControl = GetDlgItem(infoPtr->hwndDlg, ControlId);
     if (infoPtr->hwndToolTip && hwndControl)
@@ -564,7 +564,7 @@ AssociateToolWithControl(POPTIONS_DLG infoPtr, int ControlId, UINT StringId)
         ti.hinst = hInstance;
         ti.lpszText = MAKEINTRESOURCE(StringId);
 
-        SendMessage(infoPtr->hwndToolTip, TTM_ADDTOOL, 0, (LPARAM)&ti);
+        SendMessageW(infoPtr->hwndToolTip, TTM_ADDTOOL, 0, (LPARAM)&ti);
     }
 }
 
@@ -575,7 +575,7 @@ DlgProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
 
     if (Msg != WM_INITDIALOG)
     {
-        infoPtr = (POPTIONS_DLG)GetWindowLongPtr(Dlg, DWLP_USER);
+        infoPtr = (POPTIONS_DLG)GetWindowLongPtrW(Dlg, DWLP_USER);
         if (infoPtr == NULL)
         {
             return FALSE;
@@ -614,7 +614,7 @@ DlgProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
             infoPtr = (POPTIONS_DLG)lParam;
             infoPtr->hwndDlg = Dlg;
 
-            SetWindowLongPtr(Dlg, DWLP_USER, (LONG_PTR)infoPtr);
+            SetWindowLongPtrW(Dlg, DWLP_USER, (LONG_PTR)infoPtr);
 
             infoPtr->hwndToolTip = CreateWindowEx(0,
                                                   TOOLTIPS_CLASS,
@@ -634,7 +634,7 @@ DlgProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
                 AssociateToolWithControl(infoPtr, ToolTipAssociations[i].ControlId, ToolTipAssociations[i].StringId);
             }
 
-            infoPtr->hIcon = LoadImage( hInstance,
+            infoPtr->hIcon = LoadImageW( hInstance,
                                         MAKEINTRESOURCE(ID_OPTICON),
                                         IMAGE_ICON,
                                         GetSystemMetrics(SM_CXSMICON),
@@ -642,7 +642,7 @@ DlgProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
                                         0);
             if(infoPtr->hIcon)
             {
-                SendMessage(Dlg, WM_SETICON, ICON_SMALL, (LPARAM)infoPtr->hIcon);
+                SendMessageW(Dlg, WM_SETICON, ICON_SMALL, (LPARAM)infoPtr->hIcon);
             }
 
             GetObject(GetStockObject(ANSI_FIXED_FONT), sizeof(LOGFONT),  &lf);
@@ -690,13 +690,13 @@ DlgProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
                                 break;
                             }
                         }
-                        PostMessage(Dlg, WM_CLOSE, 0, 0);
+                        PostMessageW(Dlg, WM_CLOSE, 0, 0);
                         break;
                     }
                     case ID_BROWSE:
                     case ID_BROWSEMGW:
                     {
-                        BROWSEINFO PathInfo;
+                        BROWSEINFOW PathInfo;
                         LPITEMIDLIST pidl;
                         LPMALLOC pMalloc;
                         INT Control = ID_LOGDIR;
@@ -720,9 +720,9 @@ DlgProc(HWND Dlg, UINT Msg, WPARAM wParam, LPARAM lParam)
                             }
                             LoadStringW(hInstance, IDText, Text, 512);
                             PathInfo.lpszTitle = Text;
-                            if ((pidl = SHBrowseForFolder(&PathInfo)) != NULL)
+                            if ((pidl = SHBrowseForFolderW(&PathInfo)) != NULL)
                             {
-                                if (SHGetPathFromIDList(pidl, path))
+                                if (SHGetPathFromIDListW(pidl, path))
                                 {
                                     SetDlgItemTextW(Dlg, Control, path);
                                 }
