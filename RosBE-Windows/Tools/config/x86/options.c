@@ -214,21 +214,21 @@ WriteSettings(POPTIONS_DLG infoPtr)
         fwprintf(pFilecmd, L"set _ROSBE_SYSPATH=%d\n", syspath);
         if (logdir[0] != 0)
         {
-            fwprintf(pFilecmd, L"set _ROSBE_LOGDIR=%s\n", logdir);
+            fwprintf(pFilecmd, L"set _ROSBE_LOGDIR=%ls\n", logdir);
         }
         if (amd64 || arm)
         {
             if (mingwpath[0] != 0)
             {
-                fwprintf(pFilecmd, L"set _ROSBE_TARGET_MINGWPATH=%s\n", mingwpath);
+                fwprintf(pFilecmd, L"set _ROSBE_TARGET_MINGWPATH=%ls\n", mingwpath);
             }
         }
         else
         {
             if (mingwpath[0] != 0)
             {
-                fwprintf(pFilecmd, L"set _ROSBE_HOST_MINGWPATH=%s\n", mingwpath);
-                fwprintf(pFilecmd, L"set _ROSBE_TARGET_MINGWPATH=%s\n", mingwpath);
+                fwprintf(pFilecmd, L"set _ROSBE_HOST_MINGWPATH=%ls\n", mingwpath);
+                fwprintf(pFilecmd, L"set _ROSBE_TARGET_MINGWPATH=%ls\n", mingwpath);
             }
         }
     }
@@ -251,21 +251,21 @@ WriteSettings(POPTIONS_DLG infoPtr)
         fwprintf(pFileps1, L"$global:_ROSBE_SYSPATH = %d\n", syspath);
         if (logdir[0] != 0)
         {
-            fwprintf(pFileps1, L"$global:_ROSBE_LOGDIR = \"%s\"\n", logdir);
+            fwprintf(pFileps1, L"$global:_ROSBE_LOGDIR = \"%ls\"\n", logdir);
         }
         if (amd64 || arm)
         {
             if (mingwpath[0] != 0)
             {
-                fwprintf(pFileps1, L"$global:_ROSBE_TARGET_MINGWPATH = \"%s\"\n", mingwpath);
+                fwprintf(pFileps1, L"$global:_ROSBE_TARGET_MINGWPATH = \"%ls\"\n", mingwpath);
             }
         }
         else
         {
             if (mingwpath[0] != 0)
             {
-                fwprintf(pFileps1, L"$global:_ROSBE_HOST_MINGWPATH = \"%s\"\n", mingwpath);
-                fwprintf(pFileps1, L"$global:_ROSBE_TARGET_MINGWPATH = \"%s\"\n", mingwpath);
+                fwprintf(pFileps1, L"$global:_ROSBE_HOST_MINGWPATH = \"%ls\"\n", mingwpath);
+                fwprintf(pFileps1, L"$global:_ROSBE_TARGET_MINGWPATH = \"%ls\"\n", mingwpath);
             }
         }
     }
