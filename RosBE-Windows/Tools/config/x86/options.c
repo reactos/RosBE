@@ -220,6 +220,7 @@ WriteSettings(POPTIONS_DLG infoPtr)
         {
             if (mingwpath[0] != 0)
             {
+				fwprintf(pFilecmd, L"set _ROSBE_HOST_MINGWPATH=%ls\n", mingwpath);
                 fwprintf(pFilecmd, L"set _ROSBE_TARGET_MINGWPATH=%ls\n", mingwpath);
             }
         }
@@ -257,6 +258,7 @@ WriteSettings(POPTIONS_DLG infoPtr)
         {
             if (mingwpath[0] != 0)
             {
+				fwprintf(pFileps1, L"$global:_ROSBE_HOST_MINGWPATH = \"%ls\"\n", mingwpath);
                 fwprintf(pFileps1, L"$global:_ROSBE_TARGET_MINGWPATH = \"%ls\"\n", mingwpath);
             }
         }
