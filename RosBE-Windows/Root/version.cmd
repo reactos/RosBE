@@ -21,7 +21,7 @@ if not "%ROS_ARCH%" == "" (
     echo gcc target^: %ROS_ARCH%
     "%_ROSBE_TARGET_MINGWPATH%\bin\%_ROSBE_PREFIX%gcc.exe" -v 2>&1 | find "gcc version"
     "%_ROSBE_TARGET_MINGWPATH%\bin\%_ROSBE_PREFIX%ld.exe" -v
-    "%_ROSBE_BASEDIR%\bin\mingw32-make.exe" -v | find "GNU Make"
+    "mingw32-make.exe" -v | find "GNU Make"
 ) else (
     echo MSVC target^: %_ROSBE_MSVCARCH%
     cl.exe 2>&1 | find "Version"
