@@ -1,6 +1,6 @@
                            ReactOS Build Environment
-                 Version 2.2.1 for Unix-based operating systems
-                      Base package and i386 build tools
+                 Version 2.3 for Unix-based operating systems
+                  Base package with i386 and amd64 compilers
 
 Introduction
 -------------
@@ -51,8 +51,8 @@ system. They are needed to build the ReactOS Build Environment. The
     example for Debian-based Linux distributions is "zlib1g-dev".
 
 
-Installation
--------------
+Installation of the Base package and i386 compiler
+---------------------------------------------------
   The Installation of RosBE is very simple as there are scripts that do most of
 the work for you. Follow these steps to compile and install RosBE for your
 operating system:
@@ -75,6 +75,15 @@ operating system:
 the shortcut.
 
 
+Installation of the amd64 compiler
+-----------------------------------
+  The amd64 compiler can only be installed after you have installed the Base
+package and i386 compiler.
+  When this is done, just run "sudo ./RosBE-Builder-amd64.sh" and follow the
+instructions. The same options and variables can be used as for the base
+installation script.
+
+
 Uninstallation
 ---------------
   If you want to uninstall RosBE, just delete the entire installation directory
@@ -86,8 +95,10 @@ Version Information
   This version of RosBE for Unix-based operating systems uses the following
 components:
 
-  * GNU Binutils v2.34
+  * GNU Binutils v2.36.1
     compiled for i686-w64-mingw32
+    patched with:
+      - https://raw.githubusercontent.com/reactos/RosBE/f9e43c3b01dcbd507e5b1454f654f4493955b131/Patches/binutils-2.36.1-jerome-gardou-optional-code-argument.patch
 
   * GCC, The GNU Compiler Collection v8.4.0
     compiled for i686-w64-mingw32
@@ -109,7 +120,8 @@ components:
   * Mingw-w64 6.0.0
   * MPC 1.1.0
   * MPFR 4.0.2
-  * Ninja 1.10.0
+  * Ninja 1.10.2-ReactOS
+    (revision b661be7af3f98bd9a29caa7b35702bd5248f8ed8 from https://github.com/reactos/ninja/tree/ninja-1.10.2-reactos)
 
 
 Tested Operating Systems
@@ -117,7 +129,7 @@ Tested Operating Systems
   The Build Environment has been designed to work on all Unix-based operating
 systems. Nevertheless, it is impossible to test it on all possible systems out
 there.
-  The current primary development and test system is Ubuntu 18.04. But users
+  The current primary development and test system is Ubuntu 20.04. But users
 also reported that it works well under other Linux systems such as Fedora or
 openSUSE and Unix derivates like FreeBSD or macOS.
   You should be able to compile the build tools on both i386 (32-bit) and
