@@ -1,0 +1,14 @@
+--- configure.py.orig	2026-03-25 16:12:10.647584559 +0800
++++ configure.py	2026-03-25 16:39:00.122488627 +0800
+@@ -23,7 +23,10 @@
+ 
+ from optparse import OptionParser
+ import os
+-import pipes
++try:
++    import pipes
++except ImportError:
++    import shlex as pipes
+ import string
+ import subprocess
+ import sys
